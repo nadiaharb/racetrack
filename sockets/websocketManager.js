@@ -1,13 +1,13 @@
 
-const raceHandler = require('./raceHandler') // Passing io object and mode to raceHandler
+//const raceHandler = require('./raceHandler') // Passing io object and mode to raceHandler
 
-module.exports = function(io) {
-    
+module.exports = function (io) {
+
     let mode = 'Safe'
 
     io.on('connection', socket => {
         console.log('User connected to socket')
-        
+
         // Emit current mode 
         socket.emit('raceModeChange', mode)
 
@@ -16,7 +16,7 @@ module.exports = function(io) {
             mode = newMode
             io.emit('raceModeChange', newMode)
         })
-     
+
         // Handle disconnect event
         socket.on('disconnect', () => {
             console.log('User disconnected')

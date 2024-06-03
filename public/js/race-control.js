@@ -1,4 +1,7 @@
+const Race = require('../models/Race.js')
+
 const socket = io();
+
 function updateModeDisplay(mode) {
     document.getElementById('modeDisplay').textContent = mode
 }
@@ -21,7 +24,7 @@ document.getElementById('finishBtn').addEventListener('click', () => {
 })
 
 socket.on('raceModeChange', mode => {
-    
-   // Update mode display
-   updateModeDisplay(mode)
+
+    // Update mode display
+    updateModeDisplay(mode)
 })

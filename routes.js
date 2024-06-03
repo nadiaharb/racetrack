@@ -2,7 +2,7 @@
 const fs = require('fs')
 const path = require('path')
 
-module.exports = function(req, res) {
+module.exports = function (req, res) {
     // Serve static files from the 'public' directory
     let filePath = '.' + req.url
     if (req.method === 'GET') {

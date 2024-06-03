@@ -1,14 +1,13 @@
-//require('dotenv').config()
-//const express=require('express')
-//const fs = require('fs');
-//const path=require('path')
+require('./loadKeys');
+require('./check-keys');
+
 const http = require('http');
 const routes = require('./routes')
 const server = http.createServer(routes)
 //const { createServer }= require('http')
-const { Server }=require('socket.io')
+const { Server } = require('socket.io')
 const websocketManager = require('./sockets/websocketManager')
-//const app=express()
+const db = require('./models/DataStore')
 //const server=createServer(app)
 
 
@@ -16,22 +15,13 @@ const websocketManager = require('./sockets/websocketManager')
 
 
 
-const io=new Server(server)
-/*
-//static files  with express
-app.use(express.static(path.join(__dirname, 'public')))
+const io = new Server(server)
 
-//routes with express
-app.use('/',routes)
-
-*/
-
-const PORT= process.env.PORT || 3000
-server.listen(PORT, ()=>{
+const PORT = process.env.PORT || 3000
+server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
     //console.log(process.env)
-    console.log(`${process.env.RECEPTIONIST_KEY}`)
-    
+
 })
 
 
