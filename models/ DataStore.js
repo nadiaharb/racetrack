@@ -9,7 +9,7 @@ class DataStore {
 		this.racers.push(racer);
 
 	}
-    */
+	*/
 	// Race methods
 	addRace(race) {
 		this.races.push(race);

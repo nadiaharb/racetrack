@@ -6,10 +6,6 @@ const path = require('path')
 
 const frontdeskController = require('./viewsControllers/frontdeskView');
 
-//import frontdesk controller
-
-const frontdeskController = require('./viewsControllers/frontdeskView');
-
 module.exports = function (req, res) {
     // Serve static files from the 'public' directory
     let filePath = '.' + req.url
