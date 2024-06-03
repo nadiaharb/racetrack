@@ -10,7 +10,14 @@
     <div class="main-page-container">
         <p class="fd-p">Current mode: <span id="modeDisplay"></span></p>
     </div>
-    
+    <h1>Front Desk</h1>
+    <form id="loadDataForm">
+        <button id="loadDataButton" type="submit">Load Data</button>
+    </form>
+
+    <!-- Container to display loaded data -->
+    <div id="dataContainer"></div>
+  
 
    
     <script src="/socket.io/socket.io.js"></script>

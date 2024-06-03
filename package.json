@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node check-keys.js && node app.js"
+    "start": "node check-keys.js  && node app.js"
   },
   "keywords": [],
   "author": "",

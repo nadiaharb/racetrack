@@ -3,12 +3,13 @@ class DataStore {
 		this.races = [];
 		this.racers = [];
 	}
+	/*
 	addRacer(racer, carNumber) {
 		racer.carNumber = carNumber;
 		this.racers.push(racer);
 
 	}
-
+    */
 	// Race methods
 	addRace(race) {
 		this.races.push(race);
