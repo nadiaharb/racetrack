@@ -22,6 +22,10 @@ class DataStore {
         
     
 }
+getRaceById(raceId) {
+	return this.races.find(race => race.id === raceId)
+}
+
 
 	getRaces() {
 		return this.races;
@@ -31,6 +35,18 @@ class DataStore {
 	addRacer(racer) {
 		this.racers.push(racer);
 	}
+	addRacerToRace(raceId, racer) {
+        const race = this.getRaceById(raceId)
+        if (race) {
+            if (racer instanceof Racer) {
+                race.participants.push(racer)
+            } else {
+                throw new Error('Participant must be an instance of Racer')
+            }
+        } else {
+            throw new Error('Race not found')
+        }
+    }
 
 	getRacerByCarNumber(carNumber) { // Necessary for Lap Line Observer
 		return this.racers.find(racer => racer.carNumber === carNumber);

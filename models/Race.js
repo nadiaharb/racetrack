@@ -52,8 +52,13 @@ class Race {
     getDuration() {
         return this.duration;
     }
+
+
+
+    
     // Add participant to race
     addParticipant(participant) {
+
         // Validate that we are pushing a Racer
         if (participant instanceof Racer) {
             this.participants.push(participant);

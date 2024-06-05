@@ -1,7 +1,7 @@
 
 const dataStore = require('../models/ DataStore')
 const Race = require('../models/Race')
-const { loadData, addRace, deleteRace } = require('./front-desk-sockets')
+const { loadData, addRace, deleteRace,addRacer } = require('./front-desk-sockets')
 module.exports = function (io) {
 
 
@@ -19,6 +19,10 @@ module.exports = function (io) {
         // Delete Race 
         socket.on('deleteRace', raceId => {
             deleteRace(socket, io, raceId)
+        })
+        //add racer
+        socket.on('addRacer', racerData =>{
+            addRacer(socket, io,racerData)
         })
        
         // Handle disconnect event
