@@ -9,11 +9,19 @@ class DataStore {
 		this.racers.push(racer);
 
 	}
-	*/
+    */
 	// Race methods
 	addRace(race) {
 		this.races.push(race);
 	}
+	deleteRaceById(raceId) {
+		raceId=parseInt(raceId)
+        const index = this.races.findIndex(race => race.id === raceId)
+            this.races.splice(index, 1)
+            return true
+        
+    
+}
 
 	getRaces() {
 		return this.races;
@@ -31,7 +39,12 @@ class DataStore {
 	getRacers() {
 		return this.racers;
 	}
-
+	getRacesByRaceByState(raceState) {
+        return this.races.filter(race => race.raceState === raceState);
+    }
 }
 
-module.exports = DataStore;
+const dataStore = new DataStore();
+
+module.exports = dataStore
+

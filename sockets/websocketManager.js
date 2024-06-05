@@ -1,22 +1,26 @@
 
-//const raceHandler = require('./raceHandler') // Passing io object and mode to raceHandler
-
+const dataStore = require('../models/ DataStore')
+const Race = require('../models/Race')
+const { loadData, addRace, deleteRace } = require('./front-desk-sockets')
 module.exports = function (io) {
 
-    let mode = 'Safe'
 
     io.on('connection', socket => {
         console.log('User connected to socket')
 
-        // Emit current mode 
-        socket.emit('raceModeChange', mode)
+        // Load Data 
+        socket.emit('loadData', JSON.stringify(dataStore.races))
 
-        // Handle 'raceModeChange' event 
-        socket.on('raceModeChange', newMode => {
-            mode = newMode
-            io.emit('raceModeChange', newMode)
+        // Add Race 
+        socket.on('addRace', newRace => {
+            addRace(socket, io, newRace)
         })
 
+        // Delete Race 
+        socket.on('deleteRace', raceId => {
+            deleteRace(socket, io, raceId)
+        })
+       
         // Handle disconnect event
         socket.on('disconnect', () => {
             console.log('User disconnected')

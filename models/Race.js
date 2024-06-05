@@ -16,8 +16,9 @@ const Racer = require('./Racer');
 class Race {
     // Default duration is set by environment var
     // RaceState and FlagState are enums and contain all possible states
-    constructor(name, participants = [], duration = process.env.duration, flagState = FlagState.SAFE, raceState = RaceState.UPCOMING) {
-        this.name = name; // Name of the race
+    static lastId = 0
+    constructor(id,name, participants = [], duration = process.env.RACE_DURATION, flagState = FlagState.SAFE, raceState = RaceState.UPCOMING) {
+        this.id=++Race.lastId;
         this.participants = []
         this.duration = duration; // Duration of the race (derived from env vars, default)
         this.flagState = flagState; // State of the flag

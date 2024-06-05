@@ -81,3 +81,28 @@ h1 {
     font-weight: bold; 
     color: #007bff; 
 }
+
+/* CSS Style for Race Elements */
+.race {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.race h2 {
+    margin-top: 0;
+}
+
+.race p {
+    margin: 5px 0;
+}
+
+.race ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.race li {
+    margin-left: 20px;
+}

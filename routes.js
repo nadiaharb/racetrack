@@ -6,7 +6,8 @@ const path = require('path')
 
 const frontdeskController = require('./viewsControllers/frontdeskView');
 
-module.exports = function (req, res) {
+module.exports = function (req, res,io) {
+    
     // Serve static files from the 'public' directory
     let filePath = '.' + req.url
     if (req.method === 'GET') {
@@ -15,16 +16,7 @@ module.exports = function (req, res) {
         } else if (filePath.startsWith('./public/')) {
             // Serve static files from the public directory
             filePath = '.' + req.url
-        } else if (filePath === './front-desk') {
-            // Route to front desk controller
-            frontdeskController.handleFrontDeskRequest(req, res)
-            return;
-        } else if (req.url === '/loadData') {
-            //route to  frontdesk data
-            frontdeskController.handleLoadDataRequest(req, res)
-            return
-        }
-        else {
+        }else {
             // Serve HTML templates from the views directory
             filePath = './views' + req.url + '.html'
         }
@@ -66,6 +58,8 @@ module.exports = function (req, res) {
             }
         })
     }
+    
+  
 }
 
 

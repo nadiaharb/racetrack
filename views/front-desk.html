@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="/public/css/styles.css">
 </head>
 <body>
+    <!-- Container to display loaded data -->
+    <div id="sessionContainer"></div>
     <div class="main-page-container">
         <p class="fd-p">Current mode: <span id="modeDisplay"></span></p>
     </div>
@@ -15,12 +17,32 @@
         <button id="loadDataButton" type="submit">Load Data</button>
     </form>
 
-    <!-- Container to display loaded data -->
-    <div id="dataContainer"></div>
+    <h2>Add New Race</h2>
+    <form id="addRaceForm">
+       
+
+        <label for="flagState">Flag State:</label>
+        <select id="flagState" name="flagState">
+     
+            <option value="Danger">Danger</option>
+         
+        </select><br><br>
+
+        <label for="raceState">Race State:</label>
+        <select id="raceState" name="raceState">
+            <option value="Upcoming">Upcoming</option>
+         
+        </select><br><br>
+
+        
+
+        <button type="submit">Add Race</button>
+    </form>
   
 
    
     <script src="/socket.io/socket.io.js"></script>
     <script src="/public/js/front-desk.js"></script>
+   
 </body>
 </html>
