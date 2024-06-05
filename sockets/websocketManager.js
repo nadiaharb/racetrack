@@ -1,7 +1,7 @@
 
-const dataStore = require('../models/ DataStore')
+const dataStore = require('../models/DataStore')
 const Race = require('../models/Race')
-const { loadData, addRace, deleteRace,addRacer } = require('./front-desk-sockets')
+const { loadData, addRace, deleteRace, addRacer } = require('./front-desk-sockets')
 module.exports = function (io) {
 
 
@@ -21,10 +21,20 @@ module.exports = function (io) {
             deleteRace(socket, io, raceId)
         })
         //add racer
-        socket.on('addRacer', racerData =>{
-            addRacer(socket, io,racerData)
+        socket.on('addRacer', racerData => {
+            addRacer(socket, io, racerData)
         })
-       
+        socket.on('resetLapTimer', currentRace => {
+            //resetLapTimer(socket, io, currentRace)
+        })
+        // Change current race flagState
+        socket.on('changeFlagState', mode => {
+            //dataStore.getUpcomingRace().setFlagState(mode);
+            const race = dataStore.getInProgressRace()
+            race.setFlagState(mode);
+            console.log(dataStore.getUpcomingRace());
+
+        })
         // Handle disconnect event
         socket.on('disconnect', () => {
             console.log('User disconnected')

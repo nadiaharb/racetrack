@@ -1,5 +1,3 @@
-const Race = require('../models/Race.js')
-
 const socket = io();
 
 function updateModeDisplay(mode) {
