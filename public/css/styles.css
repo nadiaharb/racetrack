@@ -40,16 +40,17 @@ h1 {
     background-color: green;
     color: white;
     padding: 10px 20px;
-    border: none;
+    border: 2px solid black;
     border-radius: 5px;
     margin: 10px;
 }
+
 
 #hazardBtn {
     background-color: yellow;
     color: black;
     padding: 10px 20px;
-    border: none;
+    border: 2px solid black;
     border-radius: 5px;
     margin: 10px;
 }
@@ -58,7 +59,7 @@ h1 {
     background-color: red;
     color: white;
     padding: 10px 20px;
-    border: none;
+    border: 2px solid black;
     border-radius: 5px;
     margin: 10px;
 }
@@ -70,6 +71,19 @@ h1 {
     border: 2px solid black;
     border-radius: 5px;
     margin: 10px;
+}
+
+#safeBtn:active {
+    border: 2px solid orange;
+}
+#hazardBtn:active {
+    border: 2px solid orange;
+}
+#dangerBtn:active {
+    border: 2px solid orange;
+}
+#finishBtn:active {
+    border: 2px solid orange;
 }
 
 
