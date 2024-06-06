@@ -1,5 +1,5 @@
 
-
+/*
 // This should be attached to the current race
 module.exports = function (socket, mode) {
 
@@ -13,3 +13,4 @@ module.exports = function (socket, mode) {
 
 
 }
+*/
