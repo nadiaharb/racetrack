@@ -8,8 +8,15 @@ module.exports = function (io) {
 
 
     io.on('connection', socket => {
+
+        // Handle disconnect event
+        socket.on('disconnect', () => {
+            console.log('User disconnected')
+        })
+
         console.log('User connected to socket')
 
+        // Front desk / Receptionist
         // Load Data 
         socket.emit('loadData', JSON.stringify(dataStore.races))
 
@@ -38,15 +45,10 @@ module.exports = function (io) {
         //    console.log(dataStore.getUpcomingRace());
 
         //})
-
-        // Handle disconnect event
-        socket.on('disconnect', () => {
-            console.log('User disconnected')
-        })
+        
 
         // Race control / Safety official
-
-        // Change current race flagState
+        // Change current race flagState / mode
         socket.on('raceModeChange', mode => {
             raceModeChange(socket, io, mode)
         })
