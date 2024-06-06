@@ -1,3 +1,4 @@
+//const nextRace = require('../sockets/next-race-sockets');
 const { RaceState } = require('./enums')
 const Race = require('./Race')
 const Racer = require('./Racer');
@@ -88,7 +89,6 @@ class DataStore {
 
 const dataStore = new DataStore();
 
-module.exports = dataStore
 
 
 
@@ -125,5 +125,11 @@ racers2.forEach(racer => race2.addParticipant(racer));
 race2.flagState = 'Danger'
 race2.raceState = 'Next'
 
+//nextRace.nextRaceChange(socket, io, race2)
+
 console.log(race1);
 console.log(race2);
+
+
+
+module.exports = {dataStore, race1, race2}

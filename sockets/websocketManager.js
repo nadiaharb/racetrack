@@ -3,6 +3,7 @@ const dataStore = require('../models/DataStore')
 const Race = require('../models/Race')
 const { loadData, addRace, deleteRace, addRacer } = require('./front-desk-sockets')
 const { raceModeChange} = require('./race-control-sockets')
+const { nextRaceChange} = require('./next-race-sockets')
 
 module.exports = function (io) {
 
@@ -51,6 +52,15 @@ module.exports = function (io) {
         // Change current race flagState / mode
         socket.on('raceModeChange', mode => {
             raceModeChange(socket, io, mode)
+        })
+
+        // Next race display      
+        // For testing
+        io.emit('nextRaceChange', dataStore.race2)
+
+        // Refresh next race data
+        socket.on('nextRaceChange', race => {
+            nextRaceChange(socket, io, race)
         })
     })
 }
