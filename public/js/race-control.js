@@ -22,6 +22,10 @@ document.getElementById('finishBtn').addEventListener('click', () => {
     if (confirm(text) == true) {
         console.log("Race is finished by safety official")    
         socket.emit('raceModeChange', 'Finish')  
+        document.getElementById('safeBtn').style.backgroundColor = 'gray'
+        document.getElementById('hazardBtn').style.backgroundColor = 'gray'
+        document.getElementById('dangerBtn').style.backgroundColor = 'gray'
+        document.getElementById('finishBtn').style.backgroundColor = 'gray'
     } else {
         console.log("Finish cancelled")
     }    
