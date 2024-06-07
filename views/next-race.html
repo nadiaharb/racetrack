@@ -1,11 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Next Race</title>
+    <link rel="stylesheet" href="/public/css/styles.css">
+  </head>
 <body>
-    
+
+  <!-- Button for testing purposes -->
+  <button id="refreshBtn">Refresh</button>
+
+    <!-- Container to display next race data -->
+    <div id="nextRaceContainer">        
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/public/js/next-race.js"></script>
+
 </body>
 </html>

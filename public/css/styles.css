@@ -36,43 +36,6 @@ h1 {
 
 
 
-#safeBtn {
-    background-color: green;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    margin: 10px;
-}
-
-#hazardBtn {
-    background-color: yellow;
-    color: black;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    margin: 10px;
-}
-
-#dangerBtn {
-    background-color: red;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    margin: 10px;
-}
-
-#finishBtn {
-    background-color: white;
-    color: black;
-    padding: 10px 20px;
-    border: 2px solid black;
-    border-radius: 5px;
-    margin: 10px;
-}
-
-
 .fd-p {
     margin: 20px 0;
 }

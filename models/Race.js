@@ -1,7 +1,8 @@
 const RaceState = Object.freeze({ // RaceState enum
     UPCOMING: 'Upcoming',
     IN_PROGRESS: 'In Progress',
-    FINISHED: 'Finished'
+    FINISHED: 'Finished',
+    NEXT: 'Next'
 });
 
 const FlagState = Object.freeze({ // FlagState enum

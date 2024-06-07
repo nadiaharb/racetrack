@@ -5,7 +5,8 @@ const { loadData, addRace, deleteRace, addRacer, getRaceParticipants } = require
 const { } = require('./leaderboard-sockets')
 
 const { RaceState, FlagState } = require('../models/enums')
-
+const { raceModeChange } = require('./race-control-sockets')
+const { nextRaceChange } = require('./next-race-sockets')
 
 
 /*
@@ -19,8 +20,16 @@ module.exports = function (io) {
 
 
     io.on('connection', socket => {
+
+        // Handle disconnect event
+        socket.on('disconnect', () => {
+            console.log('User disconnected')
+        })
+
         console.log('User connected to socket')
 
+        // Front desk / Receptionist
+        // Load Data 
         socket.emit('loadData', JSON.stringify(dataStore.races))
 
         /*if (dataStore.getInProgressRace() !== null && dataStore.races.length !== 0 && dataStore.getInProgressRace().duration !== 0) { // While there is a race in progress
@@ -92,47 +101,58 @@ module.exports = function (io) {
                 emitCurrentRace(io); // Notify all clients
             }
 
-        })
+            //})
 
-        // Handle disconnect event
-        socket.on('disconnect', () => {
-            console.log('User disconnected')
+
+            // Race control / Safety official
+            // Change current race flagState / mode
+            socket.on('raceModeChange', mode => {
+                raceModeChange(socket, io, mode)
+            })
+
+            // Next race display      
+            // For testing
+            io.emit('nextRaceChange', null)
+
+            // Refresh next race data
+            socket.on('nextRaceChange', race => {
+                nextRaceChange(socket, io, race)
+            })
         })
-    })
-}
+    }
 
 function emitCurrentRace(io) {
-    const inProgressRace = dataStore.getInProgressRace();
-    const upcomingRace = dataStore.getUpcomingRace();
-    if (inProgressRace) {
-        io.emit('updateRaceData', JSON.stringify(inProgressRace));
-    } else if (upcomingRace) {
-        io.emit('updateRaceData', JSON.stringify(upcomingRace));
-    } else {
-        // Gotta make changes here for leaderboard probably
-        io.emit('displayNone', {});
-    }
-}
-
-function startCountdown(io, race) {
-    const interval = setInterval(() => {
-        if (race.duration > 0 && race.raceState === RaceState.IN_PROGRESS) {
-            race.duration -= 1000; // Decrement by 1 second (1000ms)
-            io.emit('updateRaceData', JSON.stringify(race)); // Emit to all connected clients
-        } else {
-            clearInterval(interval);
-            if (race.raceState === RaceState.IN_PROGRESS) {
-                race.setRaceState(RaceState.FINISHED);
-                io.emit('raceStateChange', JSON.stringify(race));
-                emitCurrentRace(io); // Notify all clients
+            const inProgressRace = dataStore.getInProgressRace();
+            const upcomingRace = dataStore.getUpcomingRace();
+            if (inProgressRace) {
+                io.emit('updateRaceData', JSON.stringify(inProgressRace));
+            } else if (upcomingRace) {
+                io.emit('updateRaceData', JSON.stringify(upcomingRace));
+            } else {
+                // Gotta make changes here for leaderboard probably
+                io.emit('displayNone', {});
             }
         }
-    }, 1000); // Countdown interval set to 1 second
-}
+
+function startCountdown(io, race) {
+            const interval = setInterval(() => {
+                if (race.duration > 0 && race.raceState === RaceState.IN_PROGRESS) {
+                    race.duration -= 1000; // Decrement by 1 second (1000ms)
+                    io.emit('updateRaceData', JSON.stringify(race)); // Emit to all connected clients
+                } else {
+                    clearInterval(interval);
+                    if (race.raceState === RaceState.IN_PROGRESS) {
+                        race.setRaceState(RaceState.FINISHED);
+                        io.emit('raceStateChange', JSON.stringify(race));
+                        emitCurrentRace(io); // Notify all clients
+                    }
+                }
+            }, 1000); // Countdown interval set to 1 second
+        }
 
 // Not in use yet, yet to be verified
 function stopCountdown(io, race) {
-    race.setRaceState(RaceState.FINISHED);
-    io.emit('raceStateChange', JSON.stringify(race));
-    emitCurrentRace(io); // Notify all clients
-}
+            race.setRaceState(RaceState.FINISHED);
+            io.emit('raceStateChange', JSON.stringify(race));
+            emitCurrentRace(io); // Notify all clients
+        }
