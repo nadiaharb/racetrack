@@ -134,4 +134,4 @@ dataStore.addRace(race2);
 console.log(race1);
 console.log(race2);
 
-module.exports = { dataStore };
+module.exports = dataStore;
