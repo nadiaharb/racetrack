@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "RACE_DURATION=600000 node app.js",
+    "dev": "RACE_DURATION=60000 node app.js"
   },
   "keywords": [],
   "author": "",

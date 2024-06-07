@@ -21,6 +21,9 @@ document.getElementById('finishBtn').addEventListener('click', () => {
     socket.emit('raceModeChange', 'Finish')
 })
 
+socket.emit('startRace', race => {
+    // Race controller does something and race starts.
+})
 socket.on('raceModeChange', mode => {
 
     // Update mode display

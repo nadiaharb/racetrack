@@ -1,23 +1,25 @@
 const { RaceState } = require('./enums')
-require('./Race')
-require('./Racer')
+const Race = require('./Race')
+const Racer = require('./Racer')
 
 
 class DataStore {
 	constructor() {
 		this.races = [];
 	}
-	// Get the first upcoming race (Aka the next one)
+
+	// Race Methods
+
 	getUpcomingRace() {
 		const upcomingRaces = this.races.filter(race => race.raceState === RaceState.UPCOMING);
 		if (upcomingRaces.length === 0) {
 			return null; //
 		}
 		return upcomingRaces.reduce((minRace, currentRace) => {
-			return currentRace.id < minRace.id ? currentRace : minRace;
+			return currentRace.id <= minRace.id ? currentRace : minRace;
 		});
 	}
-	// Get the in progress race
+
 	getInProgressRace() {
 		const inProgressRaces = this.races.filter(race => race.raceState === RaceState.IN_PROGRESS);
 		if (inProgressRaces.length === 0) {
@@ -28,20 +30,25 @@ class DataStore {
 		}
 		return inProgressRaces[0];
 	}
-	// Race methods
+
 	addRace(race) {
 		this.races.push(race);
 	}
+
 	deleteRaceById(raceId) {
-		raceId = parseInt(raceId)
-		const index = this.races.findIndex(race => race.id === raceId)
-		this.races.splice(index, 1)
-		return true
+		raceId = parseInt(raceId);
+		const index = this.races.findIndex(race => race.id === raceId);
 
-
+		if (index !== -1) { // Check if the race was found
+			this.races.splice(index, 1);
+			return true;
+		} else {
+			return false; // Indicate that the race was not found
+		}
 	}
+
 	getRaceById(raceId) {
-		return this.races.find(race => race.id === raceId)
+		return this.races.find(race => race.id === raceId);
 	}
 
 
@@ -49,11 +56,23 @@ class DataStore {
 		return this.races;
 	}
 
-	addRacer(racer) {
-		this.racers.push(racer);
+	getRaceByRaceID(id) {
+		const race = this.races.find(race => race.id === id);
+		if (race) {
+			return race
+		} else {
+			return null
+		}
 	}
-	addRacerToRace(raceId, racer) {
-		const race = this.getRaceById(raceId)
+
+	getRacesByRaceByState(raceState) {
+		return this.races.filter(race => race.raceState === raceState);
+	}
+
+	// Racer Methods
+
+	addRacerToRace(raceID, racer) {
+		const race = this.getRaceById(raceID)
 		if (race) {
 			if (racer instanceof Racer) {
 				race.participants.push(racer)
@@ -65,10 +84,6 @@ class DataStore {
 		}
 	}
 
-	getRacerByCarNumber(carNumber) { // Necessary for Lap Line Observer
-		return this.racers.find(racer => racer.carNumber === carNumber);
-	}
-
 	getRacersByRaceID(id) {
 		const matchingRace = this.races.find(race => race.id === id);
 		if (matchingRace) {
@@ -78,15 +93,8 @@ class DataStore {
 		}
 	}
 
-	getRacers() {
-		return this.racers;
-	}
-	getRacesByRaceByState(raceState) {
-		return this.races.filter(race => race.raceState === raceState);
-	}
 }
 
 const dataStore = new DataStore();
 
 module.exports = dataStore
-
