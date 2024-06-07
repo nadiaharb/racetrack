@@ -56,7 +56,7 @@ module.exports = function (io) {
 
         // Next race display      
         // For testing
-        io.emit('nextRaceChange', dataStore.race2)
+        io.emit('nextRaceChange', null)
 
         // Refresh next race data
         socket.on('nextRaceChange', race => {

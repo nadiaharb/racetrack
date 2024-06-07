@@ -1,16 +1,15 @@
 
-//const race2 = require('../models/DataStore')
+const { dataStore } = require('../models/DataStore');
 const Race = require('../models/Race')
 const Racer = require('../models/Racer')
 //function io = require('./websocketManager') 
 
 
-function nextRaceChange(socket, io, race) {
+function nextRaceChange(socket, io) {
     console.log('Next race changed');
-    io.emit('nextRaceChange', race)
-    //dataStore.deleteRaceById(raceId)
-    //const upcomingRaces = dataStore.getRacesByRaceByState('Upcoming')
-    //io.emit('loadData', JSON.stringify(upcomingRaces))
+
+    const nextRace = dataStore.getNextRace()
+    io.emit('nextRaceChange', nextRace)
 }
 
 

@@ -1,6 +1,14 @@
 
 const socket = io('http://localhost:3000')
 
+
+// Refresh button for testing
+document.getElementById('refreshBtn').addEventListener('click', () => {
+    console.log("clicked")
+    socket.emit('nextRaceChange')
+})
+
+
 socket.on('nextRaceChange', race => {    
     const container = document.getElementById('nextRaceContainer')
 
