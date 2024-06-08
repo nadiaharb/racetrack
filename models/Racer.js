@@ -10,6 +10,10 @@ class Racer {
     generateRandomId() {
         return Math.floor(Math.random() * 1000000)
     }
+    // Necessary for Receptionist bonus functionality afaik
+    changeCarNumber(carNumber) {
+        this.carNumber = carNumber;
+    }
 }
 
 

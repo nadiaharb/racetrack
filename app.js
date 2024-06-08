@@ -25,4 +25,3 @@ server.listen(PORT, () => {
 
 
 websocketManager(io)
-//RECEPTIONIST_KEY=8ded6076 OBSERVER_KEY=662e0f6c SAFETY_KEY=a2d393bc npm start

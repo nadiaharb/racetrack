@@ -20,19 +20,19 @@ document.getElementById('dangerBtn').addEventListener('click', () => {
 document.getElementById('finishBtn').addEventListener('click', () => {
     let text = "Confirm finishing the race";
     if (confirm(text) == true) {
-        console.log("Race is finished by safety official")    
-        socket.emit('raceModeChange', 'Finish')  
+        console.log("Race is finished by safety official")
+        socket.emit('raceModeChange', 'Finish')
         document.getElementById('safeBtn').style.backgroundColor = 'gray'
         document.getElementById('hazardBtn').style.backgroundColor = 'gray'
         document.getElementById('dangerBtn').style.backgroundColor = 'gray'
         document.getElementById('finishBtn').style.backgroundColor = 'gray'
     } else {
         console.log("Finish cancelled")
-    }    
+    }
 })
 
 // Update mode display in safety official interface
-socket.on('raceModeChange', mode => {    
+socket.on('raceModeChange', mode => {
     updateModeDisplay(mode)
 })
 function updateModeDisplay(mode) {

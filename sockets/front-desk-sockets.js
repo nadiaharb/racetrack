@@ -7,35 +7,38 @@ function loadData(socket, io) {
 }
 
 function addRace(socket, io, newRace) {
-    const addRace = new Race(newRace.id)
-    addRace.flagState = newRace.flagState
-    addRace.raceState = newRace.raceState
-
-    dataStore.addRace(addRace)
+    const race = new Race(newRace.id)
+    console.log(newRace);
+    dataStore.addRace(race)
 
     const upcomingRaces = dataStore.getRacesByRaceByState('Upcoming')
     io.emit('loadData', JSON.stringify(upcomingRaces))
-    socket.emit('raceAdded', newRace)
+    // Logs basically
+    io.emit('racesState', dataStore.races)
 }
 
-function deleteRace(socket, io, raceId) {
+function deleteRace(io, raceId) {
     // console.log("GOT ID", raceId)
     dataStore.deleteRaceById(raceId)
+
     //console.log(dataStore.races)
     const upcomingRaces = dataStore.getRacesByRaceByState('Upcoming')
     io.emit('loadData', JSON.stringify(upcomingRaces))
 }
 
 
-function addRacer(socket, io, racerData) {
-    const addRacer = racerData.racer
+function addRacer(io, socket, racerData) {
+    const racer = new Racer(racerData.carNumber, racerData.name)
+    const currentRace = dataStore.getRaceById(racerData.raceID)
+    currentRace.addParticipant(racer)
 
-    const newRacer = new Racer(addRacer.carNumber, addRacer.name)
-    const currentRace = dataStore.getRaceById(racerData.raceId)
-    currentRace.addParticipant(newRacer)
-
-
-    socket.emit('loadData', JSON.stringify(dataStore.races))
+    const upcomingRaces = dataStore.getRacesByRaceByState('Upcoming')
+    io.emit('loadData', JSON.stringify(upcomingRaces))
+    // Logs basically
+    // Emit racer added
+    socket.emit('racerAdded', racer)
+    // Emit state too
+    socket.emit('raceState', currentRace.participants)
 
 }
 

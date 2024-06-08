@@ -5,39 +5,31 @@ const Racer = require('./Racer');
 class DataStore {
     constructor() {
         this.races = [];
-        this.racers = []; // Assuming you need a place to store racers
     }
 
-    // Get all upcoming races sorted by id
-    getUpcomingRaces() {
-		// Find all races with raceState Upcoming
+    // Race Methods
+
+    getUpcomingRace() {
         const upcomingRaces = this.races.filter(race => race.raceState === RaceState.UPCOMING);
-		// Sort races by id
-		upcomingRaces.sort((a, b) => a.id - b.id);
-		return upcomingRaces
+        if (upcomingRaces.length === 0) {
+            return null; //
+        }
+        return upcomingRaces.reduce((minRace, currentRace) => {
+            return currentRace.id <= minRace.id ? currentRace : minRace;
+        });
     }
 
-	// Get the first upcoming race (Aka the next one)
-    getNextRace() {
-		// Find all upcoming races sorted by id
-		const upcomingRaces = this.getUpcomingRaces()
-		// Return race with smallest id, which is the next race
-		return upcomingRaces[0]
-    }
-
-    // Get the in-progress race
     getInProgressRace() {
         const inProgressRaces = this.races.filter(race => race.raceState === RaceState.IN_PROGRESS);
         if (inProgressRaces.length === 0) {
-            return null;
+            return null; // 
         }
         if (inProgressRaces.length > 1) {
-            throw new Error('Error! Multiple races in progress');
+            throw new Error('Multiple races in progress');
         }
         return inProgressRaces[0];
     }
 
-    // Race methods
     addRace(race) {
         this.races.push(race);
     }
@@ -45,40 +37,50 @@ class DataStore {
     deleteRaceById(raceId) {
         raceId = parseInt(raceId);
         const index = this.races.findIndex(race => race.id === raceId);
-        if (index !== -1) {
+
+        if (index !== -1) { // Check if the race was found
             this.races.splice(index, 1);
             return true;
+        } else {
+            return false; // Indicate that the race was not found
         }
-        return false;
     }
 
     getRaceById(raceId) {
         return this.races.find(race => race.id === raceId);
     }
 
+
     getRaces() {
         return this.races;
     }
 
-    addRacer(racer) {
-        this.racers.push(racer);
-    }
-
-    addRacerToRace(raceId, racer) {
-        const race = this.getRaceById(raceId);
+    getRaceByRaceID(id) {
+        const race = this.races.find(race => race.id === id);
         if (race) {
-            if (racer instanceof Racer) {
-                race.participants.push(racer);
-            } else {
-                throw new Error('Participant must be an instance of Racer');
-            }
+            return race
         } else {
-            throw new Error('Race not found');
+            return null
         }
     }
 
-    getRacerByCarNumber(carNumber) {
-        return this.racers.find(racer => racer.carNumber === carNumber);
+    getRacesByRaceByState(raceState) {
+        return this.races.filter(race => race.raceState === raceState);
+    }
+
+    // Racer Methods
+
+    addRacerToRace(raceID, racer) {
+        const race = this.getRaceById(raceID)
+        if (race) {
+            if (racer instanceof Racer) {
+                race.participants.push(racer)
+            } else {
+                throw new Error('Participant must be an instance of Racer')
+            }
+        } else {
+            throw new Error('Race not found')
+        }
     }
 
     getRacersByRaceID(id) {
@@ -90,13 +92,6 @@ class DataStore {
         }
     }
 
-    getRacers() {
-        return this.racers;
-    }
-
-    getRacesByRaceByState(findRaceState) {
-        return this.races.filter(race => race.raceState === findRaceState);
-    }
 }
 
 const dataStore = new DataStore();
@@ -139,4 +134,4 @@ dataStore.addRace(race2);
 console.log(race1);
 console.log(race2);
 
-module.exports = { dataStore };
+module.exports = dataStore;
