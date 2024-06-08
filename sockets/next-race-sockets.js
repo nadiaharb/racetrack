@@ -8,7 +8,7 @@ const Racer = require('../models/Racer')
 function nextRaceChange(socket, io) {
     console.log('Next race changed');
 
-    const nextRace = dataStore.getUpcomingRace()
+    const nextRace = dataStore.getNextRace()
     io.emit('nextRaceChange', nextRace)
 }
 

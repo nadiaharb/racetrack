@@ -8,7 +8,7 @@ class DataStore {
     }
 
     // Race Methods
-
+/* Replaced this function with getNextRace
     getUpcomingRace() {
         const upcomingRaces = this.races.filter(race => race.raceState === RaceState.UPCOMING);
         if (upcomingRaces.length === 0) {
@@ -18,14 +18,34 @@ class DataStore {
             return currentRace.id <= minRace.id ? currentRace : minRace;
         });
     }
+*/
+    // Get all upcoming races sorted by race id
+    getUpcomingRaces() {
+    // Find all races with raceState Upcoming
+    const upcomingRaces = this.races.filter(race => race.raceState === RaceState.UPCOMING);
+    // If no upcoming races
+    if (upcomingRaces.length === 0) {
+        return null; //
+    }
+    // Sort races by id
+    upcomingRaces.sort((a, b) => a.id - b.id);
+    return upcomingRaces;
+    }
 
+    // Get next race (to be started after the one in progress)
+    getNextRace() {
+        const upcomingRaces = this.getUpcomingRaces();
+        return upcomingRaces[0];
+    }
+
+    // Get ongoing race
     getInProgressRace() {
         const inProgressRaces = this.races.filter(race => race.raceState === RaceState.IN_PROGRESS);
         if (inProgressRaces.length === 0) {
             return null; // 
         }
         if (inProgressRaces.length > 1) {
-            throw new Error('Multiple races in progress');
+            throw new Error('Error! Multiple races in progress');
         }
         return inProgressRaces[0];
     }
@@ -63,10 +83,14 @@ class DataStore {
             return null
         }
     }
-
+/*
     getRacesByRaceByState(raceState) {
         return this.races.filter(race => race.raceState === raceState);
     }
+*/
+
+
+
 
     // Racer Methods
 

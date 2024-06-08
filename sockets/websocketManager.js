@@ -56,7 +56,7 @@ module.exports = function (io) {
 
         // Gotta check this works
         socket.on('startRace', () => {
-            const race = dataStore.getUpcomingRace();
+            const race = dataStore.getNextRace();
             if (race) {
                 race.setRaceState(RaceState.IN_PROGRESS);
                 startCountdown(io, race);
@@ -66,7 +66,7 @@ module.exports = function (io) {
 
         // For testing only
         socket.on('startCountdown', () => {
-            const race = dataStore.getUpcomingRace();
+            const race = dataStore.getNextRace();
             if (race) {
                 race.setRaceState(RaceState.IN_PROGRESS);
                 startCountdown(io, race);
@@ -121,7 +121,7 @@ module.exports = function (io) {
 
 function emitCurrentRace(io) {
     const inProgressRace = dataStore.getInProgressRace();
-    const upcomingRace = dataStore.getUpcomingRace();
+    const upcomingRace = dataStore.getNextRace();
     if (inProgressRace) {
         io.emit('updateRaceData', JSON.stringify(inProgressRace));
     } else if (upcomingRace) {
