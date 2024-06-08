@@ -8,28 +8,28 @@ class DataStore {
     }
 
     // Race Methods
-/* Replaced this function with getNextRace
-    getUpcomingRace() {
-        const upcomingRaces = this.races.filter(race => race.raceState === RaceState.UPCOMING);
-        if (upcomingRaces.length === 0) {
-            return null; //
+    /* Replaced this function with getNextRace
+        getUpcomingRace() {
+            const upcomingRaces = this.races.filter(race => race.raceState === RaceState.UPCOMING);
+            if (upcomingRaces.length === 0) {
+                return null; //
+            }
+            return upcomingRaces.reduce((minRace, currentRace) => {
+                return currentRace.id <= minRace.id ? currentRace : minRace;
+            });
         }
-        return upcomingRaces.reduce((minRace, currentRace) => {
-            return currentRace.id <= minRace.id ? currentRace : minRace;
-        });
-    }
-*/
+    */
     // Get all upcoming races sorted by race id
     getUpcomingRaces() {
-    // Find all races with raceState Upcoming
-    const upcomingRaces = this.races.filter(race => race.raceState === RaceState.UPCOMING);
-    // If no upcoming races
-    if (upcomingRaces.length === 0) {
-        return null;
-    }
-    // Sort races by id
-    upcomingRaces.sort((a, b) => a.id - b.id);
-    return upcomingRaces;
+        // Find all races with raceState Upcoming
+        const upcomingRaces = this.races.filter(race => race.raceState === RaceState.UPCOMING);
+        // If no upcoming races
+        if (upcomingRaces.length === 0) {
+            return null;
+        }
+        // Sort races by id
+        upcomingRaces.sort((a, b) => a.id - b.id);
+        return upcomingRaces;
     }
 
     // Get next race (to be started after the one in progress)
@@ -58,9 +58,9 @@ class DataStore {
         this.races.push(race);
     }
     getRaceByFlag() {
-        
+
     }
-   
+
     deleteRaceById(raceId) {
         raceId = parseInt(raceId);
         const index = this.races.findIndex(race => race.id === raceId);
@@ -74,7 +74,7 @@ class DataStore {
     }
     //get upcoming races
     getUpcomingRacesByFlag(flagState) {
-        const upcomingRaces=this.getUpcomingRaces()
+        const upcomingRaces = this.getUpcomingRaces()
         return upcomingRaces.filter(race => race.flagState === flagState)
     }
     getRaceById(raceId) {
@@ -94,11 +94,11 @@ class DataStore {
             return null
         }
     }
-/*
-    getRacesByRaceByState(raceState) {
-        return this.races.filter(race => race.raceState === raceState);
-    }
-*/
+    /*
+        getRacesByRaceByState(raceState) {
+            return this.races.filter(race => race.raceState === raceState);
+        }
+    */
 
 
 

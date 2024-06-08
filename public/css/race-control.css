@@ -5,13 +5,35 @@ body {
     background-color: #f2f2f2;
 }
 
-.main-page-container {
+.race-mode-container {
+    width: 80%;
+    margin: 50px auto;
+    text-align: center;
+}
+
+.end-race-container {
+    width: 80%;
+    margin: 50px auto;
+    text-align: center;
+}
+
+.start-container {
+    width: 80%;
+    margin: 50px auto;
+    text-align: center;
+}
+
+.table-container {
     width: 80%;
     margin: 50px auto;
     text-align: center;
 }
 
 h1 {
+    color: #333;
+}
+
+h2 {
     color: #333;
 }
 
@@ -39,10 +61,10 @@ h1 {
     border: 2px solid black;
     padding: 10px 20px;
     margin: 10px;
-  }
+}
 
 #safeBtn {
-    background-color: green;
+    background-color: gray;
     padding: 10px 20px;
     border-radius: 5px;
     margin: 10px;
@@ -50,21 +72,35 @@ h1 {
 }
 
 #hazardBtn {
-    background-color: yellow;
+    background-color: gray;
     padding: 10px 20px;
     border-radius: 5px;
     font-weight: bold;
 }
 
 #dangerBtn {
-    background-color: red;
+    background-color: gray;
     padding: 10px 20px;
     border-radius: 5px;
     font-weight: bold;
 }
 
 #finishBtn {
-    background-color: white;
+    background-color: gray;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+#endBtn {
+    background-color: gray;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+#startBtn {
+    background-color: lightgreen;
     padding: 10px 20px;
     border-radius: 5px;
     font-weight: bold;
@@ -73,14 +109,36 @@ h1 {
 #safeBtn:active {
     border: 2px solid orange;
 }
+
 #hazardBtn:active {
     border: 2px solid orange;
 }
+
 #dangerBtn:active {
     border: 2px solid orange;
 }
+
 #finishBtn:active {
     border: 2px solid orange;
+}
+#endBtn:active {
+    border: 2px solid green;
+}
+#startBtn:active {
+    border: 2px solid orange;
+}
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+td,
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
 }
 
 
@@ -89,8 +147,8 @@ h1 {
 }
 
 #modeDisplay {
-    font-weight: bold; 
-    color: #007bff; 
+    font-weight: bold;
+    color: #007bff;
 }
 
 /* CSS Style for Race Elements */

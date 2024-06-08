@@ -4,7 +4,7 @@ const { loadData, addRace, deleteRace, addRacer, getRaceParticipants, deleteRace
 const { } = require('./leaderboard-sockets');
 
 const { RaceState, FlagState } = require('../models/enums');
-const { raceModeChange } = require('./race-control-sockets');
+const { raceModeChange, raceStarted, raceEnded, prepareNextRace } = require('./race-control-sockets');
 const { nextRaceChange } = require('./next-race-sockets');
 
 
@@ -87,7 +87,7 @@ module.exports = function (io) {
         socket.on('endRace', raceID => {
             const race = dataStore.getInProgressRace(raceID);
             if (race) {
-                race.setRaceState(RaceState.FINISHED);
+                //race.setRaceState(RaceState.FINISHED);
                 emitCurrentRace(io); // Notify all clients
                 stopCountdown(io, race);
             }
@@ -117,12 +117,15 @@ module.exports = function (io) {
             raceModeChange(socket, io, mode);
         });
 
+        // Begin new race
+        socket.on('raceStarted', () => { emitCurrentRace })
+
         // Next race display      
         // For testing
         io.emit('nextRaceChange', null);
 
         // Refresh next race data
-        socket.on('nextRaceChange', race => {
+        socket.on('prepareNextRace', race => {
             nextRaceChange(socket, io, race);
         });
     });

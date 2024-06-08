@@ -1,24 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Race Control</title>
-    <link rel="stylesheet" href="/public/css/race-control.css">
 
-  </head>
-  <body>
-    <div class="main-page-container">
-      <h1>Race Mode Buttons</h1>
-      <button id="safeBtn">Safe</button>
-      <button id="hazardBtn">Hazard</button>
-      <button id="dangerBtn">Danger</button>
-      <button id="finishBtn">Finish</button>
-      <p>Current mode: <span id="modeDisplay"></span></p>
+<head>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Race Control</title>
+  <link rel="stylesheet" href="/public/css/race-control.css">
+
+</head>
+
+<body>
+  <div class="race-mode-container">
+    <h2>Race Mode Buttons</h2>
+    <button id="safeBtn">Safe</button>
+    <button id="hazardBtn">Hazard</button>
+    <button id="dangerBtn">Danger</button>
+    <button id="finishBtn">Finish</button>
+    <p>Current mode: <span id="modeDisplay"></span></p>
   </div>
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/public/js/race-control.js"></script>
+  <div class="end-race-container">
+    <h2>End race session</h2>
+    <button id="endBtn">Track is clear</button>
+  </div>
+
+  <div class="table-container">
+
+    <h2 id="table-title">Drivers</h2>
+
+    <table>
+      <tr>
+        <th>Car</th>
+        <th>Driver</th>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td id="driver1"></td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td id="driver2"></td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td id="driver3"></td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td id="driver4"></td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td id="driver5"></td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td id="driver6"></td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td id="driver7"></td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td id="driver8"></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="start-container">
+    <h3 id="start-title">Start race</h3>
+    <button id="startBtn">Start</button>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/public/js/race-control.js"></script>
 
 
-  </body>
+</body>
+
 </html>
