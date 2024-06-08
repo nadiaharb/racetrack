@@ -1,0 +1,119 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f2f2f2;
+}
+
+.main-page-container {
+    width: 80%;
+    margin: 50px auto;
+    text-align: center;
+}
+
+h1 {
+    color: #333;
+}
+
+.main-links {
+    margin-top: 20px;
+}
+
+.main-links a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 0 10px;
+    transition: background-color 0.3s;
+}
+
+.main-links a:hover {
+    background-color: #0056b3;
+}
+
+.button {
+    color: black;
+    border: 2px solid black;
+    padding: 10px 20px;
+    margin: 10px;
+  }
+
+#safeBtn {
+    background-color: green;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin: 10px;
+    font-weight: bold;
+}
+
+#hazardBtn {
+    background-color: yellow;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+#dangerBtn {
+    background-color: red;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+#finishBtn {
+    background-color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+#safeBtn:active {
+    border: 2px solid orange;
+}
+#hazardBtn:active {
+    border: 2px solid orange;
+}
+#dangerBtn:active {
+    border: 2px solid orange;
+}
+#finishBtn:active {
+    border: 2px solid orange;
+}
+
+
+.fd-p {
+    margin: 20px 0;
+}
+
+#modeDisplay {
+    font-weight: bold; 
+    color: #007bff; 
+}
+
+/* CSS Style for Race Elements */
+.race {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.race h2 {
+    margin-top: 0;
+}
+
+.race p {
+    margin: 5px 0;
+}
+
+.race ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.race li {
+    margin-left: 20px;
+}
