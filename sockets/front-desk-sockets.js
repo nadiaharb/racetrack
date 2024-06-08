@@ -6,9 +6,20 @@ function loadData(socket, io) {
     socket.emit('loadData', JSON.stringify(dataStore.races))
 }
 
+function deleteRacer(io, deleteRacer){
+    const race = dataStore.getRaceById(deleteRacer.raceId)
+    const racer=race.getRacerById(parseInt(deleteRacer.racerId))
+     race.deleteParticipant(racer.id)
+   const updatedRaces = dataStore.getUpcomingRaces()
+   io.emit('loadData', JSON.stringify(updatedRaces))
+
+ }
+
+
+
 function addRace(socket, io, newRace) {
     const race = new Race(newRace.id)
-    console.log(newRace);
+    race.flagState="Danger"
     dataStore.addRace(race)
 
     const upcomingRaces = dataStore.getUpcomingRaces()
@@ -28,8 +39,8 @@ function deleteRace(io, raceId) {
 
 
 function addRacer(io, socket, racerData) {
-    const racer = new Racer(racerData.carNumber, racerData.name)
-    const currentRace = dataStore.getRaceById(racerData.raceID)
+    const racer = new Racer(racerData.racer.carNumber, racerData.racer.name)
+    const currentRace = dataStore.getRaceById(parseInt(racerData.raceId))
     currentRace.addParticipant(racer)
 
     const upcomingRaces = dataStore.getUpcomingRaces()
@@ -42,4 +53,16 @@ function addRacer(io, socket, racerData) {
 
 }
 
-module.exports = { loadData, addRace, deleteRace, addRacer }
+function editRacer(io,editedRacer){
+    const race = dataStore.getRaceById(editedRacer.raceId)
+    const racer=race.getRacerById(parseInt(editedRacer.racerId))
+    
+     racer.name=editedRacer.name
+     racer.carNumber=editedRacer.carNumber
+     const upcomingRaces = dataStore.getUpcomingRaces()
+        io.emit('loadData', JSON.stringify(upcomingRaces))
+    }
+
+module.exports = { loadData, addRace, deleteRace, addRacer , deleteRacer,  editRacer
+
+}

@@ -35,12 +35,28 @@ class Race {
             throw new Error('Participant must be an instance of Racer');
         }
     }
+    deleteParticipant(participantId){
+         const index = this.participants.findIndex(participant => participant.id === participantId);
+        
+         
+         if (index !== -1) {
+             this.participants.splice(index, 1);
+         } else {
+             throw new Error('Participant not found');
+         }
+    }
 
     // Racer Method
     getRacerByCarNumber(carNumber) { // Necessary for Lap Line Observer
         return this.racers.find(racer => racer.carNumber === carNumber);
     }
-
+    getRacerById(participantId) {
+        
+        const participant = this.participants.find(participant => participant.id === participantId);
+        
+       
+        return participant || null;
+    }
     // Flag State - Race State
     getFlagState() {
         return this.flagState;

@@ -1,6 +1,6 @@
 const dataStore = require('../models/DataStore');
 
-const { loadData, addRace, deleteRace, addRacer, getRaceParticipants } = require('./front-desk-sockets');
+const { loadData, addRace, deleteRace, addRacer, getRaceParticipants, deleteRacer, editRacer } = require('./front-desk-sockets');
 const { } = require('./leaderboard-sockets');
 
 const { RaceState, FlagState } = require('../models/enums');
@@ -26,7 +26,7 @@ module.exports = function (io) {
         });
 
         // Load Data 
-        socket.emit('loadData', JSON.stringify(dataStore.races));
+        socket.emit('loadData', JSON.stringify(dataStore.getUpcomingRaces()));
 
         // Emit current race if it exists
         emitCurrentRace(io);
@@ -36,6 +36,15 @@ module.exports = function (io) {
             addRace(socket, io, race);
             emitCurrentRace(io); // Notify all clients
         });
+
+        //delete racer
+        socket.on('deleteRacer', deletedRacer =>{
+            deleteRacer( io,deletedRacer)
+        } )
+        //edit racer
+         socket.on('editRacer', editedRacer => {
+            editRacer(io, editedRacer)
+        })
 
         // Add Racer - Receptionist
         socket.on('addRacer', (racerData) => {
@@ -56,7 +65,7 @@ module.exports = function (io) {
 
         // Gotta check this works
         socket.on('startRace', () => {
-            const race = dataStore.getNextRace();
+            const race = dataStore.getUpcomingRace();
             if (race) {
                 race.setRaceState(RaceState.IN_PROGRESS);
                 startCountdown(io, race);
@@ -66,7 +75,7 @@ module.exports = function (io) {
 
         // For testing only
         socket.on('startCountdown', () => {
-            const race = dataStore.getNextRace();
+            const race = dataStore.getUpcomingRace();
             if (race) {
                 race.setRaceState(RaceState.IN_PROGRESS);
                 startCountdown(io, race);
@@ -121,7 +130,7 @@ module.exports = function (io) {
 
 function emitCurrentRace(io) {
     const inProgressRace = dataStore.getInProgressRace();
-    const upcomingRace = dataStore.getNextRace();
+    const upcomingRace = dataStore.getUpcomingRaces();
     if (inProgressRace) {
         io.emit('updateRaceData', JSON.stringify(inProgressRace));
     } else if (upcomingRace) {

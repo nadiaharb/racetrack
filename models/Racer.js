@@ -1,6 +1,6 @@
 class Racer {
     constructor(carNumber, name) {
-        //this.id = this.generateRandomId()
+        this.id = this.generateRandomId()
         this.carNumber = carNumber
         this.name = name
         this.bestLapTime = null
