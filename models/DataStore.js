@@ -25,7 +25,7 @@ class DataStore {
     const upcomingRaces = this.races.filter(race => race.raceState === RaceState.UPCOMING);
     // If no upcoming races
     if (upcomingRaces.length === 0) {
-        return null; //
+        return null;
     }
     // Sort races by id
     upcomingRaces.sort((a, b) => a.id - b.id);
@@ -35,6 +35,10 @@ class DataStore {
     // Get next race (to be started after the one in progress)
     getNextRace() {
         const upcomingRaces = this.getUpcomingRaces();
+        // If no upcoming races
+        if (upcomingRaces.length === 0) {
+            return null;
+        }
         return upcomingRaces[0];
     }
 
