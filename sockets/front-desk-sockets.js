@@ -41,7 +41,22 @@ function deleteRace(io, raceId) {
 function addRacer(io, socket, racerData) {
     const racer = new Racer(racerData.racer.carNumber, racerData.racer.name)
     const currentRace = dataStore.getRaceById(parseInt(racerData.raceId))
-    currentRace.addParticipant(racer)
+    if(!currentRace.isNameUnique(racerData.racer.name)){
+        socket.emit('error', { message: 'Racer with this name already exist' })
+        return
+    }
+    if(!currentRace.isCarUnique(parseInt(racerData.racer.carNumber))){
+        socket.emit('error', { message: 'Racer with this car number already exist' })
+        return
+    }
+
+    try{
+        currentRace.addParticipant(racer)
+    }catch(error){
+        socket.emit('error', { message: error.message })
+        return
+    }
+   
 
     const upcomingRaces = dataStore.getUpcomingRaces()
     io.emit('loadData', JSON.stringify(upcomingRaces))
@@ -56,7 +71,19 @@ function addRacer(io, socket, racerData) {
 function editRacer(io,editedRacer){
     const race = dataStore.getRaceById(editedRacer.raceId)
     const racer=race.getRacerById(parseInt(editedRacer.racerId))
-    
+    console.log(race, racer)
+    if (!race.isNameUnique(editedRacer.name, racer.id)) {
+        io.emit('error', { message: 'Racer with this name already exist' })
+        return
+    }
+    if(!race.isCarUnique(parseInt(editedRacer.carNumber), racer.id)){
+       io.emit('error', { message: 'Racer with this car number already exist' })
+        return
+    }
+    if(editedRacer.carNumber>8){
+        io.emit('error', { message: `Car's numbers can be from 1 to 8` })
+         return
+     }
      racer.name=editedRacer.name
      racer.carNumber=editedRacer.carNumber
      const upcomingRaces = dataStore.getUpcomingRaces()

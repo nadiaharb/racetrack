@@ -24,26 +24,61 @@ class Race {
         this.duration = duration; // Duration of the race (derived from env vars, default)
         this.flagState = flagState; // State of the flag
         this.raceState = raceState; // State of the race
+        this.assignedCarNumbers = new Set()
     }
     // Race Methods
 
     addParticipant(participant) {
-        // Validate that we are pushing a Racer
-        if (participant instanceof Racer) {
-            (this.participants).push(participant);
-        } else {
-            throw new Error('Participant must be an instance of Racer');
+       
+        if (this.participants.length >= 8) {
+            
+            throw new Error('Race is already full. Cannot add more participants.');
         }
+        if (!(participant instanceof Racer)) {
+            throw new Error('Participant must be an instance of Racer')
+        }
+        let carNumber
+        if (participant.carNumber && !this.assignedCarNumbers.has(participant.carNumber) ) {
+            if(participant.carNumber>=1 && participant.carNumber<=8){
+                carNumber = participant.carNumber
+            }else{
+                throw new Error('Car numbers can be from 1 to 8.')
+            }
+            
+        } else {
+
+            carNumber = 1
+            while (this.assignedCarNumbers.has(carNumber) && carNumber <= 8) {
+                carNumber++
+            }
+            
+            if (carNumber > 8) {
+                throw new Error('All car numbers from 1 to 8 are already assigned.')
+            }
+            
+        }
+    
+        participant.carNumber = carNumber
+        this.assignedCarNumbers.add(carNumber)
+    
+        this.participants.push(participant)
     }
     deleteParticipant(participantId){
-         const index = this.participants.findIndex(participant => participant.id === participantId);
-        
-         
-         if (index !== -1) {
-             this.participants.splice(index, 1);
-         } else {
-             throw new Error('Participant not found');
-         }
+        const index = this.participants.findIndex(p => p.id === participantId)
+        if (index !== -1) {
+            const deletedParticipant = this.participants.splice(index, 1)[0]
+            this.assignedCarNumbers.delete(deletedParticipant.carNumber)
+            return deletedParticipant
+        } else {
+            throw new Error(`Participant with ID ${participantId} not found.`)
+        }
+    }
+
+    isNameUnique(name, excludeId = null) {
+        return !this.participants.some(p => p.name === name && p.id !== excludeId)
+    }
+    isCarUnique(carNumber,excludeId = null) {
+        return !this.participants.some(p => p.carNumber === carNumber && p.id !== excludeId)
     }
 
     // Racer Method
@@ -74,7 +109,10 @@ class Race {
     getRaceState() {
         return this.raceState;
     }
-
+    getRacesByFlag(flagState, races) {
+        
+        return races.filter(race => race.flagState === flagState)
+    }
     setRaceState(state) { // This method is used to set the state via enum
         if (this.raceState === RaceState.FINISHED) {
             throw new Error('Race state is FINAL. Cannot change from FINISHED state.');

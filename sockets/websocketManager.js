@@ -26,7 +26,7 @@ module.exports = function (io) {
         });
 
         // Load Data 
-        socket.emit('loadData', JSON.stringify(dataStore.getUpcomingRaces()));
+        socket.emit('loadData', JSON.stringify(dataStore.getUpcomingRacesByFlag("Danger")))
 
         // Emit current race if it exists
         emitCurrentRace(io);

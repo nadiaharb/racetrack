@@ -57,7 +57,10 @@ class DataStore {
     addRace(race) {
         this.races.push(race);
     }
-
+    getRaceByFlag() {
+        
+    }
+   
     deleteRaceById(raceId) {
         raceId = parseInt(raceId);
         const index = this.races.findIndex(race => race.id === raceId);
@@ -69,7 +72,11 @@ class DataStore {
             return false; // Indicate that the race was not found
         }
     }
-
+    //get upcoming races
+    getUpcomingRacesByFlag(flagState) {
+        const upcomingRaces=this.getUpcomingRaces()
+        return upcomingRaces.filter(race => race.flagState === flagState)
+    }
     getRaceById(raceId) {
         return this.races.find(race => race.id === raceId);
     }
@@ -148,7 +155,7 @@ const racers2 = [
 
 const race1 = new Race();
 racers1.forEach(racer => race1.addParticipant(racer));
-race1.flagState = 'Danger';
+race1.flagState = 'Safe';
 race1.raceState = RaceState.IN_PROGRESS;
 
 const race2 = new Race();

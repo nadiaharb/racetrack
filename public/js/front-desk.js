@@ -35,21 +35,37 @@ function renderRaces(races) {
         <button class="add-racer-button" data-race-id="${race.id}"  data-race-flag="${race.flagState}" ${race.flagState === "Safe" ? 'disabled' : ''}>Add Racer</button>
         <div id ="racerForm${race.id}" class="racerFormContainer" style="display: none;">
             <form id="raceForm${race.id}">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <!-- Hidden carNumber input -->
+            <div id="carNumberContainer${race.id}" style="display: none;">
                 <label for="carNumber">Car Number:</label>
-                <input type="text" id="carNumber" name="carNumber" required>
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
-                <button type="submit">Add Racer</button>
-                <button type="button" id="cancelButton" data-race-flag="${race.flagState}" ${race.flagState === "Safe" ? 'disabled' : ''}>Cancel</button>
+                <input type="text" id="carNumber" name="carNumber">
+            </div>
+            <!-- Button to show carNumber input -->
+            <button type="button" id="assignCarManuallyButton">Assign Car Manually</button>
+            <button type="submit">Add Racer</button>
+            <button type="button" id="cancelButton${race.id}" data-race-flag="${race.flagState}" ${race.flagState === "Safe" ? 'disabled' : ''}>Cancel</button>
             </form>
         </div>
-        <button class="delete-button" data-race-id="${race.id}" data-race-flag="${race.flagState}" ${race.flagState === "Safe" ? 'disabled' : ''}>Delete</button>
+        <br>
+        <br>
+        <button  class="delete-button" data-race-id="${race.id}" data-race-flag="${race.flagState}" ${race.flagState === "Safe" ? 'disabled' : ''}>Delete Race</button>
         `
         sessionContainer.appendChild(raceDiv)
          // Add Racer button event listener
          const addRacerButton = raceDiv.querySelector('.add-racer-button')
          addRacerButton.addEventListener('click', function() {
              showRacerForm(race.id)
+         })
+
+         // Event listener for "Assign Car Manually" button
+         const assignCarManuallyButton = raceDiv.querySelector('#assignCarManuallyButton');
+         assignCarManuallyButton.addEventListener('click', function() {
+             // Show the carNumber input container
+            // console.log("clicked",  document.getElementById('carNumberContainer'+race.id))
+             document.getElementById('carNumberContainer'+race.id).style.display = 'block';
+             assignCarManuallyButton.style.display='none'
          })
 
          // Delete Racer button event listeners
@@ -76,6 +92,9 @@ editRacerButtons.forEach(btn => {
 
     })
 }
+
+
+
 //add racer
 function showRacerForm(raceId) {
     const racerFormContainer = document.getElementById("racerForm"+raceId)
@@ -97,7 +116,7 @@ function showRacerForm(raceId) {
         racerForm.reset()
     }
 
-    const cancelButton = document.getElementById('cancelButton')
+    const cancelButton = document.getElementById('cancelButton'+raceId)
     cancelButton.onclick = function() {
         racerFormContainer.style.display = 'none'
         racerForm.reset()
@@ -218,3 +237,7 @@ socket.on('raceAdded', function(response) {
 })
 
 
+//Error
+socket.on('error', (data) => {
+    alert(data.message) 
+})
