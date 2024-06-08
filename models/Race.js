@@ -109,10 +109,7 @@ class Race {
     getRaceState() {
         return this.raceState;
     }
-    getRacesByFlag(flagState, races) {
-        
-        return races.filter(race => race.flagState === flagState)
-    }
+   
     setRaceState(state) { // This method is used to set the state via enum
         if (this.raceState === RaceState.FINISHED) {
             throw new Error('Race state is FINAL. Cannot change from FINISHED state.');
