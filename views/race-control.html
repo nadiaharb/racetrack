@@ -9,25 +9,24 @@
 </head>
 
 <body>
-  <div class="race-mode-container">
+  <div class="race-mode-container" style="display: none;">
     <h2>Race Mode Buttons</h2>
-    <button id="safeBtn">Safe</button>
-    <button id="hazardBtn">Hazard</button>
-    <button id="dangerBtn">Danger</button>
-    <button id="finishBtn">Finish</button>
+    <button id="safeBtn" data-state="Safe" class="modeBtn">Safe</button>
+<button id="hazardBtn" data-state="Hazard" class="modeBtn">Hazard</button>
+<button id="dangerBtn" data-state="Danger" class="modeBtn">Danger</button>
+<button id="finishBtn" data-state="Finish" class="modeBtn">Finish</button>
+
     <p>Current mode: <span id="modeDisplay"></span></p>
   </div>
 
-  <div class="end-race-container">
+  <div class="end-race-container" style="display: none;">
     <h2>End race session</h2>
-    <button id="endBtn">Track is clear</button>
+    <button id="endBtn">End Race</button>
   </div>
 
   <div class="table-container">
-
     <h2 id="table-title">Drivers</h2>
-
-    <table>
+    <table id="drivers-table">
       <tr>
         <th>Car</th>
         <th>Driver</th>
@@ -65,15 +64,14 @@
         <td id="driver8"></td>
       </tr>
     </table>
-  </div>
-
+</div>
   <div class="start-container">
     <h3 id="start-title">Start race</h3>
     <button id="startBtn">Start</button>
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
-  <script src="/public/js/race-control.js"></script>
+  <script src="/public/js/race-control-new.js"></script>
 
 
 </body>

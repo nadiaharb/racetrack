@@ -188,7 +188,7 @@ document.getElementById('sessionContainer').addEventListener('click', function(e
 
 // Load and render race data
 socket.on('loadData', function(loadedData) {
-  
+  console.log('triggerd')
     try {
         const races = JSON.parse(loadedData)
         if (races) {
@@ -240,4 +240,8 @@ socket.on('raceAdded', function(response) {
 //Error
 socket.on('error', (data) => {
     alert(data.message) 
+})
+
+socket.on("raceModeChanged", race=>{
+    console.log(race)
 })

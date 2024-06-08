@@ -11,6 +11,7 @@ function deleteRacer(io, deleteRacer){
     const racer=race.getRacerById(parseInt(deleteRacer.racerId))
      race.deleteParticipant(racer.id)
    const updatedRaces = dataStore.getUpcomingRaces()
+   io.emit('racerDeleted', dataStore.getNextRace())
    io.emit('loadData', JSON.stringify(updatedRaces))
 
  }
@@ -35,6 +36,7 @@ function deleteRace(io, raceId) {
     //console.log(dataStore.races)
     const upcomingRaces = dataStore.getUpcomingRaces()
     io.emit('loadData', JSON.stringify(upcomingRaces))
+    
 }
 
 
@@ -62,7 +64,8 @@ function addRacer(io, socket, racerData) {
     io.emit('loadData', JSON.stringify(upcomingRaces))
     // Logs basically
     // Emit racer added
-    socket.emit('racerAdded', racer)
+    io.emit('racerAdded', dataStore.getNextRace())
+   // socket.emit('racerAdded', racer)
     // Emit state too
     socket.emit('raceState', currentRace.participants)
 
@@ -88,6 +91,7 @@ function editRacer(io,editedRacer){
      racer.carNumber=editedRacer.carNumber
      const upcomingRaces = dataStore.getUpcomingRaces()
         io.emit('loadData', JSON.stringify(upcomingRaces))
+        io.emit('racerEdited', dataStore.getNextRace())
     }
 
 module.exports = { loadData, addRace, deleteRace, addRacer , deleteRacer,  editRacer

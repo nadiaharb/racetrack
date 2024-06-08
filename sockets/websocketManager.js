@@ -4,7 +4,7 @@ const { loadData, addRace, deleteRace, addRacer, getRaceParticipants, deleteRace
 const { } = require('./leaderboard-sockets');
 
 const { RaceState, FlagState } = require('../models/enums');
-const { raceModeChange, raceStarted, raceEnded, prepareNextRace } = require('./race-control-sockets');
+const { raceModeChange, raceStarted, raceEnded, prepareNextRace, startRace, endRace} = require('./race-control-sockets');
 const { nextRaceChange } = require('./next-race-sockets');
 
 
@@ -84,6 +84,7 @@ module.exports = function (io) {
         });
 
         // TO-DO
+        /*
         socket.on('endRace', raceID => {
             const race = dataStore.getInProgressRace(raceID);
             if (race) {
@@ -92,7 +93,7 @@ module.exports = function (io) {
                 stopCountdown(io, race);
             }
         });
-
+*/
         // Testing purposes, not sure if necessary
         socket.on('changeRaceState', mode => {
             const race = dataStore.getInProgressRace();
@@ -112,11 +113,6 @@ module.exports = function (io) {
         });
 
         // Race control / Safety official
-        // Change current race flagState / mode
-        socket.on('raceModeChange', mode => {
-            raceModeChange(socket, io, mode);
-        });
-
         // Begin new race
         socket.on('raceStarted', () => { emitCurrentRace })
 
@@ -128,6 +124,27 @@ module.exports = function (io) {
         socket.on('prepareNextRace', race => {
             nextRaceChange(socket, io, race);
         });
+
+        //race control
+        const inProgressRace = dataStore.getInProgressRace()
+        if (inProgressRace) {
+            socket.emit('loadRaceControl', inProgressRace);
+        } else {
+            
+            socket.emit('loadRaceControl', dataStore.getNextRace());
+        }
+        
+        socket.on("raceModeChange", updatedRace=>{
+            raceModeChange(io,updatedRace)
+           
+        })
+
+        socket.on("startedRace", updatedRace=>{
+             startRace(io,updatedRace)
+        })
+        socket.on("endRace", updatedRace=>{
+            endRace(io,updatedRace)
+        })
     });
 };
 

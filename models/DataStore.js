@@ -78,6 +78,7 @@ class DataStore {
         return upcomingRaces.filter(race => race.flagState === flagState)
     }
     getRaceById(raceId) {
+        
         return this.races.find(race => race.id === raceId);
     }
 
@@ -155,8 +156,8 @@ const racers2 = [
 
 const race1 = new Race();
 racers1.forEach(racer => race1.addParticipant(racer));
-race1.flagState = 'Safe';
-race1.raceState = RaceState.IN_PROGRESS;
+race1.flagState = 'Danger';
+race1.raceState = RaceState.UPCOMING;
 
 const race2 = new Race();
 racers2.forEach(racer => race2.addParticipant(racer));
