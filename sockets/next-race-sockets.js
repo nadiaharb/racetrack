@@ -1,5 +1,5 @@
 
-const { dataStore } = require('../models/DataStore');
+const dataStore = require('../models/DataStore');
 const Race = require('../models/Race')
 const Racer = require('../models/Racer')
 //function io = require('./websocketManager') 
@@ -8,7 +8,7 @@ const Racer = require('../models/Racer')
 function nextRaceChange(socket, io) {
     console.log('Next race changed');
 
-    const nextRace = dataStore.getNextRace()
+    const nextRace = dataStore.getUpcomingRace()
     io.emit('nextRaceChange', nextRace)
 }
 
