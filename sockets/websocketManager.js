@@ -81,24 +81,13 @@ module.exports = function (io) {
         socket.on('startCountdown', () => {
             const race = dataStore.getNextRace();
             if (race) {
-                race.setRaceState(RaceState.IN_PROGRESS);
+                //race.setRaceState(RaceState.IN_PROGRESS);
                 startCountdown(io, race);
                 startLapTimeUpdate(io, race);
                 emitCurrentRace(io); // Notify all clients
             }
         });
 
-        // TO-DO
-        /*
-        socket.on('endRace', raceID => {
-            const race = dataStore.getInProgressRace(raceID);
-            if (race) {
-                //race.setRaceState(RaceState.FINISHED);
-                emitCurrentRace(io); // Notify all clients
-                stopCountdown(io, race);
-            }
-        });
-*/
         // Testing purposes, not sure if necessary
         socket.on('changeRaceState', mode => {
             const race = dataStore.getInProgressRace();
@@ -132,14 +121,14 @@ module.exports = function (io) {
 
         //race control
         const inProgressRace = dataStore.getInProgressRace()
-      
+
         if (inProgressRace) {
             socket.emit('loadRaceControl', inProgressRace);
-           
+
         } else {
 
             socket.emit('loadRaceControl', dataStore.getNextRace());
-          
+
         }
 
         socket.on("raceModeChange", updatedRace => {
@@ -147,8 +136,14 @@ module.exports = function (io) {
 
         })
 
-        socket.on("startedRace", updatedRace => {
-            startRace(io, updatedRace)
+        socket.on("startedRace", race => {
+            startRace(io, race)
+        })
+        socket.on("raceStarted", race => {
+            race.setRaceState(RaceState.IN_PROGRESS);
+            startCountdown(io, race);
+            startLapTimeUpdate(io, race);
+            emitCurrentRace(io); // Notify all clients
         })
         socket.on("endRace", updatedRace => {
             endRace(io, updatedRace)
@@ -213,6 +208,8 @@ function startLapTimeUpdate(io, race) {
             });
             io.emit('lapTimeUpdate', JSON.stringify(race.participants));
             io.emit('raceTimeUpdate', JSON.stringify(race.duration));
+            io.emit('updateObserver', JSON.stringify(race));
+
         }
     }, 100); // Emit lap time update every 100ms
 }
