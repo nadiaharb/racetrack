@@ -61,6 +61,9 @@ function renderRaces(races) {
         <button  class="delete-button" data-race-id="${race.id}" data-race-flag="${race.flagState}" ${race.flagState === "Safe" ? 'disabled' : ''}>Delete Race</button>
         `
         sessionContainer.appendChild(raceDiv)
+        // Add event listeners inside the loop
+        const dltBtn = raceDiv.querySelector('.delete-button');
+        dltBtn.addEventListener('click', deleteRaceHandler);
         
 
          // Event listener for "Assign Car Manually" button
@@ -98,9 +101,18 @@ editRacerButtons.forEach(btn => {
     addRacerButton.addEventListener('click', function() {
         showRacerForm(race.id)
     })
+    
+    
     })
 }
 
+
+function deleteRaceHandler(event) {
+    console.log("triggered")
+    const raceId = event.target.dataset.raceId;
+    console.log(raceId)
+    socket.emit('deleteRace', raceId);
+}
 
 
 //add racer
@@ -183,7 +195,9 @@ function editRacer(raceId, participantId, name, car, raceId) {
 }
 
 
+
 // delete race
+/*
 document.getElementById('sessionContainer').addEventListener('click', function(event) {
     if (event.target.classList.contains('delete-button')) {
         const raceId = event.target.getAttribute('data-race-id')
@@ -192,13 +206,14 @@ document.getElementById('sessionContainer').addEventListener('click', function(e
     }
 })
 
-
+*/
 
 // Load and render race data
 socket.on('loadData', function(loadedData) {
       
     try {
         if(loadedData===null){
+            console.log("NULL")
             renderRaces(null)
             return
         }

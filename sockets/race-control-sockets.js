@@ -9,7 +9,7 @@ const Race = require('../models/Race')
 
 
 function raceModeChange(io, updatedRace) {
-
+   
     const race = dataStore.getRaceById(updatedRace.raceId)
     race.flagState = updatedRace.flagState
     //io.emit('raceModeChanged', race)
@@ -26,9 +26,11 @@ function raceModeChange(io, updatedRace) {
 function startRace(io, updatedRace) {
 
     const race = dataStore.getRaceById(parseInt(updatedRace.raceId))
+   
     race.flagState = updatedRace.flagState
     race.raceState = "In Progress"
-    io.emit("raceStarted", dataStore.getInProgressRace())
+    
+      io.emit("raceStarted", dataStore.getInProgressRace())
     //io.emit('loadRaceControl', dataStore.getInProgressRace())
     if (dataStore.getUpcomingRacesByFlag("Danger") === null) {
         io.emit('loadData', null)

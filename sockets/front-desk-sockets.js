@@ -41,12 +41,19 @@ function addRace(socket, io, newRace) {
 }
 
 function deleteRace(io, raceId) {
-    // console.log("GOT ID", raceId)
+
     dataStore.deleteRaceById(raceId)
 
-    //console.log(dataStore.races)
     const upcomingRaces = dataStore.getUpcomingRaces()
-    io.emit('loadData', JSON.stringify(upcomingRaces))
+    if(upcomingRaces===null){
+        io.emit('loadData', null)
+    }else{
+        io.emit('loadData', JSON.stringify(upcomingRaces))
+    }
+    const inProgressRace = dataStore.getInProgressRace()
+    if (!inProgressRace) {
+        io.emit('loadRaceControl', dataStore.getNextRace())
+    }
     
 }
 
