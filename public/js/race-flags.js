@@ -1,8 +1,9 @@
 const socket = io();
 
 // Update flag display
-socket.on('raceModeChange', mode => {    
-    
+socket.on('raceModeChange', race => {    
+    (console.log(race))
+    const mode=race.flagState
     let color1
     let color2
 

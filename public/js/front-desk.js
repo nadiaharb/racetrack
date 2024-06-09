@@ -8,8 +8,16 @@ const socket = io('http://localhost:3000')
 
 // render race data
 function renderRaces(races) {
-    const sessionContainer = document.getElementById('sessionContainer')
-    sessionContainer.innerHTML = ''
+    const sessionContainer = document.getElementById('sessionContainer');
+    sessionContainer.innerHTML = '';
+    console.log(races, "RENDER")
+    if (races===null) {
+        console.log("No races to display.");
+       // window.location.reload()
+        return
+    }
+   // const sessionContainer = document.getElementById('sessionContainer')
+    //sessionContainer.innerHTML = ''
 
     races.forEach(race => {
         const raceDiv = document.createElement('div')
@@ -53,11 +61,7 @@ function renderRaces(races) {
         <button  class="delete-button" data-race-id="${race.id}" data-race-flag="${race.flagState}" ${race.flagState === "Safe" ? 'disabled' : ''}>Delete Race</button>
         `
         sessionContainer.appendChild(raceDiv)
-         // Add Racer button event listener
-         const addRacerButton = raceDiv.querySelector('.add-racer-button')
-         addRacerButton.addEventListener('click', function() {
-             showRacerForm(race.id)
-         })
+        
 
          // Event listener for "Assign Car Manually" button
          const assignCarManuallyButton = raceDiv.querySelector('#assignCarManuallyButton');
@@ -89,7 +93,11 @@ editRacerButtons.forEach(btn => {
         editRacer(raceId,participantId,name,car, race.id)
     })
 })
-
+    // Add Racer button event listener
+    const addRacerButton = raceDiv.querySelector('.add-racer-button')
+    addRacerButton.addEventListener('click', function() {
+        showRacerForm(race.id)
+    })
     })
 }
 
@@ -188,8 +196,12 @@ document.getElementById('sessionContainer').addEventListener('click', function(e
 
 // Load and render race data
 socket.on('loadData', function(loadedData) {
-  console.log('triggerd')
+      
     try {
+        if(loadedData===null){
+            renderRaces(null)
+            return
+        }
         const races = JSON.parse(loadedData)
         if (races) {
             renderRaces(races)

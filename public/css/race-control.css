@@ -64,7 +64,7 @@ h2 {
 }
 
 #safeBtn {
-    background-color: gray;
+    background-color: green;
     padding: 10px 20px;
     border-radius: 5px;
     margin: 10px;
@@ -72,21 +72,22 @@ h2 {
 }
 
 #hazardBtn {
-    background-color: gray;
+    background-color: yellow;
     padding: 10px 20px;
     border-radius: 5px;
     font-weight: bold;
 }
 
 #dangerBtn {
-    background-color: gray;
+    background-color: red;
     padding: 10px 20px;
     border-radius: 5px;
     font-weight: bold;
 }
 
 #finishBtn {
-    background-color: gray;
+    background-color: black;
+    color: white;
     padding: 10px 20px;
     border-radius: 5px;
     font-weight: bold;
