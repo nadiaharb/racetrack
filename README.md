@@ -2,7 +2,7 @@ When server is started default state will be empty races, no ongoing race.
 
 Front desk will add races and drivers. Race-control interface will be updated with drivers of next race as this happens (). 
 
-This currently starting state as we have 2 sample races added
+-This is currently the default starting state as we have 2 sample races added
 
 Race starts - When drivers have been briefed and race is ready to start safety official clicks start race button, in database raceMode is changed from next race to ongoing race (function startRace(io,updatedRace))(race-control instructs dataStore to do mode change and dataStore informs all concerned interfaces to update), flag display is changed (socket.on('raceModeChange', mode)
 
