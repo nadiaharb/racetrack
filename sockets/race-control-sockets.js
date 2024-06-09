@@ -11,7 +11,7 @@ const Race = require('../models/Race')
 function raceModeChange( io, updatedRace) {
     
     const race=dataStore.getRaceById(updatedRace.raceId)
-   
+   console.log(race)
     race.flagState=updatedRace.flagState
     io.emit('raceModeChanged', race)
     //frontDesk
