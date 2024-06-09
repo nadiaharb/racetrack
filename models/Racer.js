@@ -38,7 +38,7 @@ class Racer {
         }
         this.currentLapTime = 0;
         this.lapTimer = setInterval(() => {
-            this.currentLapTime += 1000; // Increment timer every second
+            this.currentLapTime += 100; // Increment timer every second
         }, 1000);
     }
 
