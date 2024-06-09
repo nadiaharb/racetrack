@@ -1,0 +1,134 @@
+@font-face {
+    font-family: 'Race Sport';
+    src: url('../fonts/RaceSportRegular.eot'); /* IE9 Compat Modes */
+    src: url('../fonts/webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('../fonts/RaceSportRegular.woff') format('woff'), /* Modern Browsers */
+         url('../fonts/RaceSportRegular.ttf')  format('truetype'), /* Safari, Android, iOS */
+         url('../fonts/RaceSportRegular.svg#RaceSportRegular') format('svg'); /* Legacy iOS */
+}
+
+body {
+    font-family: 'Race Sport';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100vh; 
+    margin: 0;
+    overflow: hidden;
+}
+
+title{
+    display: none;
+}
+
+#tracker-container {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* Ensure 3 elements per row */
+    gap: 1vw;
+    max-width: 95vw;
+    max-height: 90vw;
+    width: 100%;
+    flex: 2;
+}
+.widget-title{
+
+}
+
+.lap-counter {
+    border: 2px solid transparent;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-width: 0.2vw;
+    padding: 1%;
+    border-radius: 1vw;
+    text-align: center;
+    list-style-type: none;
+}
+
+.lap-counter li{
+    list-style-type: none; /* Remove bullet points */
+    flex: 1;
+    margin: 0;
+}
+
+
+.race-state{
+    display: flex;
+    flex-direction: row;
+    gap: 5vw;
+    margin-bottom: 1vw;
+
+}
+
+#tracker-master-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.elapse-lap-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 36px;
+    font-weight: 1000;
+    color: #ffffff; /* White text color to contrast with the background */
+    border: none;
+    border-radius: 1vw;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    flex-grow: 1;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.elapse-lap-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.elapse-lap-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Media query for tablets */
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+        justify-content: flex-start; /* Align to top on smaller screens */
+        padding: 1rem;
+    }
+
+    #tracker-container {
+        grid-template-columns: 1fr; /* Stack elements vertically on smaller screens */
+        gap: 4vw;
+    }
+
+    .race-state {
+        flex-direction: column;
+        gap: 2vw;
+        align-items: center;
+    }
+
+    .elapse-lap-button {
+        font-size: 24px; /* Adjust button size for smaller screens */
+        margin: 10% 0;
+        padding: 8px 16px;
+    }
+}
+
+/* Media query for landscape mode */
+@media (orientation: landscape) {
+    body {
+        justify-content: center;
+        align-items: center;
+    }
+
+    .elapse-lap-button {
+        font-size: 28px; /* Adjust button size for landscape mode */
+    }
+}
+

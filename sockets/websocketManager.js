@@ -4,7 +4,7 @@ const { loadData, addRace, deleteRace, addRacer, getRaceParticipants, deleteRace
 const { } = require('./leaderboard-sockets');
 
 const { RaceState, FlagState } = require('../models/enums');
-const { raceModeChange, raceStarted, raceEnded, prepareNextRace, startRace, endRace} = require('./race-control-sockets');
+const { raceModeChange, raceStarted, raceEnded, prepareNextRace, startRace, endRace } = require('./race-control-sockets');
 const { nextRaceChange } = require('./next-race-sockets');
 
 
@@ -27,6 +27,10 @@ module.exports = function (io) {
 
         // Load Data 
         socket.emit('loadData', JSON.stringify(dataStore.getUpcomingRacesByFlag("Danger")))
+        // Render observer initially
+        socket.emit('renderObserver', JSON.stringify(dataStore.getNextRace() || dataStore.getInProgressRace()))
+
+
 
         // Emit current race if it exists
         emitCurrentRace(io);
@@ -38,11 +42,11 @@ module.exports = function (io) {
         });
 
         //delete racer
-        socket.on('deleteRacer', deletedRacer =>{
-            deleteRacer( io,deletedRacer)
-        } )
+        socket.on('deleteRacer', deletedRacer => {
+            deleteRacer(io, deletedRacer)
+        })
         //edit racer
-         socket.on('editRacer', editedRacer => {
+        socket.on('editRacer', editedRacer => {
             editRacer(io, editedRacer)
         })
 
@@ -65,7 +69,7 @@ module.exports = function (io) {
 
         // Gotta check this works
         socket.on('startRace', () => {
-            const race = dataStore.getUpcomingRace();
+            const race = dataStore.getNextRace();
             if (race) {
                 race.setRaceState(RaceState.IN_PROGRESS);
                 startCountdown(io, race);
@@ -75,10 +79,11 @@ module.exports = function (io) {
 
         // For testing only
         socket.on('startCountdown', () => {
-            const race = dataStore.getUpcomingRace();
+            const race = dataStore.getNextRace();
             if (race) {
                 race.setRaceState(RaceState.IN_PROGRESS);
                 startCountdown(io, race);
+                startLapTimeUpdate(io, race);
                 emitCurrentRace(io); // Notify all clients
             }
         });
@@ -130,21 +135,38 @@ module.exports = function (io) {
         if (inProgressRace) {
             socket.emit('loadRaceControl', inProgressRace);
         } else {
-            
+
             socket.emit('loadRaceControl', dataStore.getNextRace());
         }
-        
-        socket.on("raceModeChange", updatedRace=>{
-            raceModeChange(io,updatedRace)
-           
+
+        socket.on("raceModeChange", updatedRace => {
+            raceModeChange(io, updatedRace)
+
         })
 
-        socket.on("startedRace", updatedRace=>{
-             startRace(io,updatedRace)
+        socket.on("startedRace", updatedRace => {
+            startRace(io, updatedRace)
         })
-        socket.on("endRace", updatedRace=>{
-            endRace(io,updatedRace)
+        socket.on("endRace", updatedRace => {
+            endRace(io, updatedRace)
         })
+        socket.on('elapseLap', (participantID, raceID) => {
+            console.log(`Participant ID: ${participantID}, Race ID: ${raceID}`);
+            const race = dataStore.getRaceById(parseInt(raceID));
+            const participantIDInt = parseInt(participantID)
+            if (!race) {
+                console.error('Race not found');
+                return;
+            }
+            const participant = race.participants.find(r => r.id === participantIDInt);
+            if (participant) {
+                participant.elapseLap(); // Call elapseLap on the racer
+                io.emit('updateObserver', JSON.stringify(race));
+                console.log(participant.lapCount)
+            } else {
+                console.error('Participant not found');
+            }
+        });
     });
 };
 
@@ -175,6 +197,21 @@ function startCountdown(io, race) {
             }
         }
     }, 1000); // Countdown interval set to 1 second
+}
+
+// To be used in the future
+function startLapTimeUpdate(io, race) {
+    const lapInterval = setInterval(() => {
+        if (race.raceState === RaceState.IN_PROGRESS) {
+            race.participants.forEach(participant => {
+                if (participant.lapTimer) {
+                    participant.currentLapTime += 100; // Update lap time every 100ms for finer granularity
+                }
+            });
+            io.emit('lapTimeUpdate', JSON.stringify(race.participants));
+            io.emit('raceTimeUpdate', JSON.stringify(race.duration));
+        }
+    }, 100); // Emit lap time update every 100ms
 }
 
 // Not in use yet, yet to be verified

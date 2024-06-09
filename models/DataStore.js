@@ -36,10 +36,9 @@ class DataStore {
     getNextRace() {
         const upcomingRaces = this.getUpcomingRaces();
         // If no upcoming races
-        if (upcomingRaces.length === 0) {
-            return null;
+        if (upcomingRaces) {
+            return upcomingRaces[0];
         }
-        return upcomingRaces[0];
     }
 
     // Get ongoing race
@@ -75,10 +74,12 @@ class DataStore {
     //get upcoming races
     getUpcomingRacesByFlag(flagState) {
         const upcomingRaces = this.getUpcomingRaces()
-        return upcomingRaces.filter(race => race.flagState === flagState)
+        if (upcomingRaces) {
+            return upcomingRaces.filter(race => race.flagState === flagState)
+        }
     }
     getRaceById(raceId) {
-        
+
         return this.races.find(race => race.id === raceId);
     }
 
