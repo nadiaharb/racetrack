@@ -1,0 +1,63 @@
+@font-face {
+    font-family: 'Race Sport';
+    src: url('../fonts/RaceSportRegular.eot'); /* IE9 Compat Modes */
+    src: url('../fonts/webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('../fonts/RaceSportRegular.woff') format('woff'), /* Modern Browsers */
+         url('../fonts/RaceSportRegular.ttf')  format('truetype'), /* Safari, Android, iOS */
+         url('../fonts/RaceSportRegular.svg#RaceSportRegular') format('svg'); /* Legacy iOS */
+}
+
+/* Styling for body */
+body {
+    
+    font-family: 'Race Sport';
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+    display: flex; /* Use flexbox for centering */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100vh; /* Set full viewport height */
+}
+
+/* Styling for table container */
+.table-container {
+    text-align: center;
+}
+
+/* Styling for table title */
+#table-title {
+    font-size: 24px; /* Adjust font size as needed */
+    margin-bottom: 30px; /* Add space below the title */
+}
+
+/* Styling for additional message */
+#additionalMessage {
+    font-style: italic; /* Italicize the message */
+    margin-bottom: 30px; /* Add space below the message */
+    color: red;
+}
+
+/* Styling for drivers table */
+#drivers-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#drivers-table th, #drivers-table td {
+    padding: 10px; /* Add padding to table cells */
+    border: 1px solid #ddd; /* Add border to table cells */
+}
+
+#drivers-table th {
+    background-color: #f2f2f2; /* Light gray background for table header */
+}
+
+/* Styling for driver cells */
+#drivers-table td {
+    font-size: 16px; /* Adjust font size as needed */
+}
+
+/* Styling for driver numbers */
+#drivers-table td:first-child {
+    font-weight: bold; /* Bold font for driver numbers */
+}
