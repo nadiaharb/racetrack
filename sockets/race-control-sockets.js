@@ -46,7 +46,10 @@ function endRace(io, updatedRace) {
     const race = dataStore.getRaceById(parseInt(updatedRace.raceId))
 
     race.raceState = "Finished"
+    race.flagState='Danger'
+    io.emit('raceModeChange', race)
     io.emit('loadRaceControl', dataStore.getNextRace())
+    io.emit('showMessage', dataStore.getNextRace())
 }
 
 module.exports = { raceModeChange, startRace, endRace }

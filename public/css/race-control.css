@@ -176,3 +176,8 @@ th {
 .race li {
     margin-left: 20px;
 }
+
+#additionalMessage {
+    font-size: 18px;
+    color: red;
+}

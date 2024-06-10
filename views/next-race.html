@@ -3,17 +3,65 @@
   <head>
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>Next Race</title>
-    <link rel="stylesheet" href="/public/css/styles.css">
+    <link rel="stylesheet" href="/public/css/race-control.css">
   </head>
 <body>
 
-  <!-- Button for testing purposes -->
+
+
+
+ 
+  <div class="table-container">
+    <h2 id="table-title">Next Race Information</h2>
+    <p id="additionalMessage"></p>
+    <table id="drivers-table">
+      <tr>
+        <th>Car</th>
+        <th>Driver</th>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td id="driver1"></td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td id="driver2"></td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td id="driver3"></td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td id="driver4"></td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td id="driver5"></td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td id="driver6"></td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td id="driver7"></td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td id="driver8"></td>
+      </tr>
+    </table>
+</div>
+  <!--
+
+
   <button id="refreshBtn">Refresh</button>
 
-    <!-- Container to display next race data -->
+   
     <div id="nextRaceContainer">        
     </div>
-
+  -->
     <script src="/socket.io/socket.io.js"></script>
     <script src="/public/js/next-race.js"></script>
 

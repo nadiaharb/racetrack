@@ -176,9 +176,8 @@ endBtn.addEventListener('click', function (e) {
 
     const updateRace = {
         raceId: raceIdBtn,
-
-
-
+        flagState: "Danger"
+  
     }
 
 
