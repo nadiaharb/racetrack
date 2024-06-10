@@ -9,7 +9,8 @@ const { Server } = require('socket.io')
 const websocketManager = require('./sockets/websocketManager')
 //const server=createServer(app)
 
-// Url = "Admin.socket.io" username = "admin" password = "race"
+// https://admin.socket.io/#/
+// Server url = "http://localhost:3000" username = "admin" password = "race"
 const { instrument } = require("@socket.io/admin-ui");
 const io = new Server(server, { // Keep this line only when removing admin feature
     cors: {
