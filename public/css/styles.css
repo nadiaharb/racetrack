@@ -1,94 +1,67 @@
+@font-face {
+    font-family: 'Race Sport';
+    src: url('../fonts/RaceSportRegular.eot'); /* IE9 Compat Modes */
+    src: url('../fonts/webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('../fonts/RaceSportRegular.woff') format('woff'), /* Modern Browsers */
+         url('../fonts/RaceSportRegular.ttf')  format('truetype'), /* Safari, Android, iOS */
+         url('../fonts/RaceSportRegular.svg#RaceSportRegular') format('svg'); /* Legacy iOS */
+}
+
+/* Styling for body */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f2f2f2;
+    
+    font-family: 'Race Sport';
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+    display: flex; /* Use flexbox for centering */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100vh; /* Set full viewport height */
 }
 
 .main-page-container {
-    width: 80%;
-    margin: 50px auto;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Set full viewport height */
 }
 
-h1 {
-    color: #333;
-}
-
+/* Center the links vertically and horizontally */
 .main-links {
-    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%; /* Set height to 100% */
 }
 
+/* Style for links */
 .main-links a {
     display: inline-block;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    margin: 0 10px;
-    transition: background-color 0.3s;
-}
-
-.main-links a:hover {
-    background-color: #0056b3;
-}
-
-
-
-.fd-p {
-    margin: 20px 0;
-}
-
-#modeDisplay {
-    font-weight: bold; 
-    color: #007bff; 
-}
-
-/* CSS Style for Race Elements */
-.race {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 20px;
-}
-
-.race h2 {
-    margin-top: 0;
-}
-
-.race p {
-    margin: 5px 0;
-}
-
-.race ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.race li {
-    margin-left: 20px;
-}
-
-
-/*edit modal*/
-
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
+    padding: 10px 20px; /* Adjust padding as needed */
+    margin: 10px; /* Add margin between links */
+    text-decoration: none; /* Remove default underline */
+    color: #fff; /* Text color */
+    background-color: #007bff; /* Blue color */
+    border: 1px solid #007bff; /* Blue border */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+    font-size: 36px;
+    font-weight: 1000;
+    color: #ffffff; /* White text color to contrast with the background */
+    border: none;
+    border-radius: 1vw;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    flex-grow: 1;
     width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* semi-transparent background */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999; /* Ensure modal is on top of other content */
+    box-sizing: border-box;
+    font-family: inherit;
 }
 
-.modal {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+/* Hover effect */
+.main-links a:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    border-color: #0056b3; /* Darker blue border on hover */
 }

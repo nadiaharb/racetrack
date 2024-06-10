@@ -7,6 +7,8 @@
          url('../fonts/RaceSportRegular.svg#RaceSportRegular') format('svg'); /* Legacy iOS */
 }
 
+
+
 /* General styles for the page */
 body {
     font-family: 'Race Sport';
@@ -14,12 +16,13 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
+    flex-direction: column;
     min-height: 100vh;
 }
 
-/* Fixed container at the top of the page */
+/* Container for the main content */
 .main-page-container {
     width: 100%;
     max-width: 1200px;
@@ -34,27 +37,17 @@ body {
     z-index: 1000; /* Ensures it stays on top */
 }
 
-.main-page-container .rc-p {
+.main-page-container .fd-p {
     font-size: 24px;
     color: #333;
     text-align: center;
     margin-bottom: 0;
 }
 
-/* Add padding to the body to avoid content being hidden under the fixed container */
-body::before {
-    content: "";
-    display: block;
-    height: 100px; /* Height of the .main-page-container plus some margin */
-}
-
 /* Styling for the session container */
 #sessionContainer {
-    margin-top: 150px; /* Adjust this value if needed based on the height of the fixed container */
-    width: 100%;
-    max-width: 1200px;
-    padding: 20px;
-    box-sizing: border-box;
+    margin: 20px 0;
+    margin-top: 150px;
 }
 
 /* Race container styling */
@@ -69,7 +62,6 @@ body::before {
 .race h2 {
     font-size: 20px;
     margin-bottom: 10px;
-    text-align: center;
 }
 
 .race p {
@@ -83,8 +75,8 @@ body::before {
 
 .race li {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     margin-bottom: 10px;
 }
 
@@ -94,8 +86,7 @@ body::before {
 
 .race li .actions {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    gap: 5px;
 }
 
 /* Button styling */
@@ -120,90 +111,28 @@ button:disabled {
 .add-racer-button {
     background-color: #28a745;
     color: #fff;
+    width: 150px; /* Increased width for bigger buttons */
+    height: 50px; /* Increased height for bigger buttons */
+    font-size: 12px; /* Increased font size for better readability */
+    font-family: 'Race Sport';
 }
 
 .delete-button, .delete-racer-btn {
     background-color: #dc3545;
     color: #fff;
+    width: 150px; /* Increased width for bigger buttons */
+    height: 50px; /* Increased height for bigger buttons */
+    font-size: 12px; /* Increased font size for better readability */
+    font-family: 'Race Sport';
 }
 
 .edit-racer-btn {
     background-color: #ffc107;
     color: #fff;
-}
-
-/* Mode buttons specific styling */
-#safeBtn {
-    background-color: #28a745; /* Green */
-    color: #fff;
-}
-
-#hazardBtn {
-    background-color: #ffc107; /* Yellow */
-    color: #fff;
-}
-
-#dangerBtn {
-    background-color: #dc3545; /* Red */
-    color: #fff;
-}
-
-#finishBtn {
-    background-color: #343a40; /* Black */
-    color: #fff;
-}
-
-/* Centering content in race-mode-container */
-/* Centering content in race-mode-container */
-/* Centering content in race-mode-container */
-.race-mode-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-.race-mode-container h2 {
-    text-align: center;
-}
-
-.race-mode-container button {
-    margin: 20px; /* Increased margin to add space between buttons */
     width: 150px; /* Increased width for bigger buttons */
     height: 50px; /* Increased height for bigger buttons */
-    font-size: 16px; /* Increased font size for better readability */
+    font-size: 12px; /* Increased font size for better readability */
     font-family: 'Race Sport';
-}
-
-.race-mode-container p {
-    text-align: center;
-}
-
-
-/* Centering content in start-container */
-.start-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.start-container h3 {
-    text-align: center;
-}
-
-#startBtn {
-    background-color: #28a745; /* Green */
-    color: #fff;
-    margin-top: 10px;
-    width: 150px; /* Increased width for bigger buttons */
-    height: 50px; /* Increased height for bigger buttons */
-    font-size: 16px; /* Increased font size for better readability */
-    font-family: 'Race Sport';
-}
-
-/* Centering table title */
-#table-title {
-    text-align: center;
 }
 
 /* Add Race Form Styling */
@@ -228,6 +157,10 @@ button:disabled {
 #addRaceForm button {
     background-color: #007bff;
     color: #fff;
+    width: 150px; /* Increased width for bigger buttons */
+    height: 50px; /* Increased height for bigger buttons */
+    font-size: 12px; /* Increased font size for better readability */
+    font-family: 'Race Sport';
 }
 
 /* Racer Form Container Styling */
@@ -242,6 +175,7 @@ button:disabled {
 .racerFormContainer form {
     display: flex;
     flex-direction: column;
+    padding: 20px;
 }
 
 .racerFormContainer label {
@@ -257,8 +191,36 @@ button:disabled {
 
 .racerFormContainer button {
     align-self: flex-start;
+    color: #fff;
+    width: 150px; /* Increased width for bigger buttons */
+    height: 50px; /* Increased height for bigger buttons */
+    font-size: 12px; /* Increased font size for better readability */
+    font-family: 'Race Sport';
+}
+/* Inline styling for buttons in racerFormContainer */
+.racerFormContainer button {
+    display: inline-block;
+    margin-right: 10px; /* Add margin between buttons */
 }
 
+/* Different colors for buttons in racerFormContainer */
+.racerFormContainer button#assignCarManuallyButton {
+    background-color: #ffc107; /* Yellow */
+    color: #fff;
+    margin-top: 20px;
+}
+
+.racerFormContainer button[type="submit"] {
+    background-color: #007bff; /* Blue */
+    color: #fff;
+    margin-top: 10px;
+}
+
+.cancelButton {
+    background-color: #dc3545; /* Red */
+    color: #fff;
+    margin-top: 10px;
+}
 /* Modal Styling for Edit Racer */
 .modal-overlay {
     position: fixed;
@@ -310,54 +272,17 @@ button:disabled {
 .modal button#saveEditBtn {
     background-color: #28a745;
     color: #fff;
-}
-
-/* Styles for hidden containers */
-.race-mode-container, .end-race-container, .table-container, .start-container {
-    width: 100%;
-    max-width: 1200px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
-}
-
-#drivers-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-#drivers-table th, #drivers-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
-
-#drivers-table th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-}
-
-#drivers-table td {
-    background-color: #fff;
-}
-
-#drivers-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-#drivers-table tr:hover {
-    background-color: #f1f1f1;
-}
-
-
-#endBtn{
     width: 150px; /* Increased width for bigger buttons */
     height: 50px; /* Increased height for bigger buttons */
-    font-size: 16px; /* Increased font size for better readability */
+    font-size: 12px; /* Increased font size for better readability */
     font-family: 'Race Sport';
 }
-.end-race-container{
-    text-align: center;
+
+.modal button#cancelEditBtn {
+    background-color: #dc3545;
+    color: #fff;
+    width: 150px; /* Increased width for bigger buttons */
+    height: 50px; /* Increased height for bigger buttons */
+    font-size: 12px; /* Increased font size for better readability */
+    font-family: 'Race Sport';
 }

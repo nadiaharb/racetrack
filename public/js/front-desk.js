@@ -27,19 +27,18 @@ function renderRaces(races) {
         <p>Flag State: ${race.flagState}</p>
         <p>Race State: ${race.raceState}</p>
         <ul>
-            ${race.participants.map(participant => `
-                <li>${participant.name} - Car Number: ${participant.carNumber} - ID: ${participant.id}
+    ${race.participants.map(participant => `
+        <li>
+            <div class="details">${participant.name} - Car Number: ${participant.carNumber}</div>
+            <div class="actions">
                 ${race.flagState === "Safe" ? '' : `
-                    <button type="submit" class="edit-racer-btn" data-race-id="${race.id}" data-participant-id="${participant.id}" data-participant-name="${participant.name}" data-participant-car="${participant.carNumber}">
-                    Edit Racer
-                    </button>
-                    <button type="submit" class="delete-racer-btn" data-race-id="${race.id}" data-participant-id="${participant.id}">
-                    Delete Racer
-                    </button>
+                    <button type="submit" class="edit-racer-btn" data-race-id="${race.id}" data-participant-id="${participant.id}" data-participant-name="${participant.name}" data-participant-car="${participant.carNumber}">Edit Racer</button>
+                    <button type="submit" class="delete-racer-btn" data-race-id="${race.id}" data-participant-id="${participant.id}">Delete Racer</button>
                 `}
-                </li>
-            `).join('')}
-        </ul>
+            </div>
+        </li>
+    `).join('')}
+</ul>
         <button class="add-racer-button" data-race-id="${race.id}"  data-race-flag="${race.flagState}" ${race.flagState === "Safe" ? 'disabled' : ''}>Add Racer</button>
         <div id ="racerForm${race.id}" class="racerFormContainer" style="display: none;">
             <form id="raceForm${race.id}">
@@ -53,7 +52,7 @@ function renderRaces(races) {
             <!-- Button to show carNumber input -->
             <button type="button" id="assignCarManuallyButton">Assign Car Manually</button>
             <button type="submit">Add Racer</button>
-            <button type="button" id="cancelButton${race.id}" data-race-flag="${race.flagState}" ${race.flagState === "Safe" ? 'disabled' : ''}>Cancel</button>
+            <button type="button" class="cancelButton" id="cancelButton${race.id}" data-race-flag="${race.flagState}" ${race.flagState === "Safe" ? 'disabled' : ''}>Cancel</button>
             </form>
         </div>
         <br>
