@@ -38,8 +38,8 @@ class Racer {
         }
         this.currentLapTime = 0;
         this.lapTimer = setInterval(() => {
-            this.currentLapTime += 100; // Increment timer every second
-        }, 1000);
+            this.currentLapTime += 300; // Increment timer every second
+        }, 300);
     }
 
     // Custom serialization method to exclude lapTimer

@@ -25,45 +25,46 @@ class Race {
         this.flagState = flagState; // State of the flag
         this.raceState = raceState; // State of the race
         this.assignedCarNumbers = new Set()
+        this.raceTimer = null;
     }
     // Race Methods
 
     addParticipant(participant) {
-       
+
         if (this.participants.length >= 8) {
-            
+
             throw new Error('Race is already full. Cannot add more participants.');
         }
         if (!(participant instanceof Racer)) {
             throw new Error('Participant must be an instance of Racer')
         }
         let carNumber
-        if (participant.carNumber && !this.assignedCarNumbers.has(participant.carNumber) ) {
-            if(participant.carNumber>=1 && participant.carNumber<=8){
+        if (participant.carNumber && !this.assignedCarNumbers.has(participant.carNumber)) {
+            if (participant.carNumber >= 1 && participant.carNumber <= 8) {
                 carNumber = participant.carNumber
-            }else{
+            } else {
                 throw new Error('Car numbers can be from 1 to 8.')
             }
-            
+
         } else {
 
             carNumber = 1
             while (this.assignedCarNumbers.has(carNumber) && carNumber <= 8) {
                 carNumber++
             }
-            
+
             if (carNumber > 8) {
                 throw new Error('All car numbers from 1 to 8 are already assigned.')
             }
-            
+
         }
-    
+
         participant.carNumber = carNumber
         this.assignedCarNumbers.add(carNumber)
-    
+
         this.participants.push(participant)
     }
-    deleteParticipant(participantId){
+    deleteParticipant(participantId) {
         const index = this.participants.findIndex(p => p.id === participantId)
         if (index !== -1) {
             const deletedParticipant = this.participants.splice(index, 1)[0]
@@ -77,7 +78,7 @@ class Race {
     isNameUnique(name, excludeId = null) {
         return !this.participants.some(p => p.name === name && p.id !== excludeId)
     }
-    isCarUnique(carNumber,excludeId = null) {
+    isCarUnique(carNumber, excludeId = null) {
         return !this.participants.some(p => p.carNumber === carNumber && p.id !== excludeId)
     }
 
@@ -86,10 +87,10 @@ class Race {
         return this.racers.find(racer => racer.carNumber === carNumber);
     }
     getRacerById(participantId) {
-        
+
         const participant = this.participants.find(participant => participant.id === participantId);
-        
-       
+
+
         return participant || null;
     }
     // Flag State - Race State
@@ -109,7 +110,7 @@ class Race {
     getRaceState() {
         return this.raceState;
     }
-   
+
     setRaceState(state) { // This method is used to set the state via enum
         if (this.raceState === RaceState.FINISHED) {
             throw new Error('Race state is FINAL. Cannot change from FINISHED state.');
@@ -119,6 +120,26 @@ class Race {
         } else {
             throw new Error('Invalid race state');
         }
+    }
+    // Race Timer logic enclosed here for simplicity.
+    startRaceTimer() {
+        if (this.raceTimer) {
+            clearInterval(this.raceTimer);
+        }
+        this.raceTimer = setInterval(() => {
+            this.duration -= 300; // Decrement race duration
+            if (this.duration <= 0) {
+                clearInterval(this.raceTimer);
+                this.setRaceState(RaceState.FINISHED);
+            }
+        }, 300);
+    }
+
+    // Custom serialization method to exclude lapTimer
+    // Gotta make sure we don't JSONify the timer itself
+    toJSON() {
+        const { raceTimer, ...rest } = this;
+        return rest;
     }
 
 }

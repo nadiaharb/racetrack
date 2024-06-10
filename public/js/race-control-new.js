@@ -48,17 +48,17 @@ function renderRace(race) {
 
         return
     }
-    if(race.flagState==="Finish"){
-        raceModeBtns.style.display='none'
+    if (race.flagState === "Finish") {
+        raceModeBtns.style.display = 'none'
 
         finishDiv.style.display = 'block'
-        endBtn.style.backgroundColor='red'
+        endBtn.style.backgroundColor = 'red'
         return
     }
     deleteModeButtons()
     createModeButtons()
 
-    
+
     endBtn.setAttribute('raceId', race.id)
     startBtn.setAttribute('raceId', race.id)
     startBtn.setAttribute('racers', race.participants.length)
@@ -66,7 +66,7 @@ function renderRace(race) {
         document.getElementById(`driver${i}`).textContent = ''
     }
 
-     
+
     race.participants.forEach(participant => {
         const carNumber = participant.carNumber
         const driverCell = document.getElementById(`driver${carNumber}`)
@@ -84,7 +84,7 @@ function renderRace(race) {
         //modeDisplay.innerHTML=race.flagState
         startTitle.innerHTML = "Start Race"
         finishDiv.style.display = 'none'
-        table.style.display='block'
+        table.style.display = 'block'
 
 
     }
@@ -95,7 +95,7 @@ function renderRace(race) {
             e.preventDefault()
             const state = this.getAttribute('data-state')
             if (state === "Finish") {
-                
+
                 //deleteModeButtons()
                 finishDiv.style.display = 'block'
                 const updateRace = {
@@ -103,9 +103,9 @@ function renderRace(race) {
                     flagState: state
                 }
                 socket.emit('raceModeChange', updateRace)
-                  return
+                return
             } else {
-                
+
                 const updateRace = {
                     raceId: race.id,
                     flagState: state
@@ -123,7 +123,7 @@ function renderRace(race) {
 
 
 function renderModeBtns(race) {
-   
+
     endBtn.setAttribute('raceId', race.id);
 
     startBtn.style.display = 'none'
@@ -139,13 +139,13 @@ startBtn.addEventListener('click', function (e) {
     e.preventDefault()
 
     const raceIdBtn = startBtn.getAttribute('raceId')
-   const racers=startBtn.getAttribute('racers')
-   console.log(racers)
-   if(parseInt(racers)<8){
-    console.log("alert")
-   alert (`Insufficient number of racers registered to start the race` )
-    return
-   }
+    const racers = startBtn.getAttribute('racers')
+    console.log(racers)
+    if (parseInt(racers) < 8) {
+        console.log("alert")
+        alert(`Insufficient number of racers registered to start the race`)
+        return
+    }
     const modeBtns = document.querySelectorAll('.modeBtn')
     modeBtns.forEach(btn => {
         btn.disabled = false;
@@ -161,7 +161,7 @@ startBtn.addEventListener('click', function (e) {
         flagState: "Safe",
         raceId: raceIdBtn
     }
-   
+
     socket.emit("startCountdown")
     socket.emit("startedRace", updatedMode)
 })
@@ -177,7 +177,7 @@ endBtn.addEventListener('click', function (e) {
     const updateRace = {
         raceId: raceIdBtn,
         flagState: "Danger"
-  
+
     }
 
 
@@ -199,6 +199,10 @@ function createModeButtons() {
 
         modeBtnsContainer.appendChild(btn)
     })
+    const finishBtn = document.getElementById('finishBtn')
+    finishBtn.addEventListener('click', function (e) {
+        socket.emit('raceFinished');
+    });
 }
 
 function deleteModeButtons() {

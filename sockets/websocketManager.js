@@ -27,32 +27,57 @@ module.exports = function (io) {
 
         // Load Data 
         socket.emit('loadData', JSON.stringify(dataStore.getUpcomingRacesByFlag("Danger")))
-        // Render observer initially
-        socket.emit('renderObserver', JSON.stringify(dataStore.getNextRace() || dataStore.getInProgressRace()))
-
-
 
         // Emit current race if it exists
+        // Used by Leaderboard and Lap-Line Tracker
         emitCurrentRace(io);
+
+        // Race Control INIT
+        const inProgressRace = dataStore.getInProgressRace()
+
+        if (inProgressRace) {
+            socket.emit('loadRaceControl', inProgressRace);
+        } else {
+            socket.emit('loadRaceControl', dataStore.getNextRace());
+        }
+
+        // Race Control
+        socket.on("raceModeChange", updatedRace => {
+            raceModeChange(io, updatedRace)
+        })
+
+        socket.on("startedRace", race => {
+            startRace(io, race)
+        })
+
+        socket.on("endRace", updatedRace => {
+            //stopCountdown(io, updatedRace);
+            endRace(io, updatedRace)
+        })
+
+        // This is use until I can figure out why I can't tie logic inside of this to any of the startrace emits
+        socket.on('startCountdown', () => {
+            const race = dataStore.getNextRace();
+            if (race) {
+                //race.setRaceState(RaceState.IN_PROGRESS);
+                for (participant of race.participants) {
+                    console.log(`RacerID: ${participant.id}, RaceID: ${race.id}`)
+                    participant.elapseLap();
+                }
+                startRaceTimerMain(io, race)
+                //startCountdown(io, race);
+                //startLapTimeUpdate(io, race);
+                emitCurrentRace(io); // Notify all clients
+            }
+        });
+
+
+
+        // Front Desk
 
         // Add Race
         socket.on('addRace', race => {
             addRace(socket, io, race);
-            emitCurrentRace(io); // Notify all clients
-        });
-
-        //delete racer
-        socket.on('deleteRacer', deletedRacer => {
-            deleteRacer(io, deletedRacer)
-        })
-        //edit racer
-        socket.on('editRacer', editedRacer => {
-            editRacer(io, editedRacer)
-        })
-
-        // Add Racer - Receptionist
-        socket.on('addRacer', (racerData) => {
-            addRacer(io, socket, racerData);
             emitCurrentRace(io); // Notify all clients
         });
 
@@ -62,92 +87,29 @@ module.exports = function (io) {
             emitCurrentRace(io); // Notify all clients
         });
 
-        // TO-DO
-        socket.on('finishLap', raceID => {
-            // Lap Line Observer needs a method for his view
-        });
-        
-        // Gotta check this works
-        socket.on('startRace', () => {
-            const race = dataStore.getNextRace();
-            if (race) {
-                race.setRaceState(RaceState.IN_PROGRESS);
-                startCountdown(io, race);
-                emitCurrentRace(io); // Notify all clients
-            }
-        });
-         
-        // For testing only
-        socket.on('startCountdown', () => {
-            const race = dataStore.getNextRace();
-            if (race) {
-                //race.setRaceState(RaceState.IN_PROGRESS);
-                startCountdown(io, race);
-                startLapTimeUpdate(io, race);
-                emitCurrentRace(io); // Notify all clients
-            }
+        // Add Racer
+        socket.on('addRacer', (racerData) => {
+            addRacer(io, socket, racerData);
+            emitCurrentRace(io); // Notify all clients
         });
 
-        // Testing purposes, not sure if necessary
-        socket.on('changeRaceState', mode => {
-            const race = dataStore.getInProgressRace();
-            if (race) {
-                race.setRaceState(mode);
-                emitCurrentRace(io); // Notify all clients
-            }
-        });
+        // Edit Racer
+        socket.on('editRacer', editedRacer => {
+            editRacer(io, editedRacer)
+        })
 
-        // Change current race flagState. Testing purposes.
-        socket.on('changeFlagState', mode => {
-            const race = dataStore.getInProgressRace();
-            if (race) {
-                race.setFlagState(mode);
-                emitCurrentRace(io); // Notify all clients
-            }
-        });
+        // Delete Racer
+        socket.on('deleteRacer', deletedRacer => {
+            deleteRacer(io, deletedRacer)
+        })
 
-        // Race control / Safety official
-        // Begin new race
-        socket.on('raceStarted', () => { emitCurrentRace })
 
-        // Next race display      
-        // For testing
-        io.emit('nextRaceChange', null);
-
+        // Next Race
         // Refresh next race data
         socket.on('prepareNextRace', race => {
             nextRaceChange(socket, io, race);
         });
 
-        //race control
-        const inProgressRace = dataStore.getInProgressRace()
-
-        if (inProgressRace) {
-            socket.emit('loadRaceControl', inProgressRace);
-
-        } else {
-
-            socket.emit('loadRaceControl', dataStore.getNextRace());
-
-        }
-
-        socket.on("raceModeChange", updatedRace => {
-            raceModeChange(io, updatedRace)
-
-        })
-
-        socket.on("startedRace", race => {
-            startRace(io, race)
-        })
-        socket.on("raceStarted", race => {
-            race.setRaceState(RaceState.IN_PROGRESS);
-            startCountdown(io, race);
-            startLapTimeUpdate(io, race);
-            emitCurrentRace(io); // Notify all clients
-        })
-        socket.on("endRace", updatedRace => {
-            endRace(io, updatedRace)
-        })
         socket.on('elapseLap', (participantID, raceID) => {
             console.log(`Participant ID: ${participantID}, Race ID: ${raceID}`);
             const race = dataStore.getRaceById(parseInt(raceID));
@@ -165,12 +127,63 @@ module.exports = function (io) {
                 console.error('Participant not found');
             }
         });
+
+        socket.on('raceFinished', () => {
+            const inProgressRace = dataStore.getInProgressRace();
+            inProgressRace.duration = 0; // Set the duration to 0 so all events stop
+        })
+        /*// TO-DO
+        socket.on('finishLap', raceID => {
+            // Lap Line Observer needs a method for his view
+        });*/
+
+        /*socket.on("raceStarted", race => {
+            race.setRaceState(RaceState.IN_PROGRESS);
+            startCountdown(io, race);
+            startLapTimeUpdate(io, race);
+            emitCurrentRace(io); // Notify all clients
+        })*/
+
+        // Race control / Safety official
+        // Begin new race
+        //socket.on('raceStarted', () => { emitCurrentRace })
+
+        // Change current race flagState. Testing purposes.
+        /*socket.on('changeFlagState', mode => {
+            const race = dataStore.getInProgressRace();
+            if (race) {
+                race.setFlagState(mode);
+                emitCurrentRace(io); // Notify all clients
+            }
+        });*/
+
+        // Gotta check this works
+        /*socket.on('startRace', () => {
+            const race = dataStore.getNextRace();
+            if (race) {
+                race.setRaceState(RaceState.IN_PROGRESS);
+                startCountdown(io, race);
+                emitCurrentRace(io); // Notify all clients
+            }
+        });*/
+
+        /*
+        // Testing purposes, not sure if necessary
+        socket.on('changeRaceState', mode => {
+            const race = dataStore.getInProgressRace();
+            if (race) {
+                race.setRaceState(mode);
+                emitCurrentRace(io); // Notify all clients
+            }
+        });
+        */
     });
 };
 
+// This is used to transmit the main generic state of the ongoing race, or buffer the incoming race
 function emitCurrentRace(io) {
     const inProgressRace = dataStore.getInProgressRace();
-    const upcomingRace = dataStore.getUpcomingRaces();
+    const upcomingRace = dataStore.getNextRace();
     if (inProgressRace) {
         io.emit('updateRaceData', JSON.stringify(inProgressRace));
     } else if (upcomingRace) {
@@ -181,42 +194,19 @@ function emitCurrentRace(io) {
     }
 }
 
-function startCountdown(io, race) {
+// Consolidate countdown and lap time update logic
+function startRaceTimerMain(io, race) {
+    // Start the race timer
+    race.startRaceTimer(() => {
+        emitCurrentRace(io);
+    });
+
+    // Update clients with race duration and lap times
     const interval = setInterval(() => {
-        if (race.duration > 0 && race.raceState === RaceState.IN_PROGRESS) {
-            race.duration -= 1000; // Decrement by 1 second (1000ms)
-            io.emit('updateRaceData', JSON.stringify(race)); // Emit to all connected clients
+        if (race.raceState === RaceState.IN_PROGRESS) {
+            io.emit('updateRaceData', JSON.stringify(race));
         } else {
             clearInterval(interval);
-            if (race.raceState === RaceState.IN_PROGRESS) {
-                race.setRaceState(RaceState.FINISHED);
-                io.emit('raceStateChange', JSON.stringify(race));
-                emitCurrentRace(io); // Notify all clients
-            }
         }
-    }, 1000); // Countdown interval set to 1 second
-}
-
-// To be used in the future
-function startLapTimeUpdate(io, race) {
-    const lapInterval = setInterval(() => {
-        if (race.raceState === RaceState.IN_PROGRESS) {
-            race.participants.forEach(participant => {
-                if (participant.lapTimer) {
-                    participant.currentLapTime += 100; // Update lap time every 100ms for finer granularity
-                }
-            });
-            io.emit('lapTimeUpdate', JSON.stringify(race.participants));
-            io.emit('raceTimeUpdate', JSON.stringify(race.duration));
-            io.emit('updateObserver', JSON.stringify(race));
-
-        }
-    }, 100); // Emit lap time update every 100ms
-}
-
-// Not in use yet, yet to be verified
-function stopCountdown(io, race) {
-    race.setRaceState(RaceState.FINISHED);
-    io.emit('raceStateChange', JSON.stringify(race));
-    emitCurrentRace(io); // Notify all clients
+    }, 300);
 }

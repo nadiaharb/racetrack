@@ -55,7 +55,7 @@ function renderLeaderBoard(race) {
         <ul>
             ${sortedParticipants.map(participant => `
                 <li>${participant.name} - Car Number: ${participant.carNumber} - Fastest Lap: ${participant.bestLapTime}</li>
-                <li>Current Lap: ${participant.currentLapTime}</li>
+                <li>Current Lap: ${formatTimeWithMilliseconds(participant.currentLapTime)}</li>
             `).join('')}
         </ul>
         `;
@@ -67,6 +67,15 @@ function formatTime(duration) {
     const minutes = Math.floor(duration / 60000);
     const seconds = Math.floor((duration % 60000) / 1000);
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+}
+
+function formatTimeWithMilliseconds(duration) {
+    const durationInt = parseInt(duration, 10);
+    console.log(`Time to be formatted: ${durationInt}`);
+    const minutes = Math.floor(durationInt / 60000);
+    const seconds = Math.floor((durationInt % 60000) / 1000);
+    const milliseconds = durationInt % 1000;
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}.${milliseconds}`;
 }
 
 // Load and render race data

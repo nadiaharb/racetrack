@@ -11,12 +11,12 @@ function renderRaces(races) {
     const sessionContainer = document.getElementById('sessionContainer');
     sessionContainer.innerHTML = '';
     console.log(races, "RENDER")
-    if (races===null) {
+    if (races === null) {
         console.log("No races to display.");
-       // window.location.reload()
+        // window.location.reload()
         return
     }
-   // const sessionContainer = document.getElementById('sessionContainer')
+    // const sessionContainer = document.getElementById('sessionContainer')
     //sessionContainer.innerHTML = ''
 
     races.forEach(race => {
@@ -64,45 +64,45 @@ function renderRaces(races) {
         // Add event listeners inside the loop
         const dltBtn = raceDiv.querySelector('.delete-button');
         dltBtn.addEventListener('click', deleteRaceHandler);
-        
 
-         // Event listener for "Assign Car Manually" button
-         const assignCarManuallyButton = raceDiv.querySelector('#assignCarManuallyButton');
-         assignCarManuallyButton.addEventListener('click', function() {
-             // Show the carNumber input container
+
+        // Event listener for "Assign Car Manually" button
+        const assignCarManuallyButton = raceDiv.querySelector('#assignCarManuallyButton');
+        assignCarManuallyButton.addEventListener('click', function () {
+            // Show the carNumber input container
             // console.log("clicked",  document.getElementById('carNumberContainer'+race.id))
-             document.getElementById('carNumberContainer'+race.id).style.display = 'block';
-             assignCarManuallyButton.style.display='none'
-         })
+            document.getElementById('carNumberContainer' + race.id).style.display = 'block';
+            assignCarManuallyButton.style.display = 'none'
+        })
 
-         // Delete Racer button event listeners
-         const deleteRacerButtons = raceDiv.querySelectorAll('.delete-racer-btn')
-         deleteRacerButtons.forEach(btn => {
-             btn.addEventListener('click', function(event) {
+        // Delete Racer button event listeners
+        const deleteRacerButtons = raceDiv.querySelectorAll('.delete-racer-btn')
+        deleteRacerButtons.forEach(btn => {
+            btn.addEventListener('click', function (event) {
                 const participantId = btn.dataset.participantId
-                 console.log(`Delete racer with ID: ${participantId} from race with ID: ${race.id}`)
-                 deleteRacer(participantId, race.id)
-             })
-         })
+                console.log(`Delete racer with ID: ${participantId} from race with ID: ${race.id}`)
+                deleteRacer(participantId, race.id)
+            })
+        })
 
-         const editRacerButtons = raceDiv.querySelectorAll('.edit-racer-btn')
-editRacerButtons.forEach(btn => {
-    btn.addEventListener('click', function(event) {
-        const raceId = btn.dataset.raceId
-        const participantId = btn.dataset.participantId
-        const name=btn.dataset.participantName
-        const car= btn.dataset.participantCar
-        console.log(`Edit racer with ID: ${participantId} from race with ID: ${raceId}`)
-        editRacer(raceId,participantId,name,car, race.id)
-    })
-})
-    // Add Racer button event listener
-    const addRacerButton = raceDiv.querySelector('.add-racer-button')
-    addRacerButton.addEventListener('click', function() {
-        showRacerForm(race.id)
-    })
-    
-    
+        const editRacerButtons = raceDiv.querySelectorAll('.edit-racer-btn')
+        editRacerButtons.forEach(btn => {
+            btn.addEventListener('click', function (event) {
+                const raceId = btn.dataset.raceId
+                const participantId = btn.dataset.participantId
+                const name = btn.dataset.participantName
+                const car = btn.dataset.participantCar
+                console.log(`Edit racer with ID: ${participantId} from race with ID: ${raceId}`)
+                editRacer(raceId, participantId, name, car, race.id)
+            })
+        })
+        // Add Racer button event listener
+        const addRacerButton = raceDiv.querySelector('.add-racer-button')
+        addRacerButton.addEventListener('click', function () {
+            showRacerForm(race.id)
+        })
+
+
     })
 }
 
@@ -117,27 +117,27 @@ function deleteRaceHandler(event) {
 
 //add racer
 function showRacerForm(raceId) {
-    const racerFormContainer = document.getElementById("racerForm"+raceId)
+    const racerFormContainer = document.getElementById("racerForm" + raceId)
     racerFormContainer.style.display = 'block'
-    const racerForm = document.getElementById('raceForm'+raceId)
-    
-    racerForm.onsubmit = function(event) {
+    const racerForm = document.getElementById('raceForm' + raceId)
+
+    racerForm.onsubmit = function (event) {
         event.preventDefault()
         const formData = new FormData(racerForm)
         const carNumber = formData.get('carNumber')
         const name = formData.get('name')
-        const newRacer={
-            carNumber:carNumber,
-            name:name
+        const newRacer = {
+            carNumber: carNumber,
+            name: name
         }
-      
+
         socket.emit('addRacer', { raceId: raceId, racer: newRacer })
         racerFormContainer.style.display = 'none'
         racerForm.reset()
     }
 
-    const cancelButton = document.getElementById('cancelButton'+raceId)
-    cancelButton.onclick = function() {
+    const cancelButton = document.getElementById('cancelButton' + raceId)
+    cancelButton.onclick = function () {
         racerFormContainer.style.display = 'none'
         racerForm.reset()
     }
@@ -149,7 +149,7 @@ function editRacer(raceId, participantId, name, car, raceId) {
     const modalContainer = document.createElement('div')
     modalContainer.id = 'modalContainer'
     modalContainer.classList.add('modal-overlay')
-    
+
     // Create modal content
     const modal = document.createElement('div')
     modal.classList.add('modal')
@@ -176,13 +176,13 @@ function editRacer(raceId, participantId, name, car, raceId) {
         const newName = document.getElementById('newName').value
         const newCarNumber = document.getElementById('newCarNumber').value
         //console.log("NEW DATA FOR racer", newName, newCarNumber, participantId)
-        const editedRacer={
-            carNumber:newCarNumber,
+        const editedRacer = {
+            carNumber: newCarNumber,
             name: newName,
             racerId: participantId,
-            raceId:raceId
+            raceId: raceId
         }
-        socket.emit('editRacer',editedRacer )
+        socket.emit('editRacer', editedRacer)
         modalContainer.remove()
     })
 
@@ -191,7 +191,7 @@ function editRacer(raceId, participantId, name, car, raceId) {
         modalContainer.remove()
     })
 
-    
+
 }
 
 
@@ -209,10 +209,10 @@ document.getElementById('sessionContainer').addEventListener('click', function(e
 */
 
 // Load and render race data
-socket.on('loadData', function(loadedData) {
-      
+socket.on('loadData', function (loadedData) {
+
     try {
-        if(loadedData===null){
+        if (loadedData === null) {
             console.log("NULL")
             renderRaces(null)
             return
@@ -220,7 +220,7 @@ socket.on('loadData', function(loadedData) {
         const races = JSON.parse(loadedData)
         if (races) {
             renderRaces(races)
-           // console.log(document.querySelectorAll(".delete-racer-btn"))
+            // console.log(document.querySelectorAll(".delete-racer-btn"))
         }
     } catch (error) {
         console.error('Error parsing or handling data:', error)
@@ -230,45 +230,45 @@ socket.on('loadData', function(loadedData) {
 
 
 //delete racer
-function deleteRacer(racerId, raceId){
-    const deleteRacer={
-        racerId:racerId,
-        raceId:raceId
+function deleteRacer(racerId, raceId) {
+    const deleteRacer = {
+        racerId: racerId,
+        raceId: raceId
     }
 
     socket.emit('deleteRacer', deleteRacer)
 }
 
 ///aDD NEW RACE 
-addRaceForm.addEventListener('submit', function(event) {
-    
+addRaceForm.addEventListener('submit', function (event) {
+
     event.preventDefault() // Prevent the default form submission behavior
 
     // Get form data
     const formData = new FormData(addRaceForm)
     const flagState = formData.get('flagState')
     const raceState = formData.get('raceState')
-    
-    const newRace={
-        flagState:flagState,
-        raceState:raceState
+
+    const newRace = {
+        flagState: flagState,
+        raceState: raceState
     }
     //console.log(newRace)
     socket.emit('addRace', newRace)
     //sendData('/addRace', newRace)
-   
+
 })
 
-socket.on('raceAdded', function(response) {
+socket.on('raceAdded', function (response) {
     console.log('Race successfully added:', response)
 })
 
 
 //Error
 socket.on('error', (data) => {
-    alert(data.message) 
+    alert(data.message)
 })
 
-socket.on("raceModeChanged", race=>{
+socket.on("raceModeChanged", race => {
     console.log(race)
 })

@@ -1,11 +1,6 @@
 const socket = io('http://localhost:3000')
 
 /*
-The Lap-line observer has been given a tablet which may be used in landscape or portrait. 
-Their interface requires 1 button for each car which will be pressed as the respective car passes the lap-line. 
-The button must simply have the car's number on it. As many cars cross the lap-line quickly and often, the buttons must be very hard to miss 
-(they must occupy a large tappable area).
-
 Cars can still cross the lap line when the race is in finish mode. 
 The observer's display should show a message to indicate that the race session is ended once that has been declared by the Safety Official.
 
@@ -19,7 +14,7 @@ The buttons must not function after the race is ended. They should disappear or 
 
 
 
-
+// TO-DO: If page is CTRL+F5 the dynamic lap counters break. Oops.
 function renderObserverView(race) {
     const tracker = document.getElementById('tracker-container');
     const mainContainer = document.getElementById('tracker-master-container');
@@ -107,7 +102,7 @@ socket.on('startRace', function (incomingRace) {
     }
 });
 
-socket.on('renderObserver', function (incomingRace) {
+socket.on('updateRaceData', function (incomingRace) {
     try {
         const race = JSON.parse(incomingRace)
         if (race) {
@@ -160,10 +155,50 @@ socket.on('raceTimeUpdate', function (incomingRaceDuration) {
 
 
 
-socket.on('raceEnded', function () {
+socket.on('raceFinished', function () {
+    showRaceEndMessage();
     disableButtons();
 });
 
+
+function showRaceEndMessage() {
+    // Create the modal container
+    const modal = document.createElement('div');
+    modal.style.position = 'fixed';
+    modal.style.top = '50%';
+    modal.style.left = '50%';
+    modal.style.transform = 'translate(-50%, -50%)';
+    modal.style.padding = '20px';
+    modal.style.backgroundColor = '#fff';
+    modal.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.3)';
+    modal.style.zIndex = '1000';
+    modal.style.textAlign = 'center';
+    modal.style.borderRadius = '10px';
+    modal.style.width = '80%';
+    modal.style.maxWidth = '300px';
+
+    // Create the message text
+    const message = document.createElement('p');
+    message.textContent = 'The race has ended!';
+    message.style.fontSize = '20px';
+    message.style.marginBottom = '20px';
+    modal.appendChild(message);
+
+    // Create the close button
+    const closeButton = document.createElement('button');
+    closeButton.textContent = 'Close';
+    closeButton.style.padding = '10px 20px';
+    closeButton.style.backgroundColor = '#007bff';
+    closeButton.style.color = '#fff';
+    closeButton.style.border = 'none';
+    closeButton.style.borderRadius = '5px';
+    closeButton.style.cursor = 'pointer';
+    closeButton.onclick = () => document.body.removeChild(modal);
+    modal.appendChild(closeButton);
+
+    // Append the modal to the body
+    document.body.appendChild(modal);
+}
 
 // Helper function to format time in MM:SS
 function formatTime(duration) {

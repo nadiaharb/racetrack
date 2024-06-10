@@ -1,15 +1,15 @@
 const socket = io()
-const noRace=document.querySelector('.no-race')
+const noRace = document.querySelector('.no-race')
 socket.on('startRace', function (incomingRace) {
-    if(incomingRace===null){
+    if (incomingRace === null) {
         const timerContainer = document.getElementById('timer-container')
-    timerContainer.innerHTML = '<p>No races available</p>'
+        timerContainer.innerHTML = '<p>No races available</p>'
     }
     try {
         const race = JSON.parse(incomingRace)
         if (race) {
             renderTimer(race)
-         
+
         }
     } catch (error) {
         console.error('Error parsing or handling data:', error)
@@ -18,21 +18,21 @@ socket.on('startRace', function (incomingRace) {
 
 
 function renderTimer(race) {
-   
+
     const timerContainer = document.getElementById('timer-container')
-    if(race.duration===undefined){
+    if (race.duration === undefined) {
         const timerContainer = document.getElementById('timer-container')
-    timerContainer.innerHTML = '' // Reset just incase
-        noRace.innerHTML="No race in progress"
+        timerContainer.innerHTML = '' // Reset just incase
+        noRace.innerHTML = "No race in progress"
         return
     }
-    if(race.flagState==='Finish'){
-       timerContainer.innerHTML = '' // Reset just incase
-        noRace.innerHTML="No race in progress"
+    if (race.flagState === 'Finish') {
+        timerContainer.innerHTML = '' // Reset just incase
+        noRace.innerHTML = "No race in progress"
         return
     }
-    noRace.innerHTML=""
-    
+    noRace.innerHTML = ""
+
     timerContainer.innerHTML = '' // Reset just incase
     const raceDiv = document.createElement('div')
     raceDiv.classList.add('race')
@@ -53,7 +53,7 @@ function formatTime(duration) {
 
 // Load and render race data
 socket.on('updateRaceData', function (incomingRace) {
-    
+
     try {
         const race = JSON.parse(incomingRace)
         if (race) {

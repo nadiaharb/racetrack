@@ -1,11 +1,11 @@
 const socket = io();
-const startBtn=document.getElementById("startBtn")
-const raceModeBtns= document.querySelector(".race-mode-container")
-const modeDisplay= document.getElementById("modeDisplay")
-const startTitle=document.getElementById('start-title')
-const modeBtns=document.querySelectorAll('.modeBtn')
-const finishDiv=document.querySelector(".end-race-container")
-const endBtn=document.getElementById('endBtn')
+const startBtn = document.getElementById("startBtn")
+const raceModeBtns = document.querySelector(".race-mode-container")
+const modeDisplay = document.getElementById("modeDisplay")
+const startTitle = document.getElementById('start-title')
+const modeBtns = document.querySelectorAll('.modeBtn')
+const finishDiv = document.querySelector(".end-race-container")
+const endBtn = document.getElementById('endBtn')
 
 
 // Enable start button
@@ -50,7 +50,7 @@ function finishListener() {
 // End race button function
 function endListener() {
     let text = "Confirm all cars have returned to pit area";
-    if (confirm(text) == true) {
+    if (confirm(text)) {
         console.log("Track is declared clear")
         socket.emit('raceModeChange', 'Danger')
         socket.emit('raceEnded')
@@ -68,7 +68,7 @@ function endListener() {
 // Start race button function
 function startListener() {
     let text = "Confirm all cars are ready to start";
-    if (confirm(text) == true) {
+    if (confirm(text)) {
         console.log("Race is started")
         socket.emit('raceModeChange', 'Safe')
         document.getElementById('startBtn').removeEventListener('click', startListener)
@@ -117,16 +117,16 @@ socket.on('loadRaceControl', race => {
 })
 
 socket.on('racerDeleted', (race) => {
-    console.log("racer deletr")
+    console.log("Racer deleted")
     renderRace(race)
 }) //
 socket.on('racerAdded', (race) => {
-    console.log("racer added")
+    console.log("Racer added")
     renderRace(race)
 })
 
 socket.on('racerEdited', (race) => {
-    console.log("racer edited")
+    console.log("Racer edited")
     renderRace(race)
 })
 

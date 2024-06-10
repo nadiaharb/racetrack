@@ -1,32 +1,32 @@
 const socket = io()
 const table = document.querySelector(".table-container")
-const tableTitle=document.getElementById("table-title")
-const driversTable=document.getElementById('drivers-table')
-const msg=document.getElementById('additionalMessage')
+const tableTitle = document.getElementById("table-title")
+const driversTable = document.getElementById('drivers-table')
+const msg = document.getElementById('additionalMessage')
 
-socket.on('loadData', function(loadedData) {
+socket.on('loadData', function (loadedData) {
 
     try {
-        if(loadedData===null){
-         
+        if (loadedData === null) {
+
             renderRace(null)
             return
         }
         const races = JSON.parse(loadedData)[0]
 
-        if (races && races.participants.length>0){
+        if (races && races.participants.length > 0) {
             renderRace(races)
-         
+
         }
     } catch (error) {
         console.error('Error parsing or handling data:', error)
     }
 })
 
-socket.on("showMessage", function(loadedData){
-    if(loadedData!=null){
-    msg.innerHTML="Proceed to the paddock for the next race."
-}
+socket.on("showMessage", function (loadedData) {
+    if (loadedData != null) {
+        msg.innerHTML = "Proceed to the paddock for the next race."
+    }
 })
 
 
@@ -50,22 +50,22 @@ function renderRace(race) {
 
     if (race === null) {
         driversTable.style.display = 'none'
-        tableTitle.innerHTML='No upcoming races'
-        msg.innerHTML=''
-       console.log("No upcoming races")
+        tableTitle.innerHTML = 'No upcoming races'
+        msg.innerHTML = ''
+        console.log("No upcoming races")
 
         return
     }
-    
-   
-    tableTitle.innerHTML='Next Race Information'
+
+
+    tableTitle.innerHTML = 'Next Race Information'
     driversTable.style.display = 'inline'
-    msg.innerHTML=''
+    msg.innerHTML = ''
     for (let i = 1; i <= 8; i++) {
         document.getElementById(`driver${i}`).textContent = ''
     }
 
-     
+
     race.participants.forEach(participant => {
         const carNumber = participant.carNumber
         const driverCell = document.getElementById(`driver${carNumber}`)
@@ -75,7 +75,7 @@ function renderRace(race) {
     })
 
 
-    }
+}
 
 /*
 // Refresh button for testing
