@@ -27,7 +27,7 @@ module.exports = function (io) {
 
         // Load Data 
         socket.emit('loadData', JSON.stringify(dataStore.getUpcomingRacesByFlag("Danger")))
-
+        socket.emit('renderObserver', JSON.stringify(dataStore.getNextRace()))
         // Emit current race if it exists
         // Used by Leaderboard and Lap-Line Tracker
         emitCurrentRace(io);
@@ -61,7 +61,6 @@ module.exports = function (io) {
             if (race) {
                 //race.setRaceState(RaceState.IN_PROGRESS);
                 for (participant of race.participants) {
-                    console.log(`RacerID: ${participant.id}, RaceID: ${race.id}`)
                     participant.elapseLap();
                 }
                 startRaceTimerMain(io, race)
@@ -131,6 +130,7 @@ module.exports = function (io) {
         socket.on('raceFinished', () => {
             const inProgressRace = dataStore.getInProgressRace();
             inProgressRace.duration = 0; // Set the duration to 0 so all events stop
+            io.emit('raceFinished') // Make sure everybody knows
         })
         /*// TO-DO
         socket.on('finishLap', raceID => {
@@ -204,9 +204,19 @@ function startRaceTimerMain(io, race) {
     // Update clients with race duration and lap times
     const interval = setInterval(() => {
         if (race.raceState === RaceState.IN_PROGRESS) {
-            io.emit('updateRaceData', JSON.stringify(race));
+            io.emit('raceTimeUpdate', JSON.stringify(race.duration));
+            io.emit('lapTimeUpdate', JSON.stringify(race.participants));
+            io.emit('updateObserver', JSON.stringify(race));
+            emitCurrentRace(io);
         } else {
             clearInterval(interval);
         }
-    }, 300);
+    }, 100);
+    const otherInterval = setInterval(() => {
+        if (race.raceState === RaceState.IN_PROGRESS) {
+            emitCurrentRace(io)
+        } else {
+            clearInterval(interval);
+        }
+    }, 1000);
 }

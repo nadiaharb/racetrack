@@ -1,13 +1,6 @@
 const socket = io('http://localhost:3000')
 
-// This is used for testing
-const startCountdownBtn = document.getElementById('startCountdown')
 
-startCountdownBtn.addEventListener('click', function (e) {
-    e.preventDefault();
-
-    socket.emit('startCountdown')
-})
 // This is used for testing
 
 /*
@@ -42,23 +35,29 @@ socket.on('startRace', function (incomingRace) {
 
 
 function renderLeaderBoard(race) {
-    const leaderboard = document.getElementById('lbContainer');
+    const leaderboard = document.getElementById('lb-container');
     leaderboard.innerHTML = ''; // Reset just incase
     const sortedParticipants = race.participants.sort((a, b) => a.bestLapTime - b.bestLapTime);
     const raceDiv = document.createElement('div');
     raceDiv.classList.add('race');
-    raceDiv.innerHTML = `
+    const colorMap = assignColorsToParticipants(race.participants);
+    const raceState = document.createElement('div');
+    raceState.classList.add('race-state');
+    raceState.innerHTML = `
         <h2>Race: ${race.id}</h2>
         <p>Flag State: ${race.flagState}</p>
         <p>Race State: ${race.raceState}</p>
-        <p>Time left: ${formatTime(race.duration)}</p>
-        <ul>
+        <p>Time left: ${formatTime(race.duration)}</p>`;
+    raceDiv.innerHTML = `
+        <div class="lb-entries">
             ${sortedParticipants.map(participant => `
-                <li>${participant.name} - Car Number: ${participant.carNumber} - Fastest Lap: ${participant.bestLapTime}</li>
-                <li>Current Lap: ${formatTimeWithMilliseconds(participant.currentLapTime)}</li>
+            <div class="racer">
+            <li style="background-color: ${colorMap[participant.carNumber]}; border-color: ${colorMap[participant.carNumber]};">${participant.name} - Car Number: ${participant.carNumber} - Fastest Lap: ${formatTimeWithMilliseconds(participant.bestLapTime)}</li>
+            <li class="lap-time">Current Lap: ${formatTimeWithMilliseconds(participant.currentLapTime)}</li></div>
             `).join('')}
-        </ul>
+        </div>
         `;
+    leaderboard.appendChild(raceState)
     leaderboard.appendChild(raceDiv);
 }
 
@@ -71,11 +70,22 @@ function formatTime(duration) {
 
 function formatTimeWithMilliseconds(duration) {
     const durationInt = parseInt(duration, 10);
-    console.log(`Time to be formatted: ${durationInt}`);
     const minutes = Math.floor(durationInt / 60000);
     const seconds = Math.floor((durationInt % 60000) / 1000);
     const milliseconds = durationInt % 1000;
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}.${milliseconds}`;
+}
+
+function generateColor(index) {
+    const hue = index * 137.5 % 360; // Use a golden ratio to distribute colors
+    return `hsl(${hue}, 100%, 50%)`;
+}
+
+function assignColorsToParticipants(participants) {
+    return participants.reduce((acc, participant, index) => {
+        acc[participant.carNumber] = generateColor(index);
+        return acc;
+    }, {});
 }
 
 // Load and render race data

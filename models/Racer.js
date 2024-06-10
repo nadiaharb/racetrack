@@ -1,9 +1,9 @@
 class Racer {
-    constructor(carNumber, name, lapCount = 0) {
+    constructor(carNumber, name, lapCount = 0, bestLapTime = 0) {
         this.id = this.generateRandomId();
         this.carNumber = carNumber;
         this.name = name;
-        this.bestLapTime = null;
+        this.bestLapTime = bestLapTime;
         this.currentLapTime = 0; // Initialize current lap time
         this.lapCount = lapCount;
         this.lapTimer = null; // Initialize lap timer
@@ -24,8 +24,10 @@ class Racer {
             clearInterval(this.lapTimer);
         }
         this.lapCount++; // Increment lap count
-        if (this.bestLapTime === null || this.currentLapTime < this.bestLapTime) {
-            this.bestLapTime = this.currentLapTime; // Update best lap time
+        if (this.bestLapTime === 0 || this.currentLapTime < this.bestLapTime) {
+            if (this.currentLapTime !== 0){
+                this.bestLapTime = this.currentLapTime; // Update best lap time
+            }
         }
         this.currentLapTime = 0; // Reset current lap time
         this.startLapTimer(); // Start new lap timer
@@ -38,8 +40,8 @@ class Racer {
         }
         this.currentLapTime = 0;
         this.lapTimer = setInterval(() => {
-            this.currentLapTime += 300; // Increment timer every second
-        }, 300);
+            this.currentLapTime += 100; // Increment timer every second
+        }, 100);
     }
 
     // Custom serialization method to exclude lapTimer

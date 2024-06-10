@@ -31,10 +31,47 @@ title{
     width: 100%;
     flex: 2;
 }
+
+.race{
+    display: flex;
+    flex-direction: column;
+}
+
+.race li{  
+    list-style-type: none;
+}
+
+.lb-container{
+
+}
+.lb-entries{
+    display: flex;
+    align-items: left;
+    flex-direction: column;
+    border-width: 0.2vw;
+    border-radius: 1vw;
+    border: 2px solid transparent;
+    list-style-type: none;
+    
+}
+
+.lb-entries li{
+    display: flex;
+    flex-direction: column;
+    border-width: 0.2vw;
+    border-radius: 1vw;
+    border: 2px solid #303030;
+    padding: 1%;
+}
 .widget-title{
 
 }
+.lap-time{
 
+}
+.racer{
+    margin: 1%;
+}
 .lap-counter {
     border: 2px solid transparent;
     display: flex;
@@ -93,6 +130,7 @@ title{
     transform: translateY(1px);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
+
 
 /* Media query for tablets */
 @media (max-width: 768px) {

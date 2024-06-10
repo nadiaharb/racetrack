@@ -127,12 +127,12 @@ class Race {
             clearInterval(this.raceTimer);
         }
         this.raceTimer = setInterval(() => {
-            this.duration -= 300; // Decrement race duration
+            this.duration -= 100; // Decrement race duration
             if (this.duration <= 0) {
                 clearInterval(this.raceTimer);
                 this.setRaceState(RaceState.FINISHED);
             }
-        }, 300);
+        }, 100);
     }
 
     // Custom serialization method to exclude lapTimer

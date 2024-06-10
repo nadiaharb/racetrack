@@ -1,5 +1,6 @@
 const socket = io('http://localhost:3000')
 
+let colorMap = {};
 /*
 Cars can still cross the lap line when the race is in finish mode. 
 The observer's display should show a message to indicate that the race session is ended once that has been declared by the Safety Official.
@@ -30,7 +31,7 @@ function renderObserverView(race) {
     `;
     mainContainer.appendChild(raceState);
 
-    const colorMap = assignColorsToParticipants(race.participants);
+    colorMap = assignColorsToParticipants(race.participants);
 
     race.participants.forEach(participant => {
         const racerDiv = document.createElement('div');
@@ -55,14 +56,7 @@ function renderObserverView(race) {
 }
 
 function updateObserverView(race) {
-    // Update race state information
-    const flagStateElem = document.getElementById('flagState');
-    const raceStateElem = document.getElementById('raceState');
-    const timeLeftElem = document.getElementById('timeLeft');
-
-    if (flagStateElem) flagStateElem.textContent = `Flag State: ${race.flagState}`;
-    if (raceStateElem) raceStateElem.textContent = `Race State: ${race.raceState}`;
-    if (timeLeftElem) timeLeftElem.textContent = `Time left: ${formatTime(race.duration)}`;
+    updateRaceStatePanel(race);
 
     // Update participants information
     race.participants.forEach(participant => {
@@ -74,10 +68,19 @@ function updateObserverView(race) {
     });
 }
 
+function updateRaceStatePanel(race) {
+    const flagStateElem = document.getElementById('flagState');
+    const raceStateElem = document.getElementById('raceState');
+    const timeLeftElem = document.getElementById('timeLeft');
+
+    if (flagStateElem) flagStateElem.textContent = `Flag State: ${race.flagState}`;
+    if (raceStateElem) raceStateElem.textContent = `Race State: ${race.raceState}`;
+    if (timeLeftElem) timeLeftElem.textContent = `Time left: ${formatTime(race.duration)}`;
+}
+
 function updateParticipantLap(updatedParticipant) {
     const currentLapElem = document.querySelector(`.currentLap[data-racer-id="${updatedParticipant.id}"]`);
     const lapCountElem = document.querySelector(`.lapCount[data-racer-id="${updatedParticipant.id}"]`);
-
     if (currentLapElem) currentLapElem.textContent = `Current Lap: ${formatTimeWithMilliseconds(updatedParticipant.currentLapTime)}`;
     if (lapCountElem) lapCountElem.textContent = `Lap Count: ${updatedParticipant.lapCount}`;
 }
@@ -95,6 +98,7 @@ socket.on('startRace', function (incomingRace) {
         const race = JSON.parse(incomingRace);
         if (race) {
             renderObserverView(race);
+            //enableButtons();
             socket.emit('startCountdown', race)
         }
     } catch (error) {
@@ -102,12 +106,13 @@ socket.on('startRace', function (incomingRace) {
     }
 });
 
-socket.on('updateRaceData', function (incomingRace) {
+socket.on('renderObserver', function (incomingRace) {
     try {
         const race = JSON.parse(incomingRace)
         if (race) {
             console.log(`Received JSON: ${race}`)
             renderObserverView(race)
+            disableButtons();
         }
     } catch (error) {
         console.error('Error parsing or handling data:', error)
@@ -120,11 +125,24 @@ socket.on('updateObserver', function (incomingRace) {
         if (race) {
             console.log(`Received JSON: ${race}`)
             updateObserverView(race)
+            enableButtons();
         }
     } catch (error) {
         console.error('Error parsing or handling data:', error)
     }
 })
+
+socket.on('updateRaceStatePanel', function (incomingRace) {
+    try {
+        const race = JSON.parse(incomingRace);
+        if (race) {
+            console.log(`Received JSON: ${race}`);
+            updateRaceStatePanel(race);
+        }
+    } catch (error) {
+        console.error('Error parsing or handling data:', error);
+    }
+});
 
 socket.on('lapTimeUpdate', function (incomingParticipants) {
     try {
@@ -225,6 +243,15 @@ function disableButtons() {
         button.style.backgroundColor = '#BEBEBE';
     });
 }
+
+function enableButtons() {
+    document.querySelectorAll('.elapse-lap-button').forEach((button, index) => {
+        button.disabled = false;
+        const racerId = button.getAttribute('data-racer-id');
+        button.style.backgroundColor = colorMap[racerId] || generateColor(index);
+    });
+}
+
 
 function generateColor(index) {
     const hue = index * 137.5 % 360; // Use a golden ratio to distribute colors
