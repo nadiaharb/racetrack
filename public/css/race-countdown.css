@@ -1,0 +1,33 @@
+body {
+    background-color: #f0f0f0;
+}
+/* Center the timer container on the screen */
+.timer-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh; /* Full viewport height */
+    background-color: #f0f0f0; /* Light background for visibility */
+}
+
+/* Style for the no-race message */
+.no-race {
+    background-color: #f0f0f0;
+    text-align: center;
+    font-size: 24px;
+    color: red;
+    margin-top: 20px;
+}
+
+/* Style for the race timer */
+.timer-container .race {
+    text-align: center;
+    font-size: 48px; /* Large font size for the timer */
+    font-weight: bold;
+    color: #333;
+    padding: 20px;
+    background-color: #fff; /* White background for the timer */
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}

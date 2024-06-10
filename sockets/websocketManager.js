@@ -66,7 +66,7 @@ module.exports = function (io) {
         socket.on('finishLap', raceID => {
             // Lap Line Observer needs a method for his view
         });
-        /*
+        
         // Gotta check this works
         socket.on('startRace', () => {
             const race = dataStore.getNextRace();
@@ -76,7 +76,7 @@ module.exports = function (io) {
                 emitCurrentRace(io); // Notify all clients
             }
         });
-         */
+         
         // For testing only
         socket.on('startCountdown', () => {
             const race = dataStore.getNextRace();
