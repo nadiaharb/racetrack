@@ -25,15 +25,15 @@ module.exports = function (io) {
             console.log('User disconnected');
         });
         //env keys
-        const keys={
-            RECEPTIONIST_KEY:process.env.RECEPTIONIST_KEY,
-            OBSERVER_KEY:process.env.OBSERVER_KEY,
+        const keys = {
+            RECEPTIONIST_KEY: process.env.RECEPTIONIST_KEY,
+            OBSERVER_KEY: process.env.OBSERVER_KEY,
             SAFETY_KEY: process.env.SAFETY_KEY
         }
         socket.emit('getKey', JSON.stringify(keys))
         // Load Data 
         socket.emit('loadData', JSON.stringify(dataStore.getUpcomingRacesByFlag("Danger")))
-        socket.emit('renderObserver', JSON.stringify(dataStore.getNextRace()))
+        io.emit('renderNextRace', JSON.stringify(dataStore.getNextRace()))
         // Emit current race if it exists
         // Used by Leaderboard and Lap-Line Tracker
         emitCurrentRace(io);
@@ -111,9 +111,9 @@ module.exports = function (io) {
 
         // Next Race
         // Refresh next race data
-        socket.on('prepareNextRace', race => {
+        /*socket.on('prepareNextRace', race => {
             nextRaceChange(socket, io, race);
-        });
+        });*/
 
         socket.on('elapseLap', (participantID, raceID) => {
             console.log(`Participant ID: ${participantID}, Race ID: ${raceID}`);

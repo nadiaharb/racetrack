@@ -11,21 +11,21 @@ const table = document.querySelector(".table-container")
 
 
 
-window.addEventListener('DOMContentLoaded', function() {
+/*window.addEventListener('DOMContentLoaded', function () {
     let safetyKey
     document.body.classList.add('blur-content')
     socket.on('getKey', loadedData => {
-        const data=JSON.parse(loadedData)
-       
-       
+        const data = JSON.parse(loadedData)
+
+
         safetyKey = data.SAFETY_KEY
-        promptAccessKey() 
+        promptAccessKey()
     })
 
     const promptAccessKey = () => {
         const enteredKey = prompt('Please enter the access key:')
         const correctKey = safetyKey
-        
+
         if (enteredKey === correctKey) {
             console.log('Access granted!')
             document.body.classList.remove('blur-content')
@@ -34,32 +34,27 @@ window.addEventListener('DOMContentLoaded', function() {
             setTimeout(promptAccessKey, 500)
         }
     }
-})
+})*/
 
 
 
 
 socket.on('loadRaceControl', race => {
-
     renderRace(race)
 })
 
 socket.on('racerDeleted', (race) => {
-    console.log("racer deletr")
     renderRace(race)
 })
 socket.on('racerAdded', (race) => {
-    console.log("racer added", race)
     renderRace(race)
 })
 
 socket.on('racerEdited', (race) => {
-    console.log("racer edited")
     renderRace(race)
 })
 
 socket.on('raceStarted', (race) => {
-    console.log("started", race)
     renderRace(race)
     //renderModeBtns(race)
 })
@@ -72,7 +67,6 @@ function renderRace(race) {
         raceModeBtns.style.display = 'none'
         startTitle.innerHTML = "No Upcoming Races"
         finishDiv.style.display = 'none'
-
         return
     }
     if (race.flagState === "Finish") {
@@ -82,9 +76,9 @@ function renderRace(race) {
         endBtn.style.backgroundColor = 'red'
         return
     }
+
     deleteModeButtons()
     createModeButtons()
-
 
     endBtn.setAttribute('raceId', race.id)
     startBtn.setAttribute('raceId', race.id)
@@ -112,7 +106,6 @@ function renderRace(race) {
         startTitle.innerHTML = "Start Race"
         finishDiv.style.display = 'none'
         table.style.display = 'block'
-
 
     }
     const modeBtns = document.querySelectorAll('.modeBtn')
@@ -180,8 +173,8 @@ startBtn.addEventListener('click', function (e) {
     })
 
     endBtn.style.backgroundColor = ''
-     startBtn.style.display='none'
-     startTitle.innerHTML="In Progress"
+    startBtn.style.display = 'none'
+    startTitle.innerHTML = "In Progress"
     finishDiv.style.display = 'none';
     raceModeBtns.style.display = 'block'
     modeDisplay.innerHTML = "Safe"
@@ -204,7 +197,7 @@ endBtn.addEventListener('click', function (e) {
 
     const updateRace = {
         raceId: raceIdBtn,
-        flagState: "Danger"
+        flagState: "Finish"
 
     }
 

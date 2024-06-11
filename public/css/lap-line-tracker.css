@@ -131,6 +131,32 @@ title{
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+#flagState{
+    border-width: 0.2vw;
+    border-radius: 1vw;
+    border: solid black;
+    text-align: center;
+    padding: 1%;
+    margin-bottom: auto;
+}
+
+#raceState{
+    border-width: 0.2vw;
+    border-radius: 1vw;
+    border: solid black;
+    text-align: center;
+    padding: 1%;
+    margin-bottom: auto;
+}
+
+#timeLeft{
+    border-width: 0.2vw;
+    border-radius: 1vw;
+    border: solid black;
+    text-align: center;
+    padding: 1%;
+    margin-bottom: auto;
+}
 
 /* Media query for tablets */
 @media (max-width: 768px) {
@@ -173,4 +199,15 @@ title{
 .blur-content {
     filter: blur(5px); /* Apply blur effect */
     pointer-events: none; /* Disable pointer events */
+}
+
+.flag-container {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    margin-top: 10px;
+}
+
+.white, .black {
+    width: 1vw;
+    height: 1vw;
 }

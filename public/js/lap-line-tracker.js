@@ -13,21 +13,21 @@ The buttons must not function after the race is ended. They should disappear or 
 
 })*/
 
-window.addEventListener('DOMContentLoaded', function() {
+/*window.addEventListener('DOMContentLoaded', function () {
     let observerKey
     document.body.classList.add('blur-content')
     socket.on('getKey', loadedData => {
-        const data=JSON.parse(loadedData)
-       
-       
+        const data = JSON.parse(loadedData)
+
+
         observerKey = data.OBSERVER_KEY
-        promptAccessKey() 
+        promptAccessKey()
     })
 
     const promptAccessKey = () => {
         const enteredKey = prompt('Please enter the access key:')
         const correctKey = observerKey
-        
+
         if (enteredKey === correctKey) {
             console.log('Access granted!')
             document.body.classList.remove('blur-content')
@@ -36,7 +36,7 @@ window.addEventListener('DOMContentLoaded', function() {
             setTimeout(promptAccessKey, 500)
         }
     }
-})
+})*/
 
 
 
@@ -131,7 +131,7 @@ socket.on('startRace', function (incomingRace) {
     }
 });
 
-socket.on('renderObserver', function (incomingRace) {
+socket.on('renderNextRace', function (incomingRace) {
     try {
         const race = JSON.parse(incomingRace)
         if (race) {
