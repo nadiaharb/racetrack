@@ -11,6 +11,33 @@ const table = document.querySelector(".table-container")
 
 
 
+window.addEventListener('DOMContentLoaded', function() {
+    let safetyKey
+    document.body.classList.add('blur-content')
+    socket.on('getKey', loadedData => {
+        const data=JSON.parse(loadedData)
+       
+       
+        safetyKey = data.SAFETY_KEY
+        promptAccessKey() 
+    })
+
+    const promptAccessKey = () => {
+        const enteredKey = prompt('Please enter the access key:')
+        const correctKey = safetyKey
+        
+        if (enteredKey === correctKey) {
+            console.log('Access granted!')
+            document.body.classList.remove('blur-content')
+        } else {
+            console.log('Access denied!')
+            setTimeout(promptAccessKey, 500)
+        }
+    }
+})
+
+
+
 
 socket.on('loadRaceControl', race => {
 
@@ -153,7 +180,8 @@ startBtn.addEventListener('click', function (e) {
     })
 
     endBtn.style.backgroundColor = ''
-
+     startBtn.style.display='none'
+     startTitle.innerHTML="In Progress"
     finishDiv.style.display = 'none';
     raceModeBtns.style.display = 'block'
     modeDisplay.innerHTML = "Safe"

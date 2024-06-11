@@ -49,6 +49,7 @@ function endRace(io, updatedRace) {
     io.emit('raceModeChange', race)
     io.emit('loadRaceControl', dataStore.getNextRace())
     io.emit('showMessage', dataStore.getNextRace())
+    io.emit("updateRaceData", JSON.stringify(race))
 }
 
 module.exports = { raceModeChange, startRace, endRace }

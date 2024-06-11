@@ -1,5 +1,16 @@
+@font-face {
+    font-family: 'Race Sport';
+    src: url('../fonts/RaceSportRegular.eot'); /* IE9 Compat Modes */
+    src: url('../fonts/webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('../fonts/RaceSportRegular.woff') format('woff'), /* Modern Browsers */
+         url('../fonts/RaceSportRegular.ttf')  format('truetype'), /* Safari, Android, iOS */
+         url('../fonts/RaceSportRegular.svg#RaceSportRegular') format('svg'); /* Legacy iOS */
+}
+
+
 body {
     background-color: #f0f0f0;
+    font-family: 'Race Sport';
 }
 /* Center the timer container on the screen */
 .timer-container {

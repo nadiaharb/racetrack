@@ -361,3 +361,8 @@ button:disabled {
 .end-race-container{
     text-align: center;
 }
+
+.blur-content {
+    filter: blur(5px); /* Apply blur effect */
+    pointer-events: none; /* Disable pointer events */
+}

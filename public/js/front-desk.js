@@ -6,29 +6,29 @@ const socket = io('http://localhost:3000')
 //8ded6076
 
 window.addEventListener('DOMContentLoaded', function() {
-    let receptionistKey; // Define receptionistKey outside of the event callback
-    
-    document.body.classList.add('blur-content');
-    
+    let receptionistKey
+    document.body.classList.add('blur-content')
     socket.on('getKey', loadedData => {
-        receptionistKey = JSON.parse(loadedData);
-        console.log(receptionistKey);
-        promptAccessKey(); // Call promptAccessKey() here
-    });
+        const data=JSON.parse(loadedData)
+       
+       
+        receptionistKey = data.RECEPTIONIST_KEY
+        promptAccessKey() 
+    })
 
     const promptAccessKey = () => {
-        const enteredKey = prompt('Please enter the access key:');
-        const correctKey = receptionistKey;
+        const enteredKey = prompt('Please enter the access key:')
+        const correctKey = receptionistKey
         
         if (enteredKey === correctKey) {
-            console.log('Access granted!');
-            document.body.classList.remove('blur-content');
+            console.log('Access granted!')
+            document.body.classList.remove('blur-content')
         } else {
-            console.log('Access denied!');
-            setTimeout(promptAccessKey, 500);
+            console.log('Access denied!')
+            setTimeout(promptAccessKey, 500)
         }
-    };
-});
+    }
+})
 
 
 
@@ -38,14 +38,11 @@ window.addEventListener('DOMContentLoaded', function() {
 function renderRaces(races) {
     const sessionContainer = document.getElementById('sessionContainer');
     sessionContainer.innerHTML = '';
-    console.log(races, "RENDER")
     if (races === null) {
         console.log("No races to display.");
         // window.location.reload()
         return
     }
-    // const sessionContainer = document.getElementById('sessionContainer')
-    //sessionContainer.innerHTML = ''
 
     races.forEach(race => {
         const raceDiv = document.createElement('div')
@@ -96,8 +93,7 @@ function renderRaces(races) {
         // Event listener for "Assign Car Manually" button
         const assignCarManuallyButton = raceDiv.querySelector('#assignCarManuallyButton');
         assignCarManuallyButton.addEventListener('click', function () {
-            // Show the carNumber input container
-            // console.log("clicked",  document.getElementById('carNumberContainer'+race.id))
+
             document.getElementById('carNumberContainer' + race.id).style.display = 'block';
             assignCarManuallyButton.style.display = 'none'
         })
@@ -135,9 +131,9 @@ function renderRaces(races) {
 
 
 function deleteRaceHandler(event) {
-    console.log("triggered")
+
     const raceId = event.target.dataset.raceId;
-    console.log(raceId)
+
     socket.emit('deleteRace', raceId);
 }
 
@@ -223,24 +219,15 @@ function editRacer(raceId, participantId, name, car, raceId) {
 
 
 
-// delete race
-/*
-document.getElementById('sessionContainer').addEventListener('click', function(event) {
-    if (event.target.classList.contains('delete-button')) {
-        const raceId = event.target.getAttribute('data-race-id')
-      
-        socket.emit('deleteRace', raceId) 
-    }
-})
 
-*/
+
 
 // Load and render race data
 socket.on('loadData', function (loadedData) {
 
     try {
         if (loadedData === null) {
-            console.log("NULL")
+       
             renderRaces(null)
             return
         }

@@ -18,9 +18,9 @@ socket.on('startRace', function (incomingRace) {
 
 
 function renderTimer(race) {
-
+     
     const timerContainer = document.getElementById('timer-container')
-    if (race.duration === undefined) {
+    if (race.duration === undefined || race.raceState === "Finished") {
         const timerContainer = document.getElementById('timer-container')
         timerContainer.innerHTML = '' // Reset just incase
         noRace.innerHTML = "No race in progress"

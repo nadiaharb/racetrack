@@ -13,6 +13,31 @@ The buttons must not function after the race is ended. They should disappear or 
 
 })*/
 
+window.addEventListener('DOMContentLoaded', function() {
+    let observerKey
+    document.body.classList.add('blur-content')
+    socket.on('getKey', loadedData => {
+        const data=JSON.parse(loadedData)
+       
+       
+        observerKey = data.OBSERVER_KEY
+        promptAccessKey() 
+    })
+
+    const promptAccessKey = () => {
+        const enteredKey = prompt('Please enter the access key:')
+        const correctKey = observerKey
+        
+        if (enteredKey === correctKey) {
+            console.log('Access granted!')
+            document.body.classList.remove('blur-content')
+        } else {
+            console.log('Access denied!')
+            setTimeout(promptAccessKey, 500)
+        }
+    }
+})
+
 
 
 // TO-DO: If page is CTRL+F5 the dynamic lap counters break. Oops.

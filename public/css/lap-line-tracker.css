@@ -170,3 +170,7 @@ title{
     }
 }
 
+.blur-content {
+    filter: blur(5px); /* Apply blur effect */
+    pointer-events: none; /* Disable pointer events */
+}
