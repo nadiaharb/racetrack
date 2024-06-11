@@ -7,7 +7,6 @@ const path = require('path')
 const frontdeskController = require('./viewsControllers/frontdeskView');
 
 module.exports = function (req, res,io) {
-    
     // Serve static files from the 'public' directory
     let filePath = '.' + req.url
     if (req.method === 'GET') {

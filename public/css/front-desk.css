@@ -286,3 +286,8 @@ button:disabled {
     font-size: 12px; /* Increased font size for better readability */
     font-family: 'Race Sport';
 }
+
+.blur-content {
+    filter: blur(5px); /* Apply blur effect */
+    pointer-events: none; /* Disable pointer events */
+}

@@ -3,6 +3,34 @@
 const addRaceForm = document.getElementById('addRaceForm')
 const loadDataButton = document.getElementById('loadDataButton')
 const socket = io('http://localhost:3000')
+//8ded6076
+
+window.addEventListener('DOMContentLoaded', function() {
+    let receptionistKey; // Define receptionistKey outside of the event callback
+    
+    document.body.classList.add('blur-content');
+    
+    socket.on('getKey', loadedData => {
+        receptionistKey = JSON.parse(loadedData);
+        console.log(receptionistKey);
+        promptAccessKey(); // Call promptAccessKey() here
+    });
+
+    const promptAccessKey = () => {
+        const enteredKey = prompt('Please enter the access key:');
+        const correctKey = receptionistKey;
+        
+        if (enteredKey === correctKey) {
+            console.log('Access granted!');
+            document.body.classList.remove('blur-content');
+        } else {
+            console.log('Access denied!');
+            setTimeout(promptAccessKey, 500);
+        }
+    };
+});
+
+
 
 
 

@@ -24,7 +24,8 @@ module.exports = function (io) {
         socket.on('disconnect', () => {
             console.log('User disconnected');
         });
-
+        //env keys
+        socket.emit('getKey', JSON.stringify(process.env.RECEPTIONIST_KEY))
         // Load Data 
         socket.emit('loadData', JSON.stringify(dataStore.getUpcomingRacesByFlag("Danger")))
         socket.emit('renderObserver', JSON.stringify(dataStore.getNextRace()))
