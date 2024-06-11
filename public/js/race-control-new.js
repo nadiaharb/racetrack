@@ -11,7 +11,7 @@ const table = document.querySelector(".table-container")
 
 
 
-/*window.addEventListener('DOMContentLoaded', function () {
+window.addEventListener('DOMContentLoaded', function () {
     let safetyKey
     document.body.classList.add('blur-content')
     socket.on('getKey', loadedData => {
@@ -34,7 +34,7 @@ const table = document.querySelector(".table-container")
             setTimeout(promptAccessKey, 500)
         }
     }
-})*/
+})
 
 
 

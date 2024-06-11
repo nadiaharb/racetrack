@@ -13,7 +13,7 @@ The buttons must not function after the race is ended. They should disappear or 
 
 })*/
 
-/*window.addEventListener('DOMContentLoaded', function () {
+window.addEventListener('DOMContentLoaded', function () {
     let observerKey
     document.body.classList.add('blur-content')
     socket.on('getKey', loadedData => {
@@ -36,7 +36,7 @@ The buttons must not function after the race is ended. They should disappear or 
             setTimeout(promptAccessKey, 500)
         }
     }
-})*/
+})
 
 
 
