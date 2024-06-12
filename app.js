@@ -9,6 +9,9 @@ const { Server } = require('socket.io')
 const websocketManager = require('./sockets/websocketManager')
 //const server=createServer(app)
 
+// SQLite3 database
+const database = require('./data/database')
+
 // https://admin.socket.io/#/
 // Server url = "http://localhost:3000" username = "admin" password = "race"
 const { instrument } = require("@socket.io/admin-ui");
