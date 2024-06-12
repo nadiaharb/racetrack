@@ -2,11 +2,22 @@
 const fs = require('fs')
 const path = require('path')
 
-//import frontdesk controller
 
-const frontdeskController = require('./viewsControllers/frontdeskView');
+//https://e3f9-176-118-7-17.ngrok-free.app/
+
 
 module.exports = function (req, res,io) {
+    // Add CORS headers
+    const origin = req.headers.origin;
+    const allowedOrigin = /\.ngrok-free\.app$/;
+
+    if (origin && allowedOrigin.test(new URL(origin).hostname)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
     // Serve static files from the 'public' directory
     let filePath = '.' + req.url
     if (req.method === 'GET') {

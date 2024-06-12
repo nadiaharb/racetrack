@@ -97,7 +97,7 @@ function updateCheckerboard(mode) {
     } else if (mode === "Danger") {
         color1 = 'red';
         color2 = 'red';
-    } else if (mode === "Finish") {
+    } else if (mode === "white") {
         color1 = 'white';
         color2 = 'black';
         console.log("Reached finish")
@@ -152,7 +152,6 @@ function assignColorsToParticipants(participants) {
 
 // Update flag display
 socket.on('raceModeChange', race => {
-    console.log(race);
     const mode = race.flagState;
     let color1;
     let color2;
@@ -171,6 +170,7 @@ socket.on('raceModeChange', race => {
         color2 = 'black';
     }
 
+     
     updateCheckerboard(color1, color2);
     console.log("Updated flag display to: " + mode);
 });
@@ -180,7 +180,7 @@ function updateLeaderBoard(race) {
     const raceStateElem = document.querySelector('.race-state');
     raceStateElem.querySelector('p:nth-child(2)').textContent = `Flag State: ${race.flagState}`;
     raceStateElem.querySelector('p:nth-child(3)').textContent = `Race State: ${race.raceState}`;
-    raceStateElem.querySelector('p:nth-child(4)').textContent = `Time left: ${formatTime(race.duration)}`;
+    raceStateElem.querySelector('p:nth-child(4)').textContent = `Time left: ${race.raceState === "Finished" ? "00:00" : formatTime(race.duration)}`;
 
     // Update the flag container
     updateCheckerboard(race.flagState);

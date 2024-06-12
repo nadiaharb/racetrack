@@ -14,6 +14,9 @@ If we want to fetch data, we should emit it (pipe it) through the socket, and re
 by using the .on method on the same event name.
 This is basically how the socket works.
 */
+
+
+
 // Stringification is necessary so is JSONification
 module.exports = function (io) {
     io.on('connection', socket => {

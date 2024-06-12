@@ -19,6 +19,9 @@ const io = new Server(server, { // Keep this line only when removing admin featu
     cors: {
         origin: ["https://admin.socket.io"],
         credentials: true,
+        origin: /\.ngrok-free\.app$/,
+        methods: ['GET', 'POST'],
+        allowedHeaders: ['Content-Type'],
     }
 })
 instrument(io, {
