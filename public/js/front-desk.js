@@ -198,7 +198,6 @@ function editRacer(raceId, participantId, name, car, raceId) {
     saveEditBtn.addEventListener('click', () => {
         const newName = document.getElementById('newName').value
         const newCarNumber = document.getElementById('newCarNumber').value
-        //console.log("NEW DATA FOR racer", newName, newCarNumber, participantId)
         const editedRacer = {
             carNumber: newCarNumber,
             name: newName,

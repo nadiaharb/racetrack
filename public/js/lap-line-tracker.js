@@ -120,20 +120,18 @@ function displayNone() {
     tracker.style.textAlign = 'center';
 }
 
-
-
 socket.on('disableInput', function (incomingRace) {
     try {
         const race = JSON.parse(incomingRace);
         if (race) {
-            //enableButtons();
+            disableButtons();
         }
     } catch (error) {
         console.error('Error parsing or handling data:', error);
     }
 });
 
-socket.on('updateRaceData', function (incomingRace) {
+socket.on('renderNextRace', function (incomingRace) {
     try {
         const race = JSON.parse(incomingRace)
         if (race) {
@@ -144,28 +142,16 @@ socket.on('updateRaceData', function (incomingRace) {
     }
 })
 
-socket.on('updateObserver', function (incomingRace) {
+socket.on('updateData', function (incomingRace) {
     try {
         const race = JSON.parse(incomingRace)
         if (race) {
             updateObserverView(race)
-            enableButtons();
         }
     } catch (error) {
         console.error('Error parsing or handling data:', error)
     }
 })
-
-socket.on('updateRaceStatePanel', function (incomingRace) {
-    try {
-        const race = JSON.parse(incomingRace);
-        if (race) {
-            updateRaceStatePanel(race);
-        }
-    } catch (error) {
-        console.error('Error parsing or handling data:', error);
-    }
-});
 
 socket.on('lapTimeUpdate', function (incomingParticipants) {
     try {
@@ -190,6 +176,10 @@ socket.on('raceTimeUpdate', function (incomingRaceDuration) {
         console.error('Error parsing or handling data:', error);
     }
 });
+socket.on("startedRace", function () {
+    enableButtons();
+})
+
 
 // Handle case when no races are available
 socket.on('displayNone', function () {

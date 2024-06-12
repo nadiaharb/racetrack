@@ -97,7 +97,6 @@ function addRacer(io, socket, racerData) {
 function editRacer(io, editedRacer) {
     const race = dataStore.getRaceById(editedRacer.raceId)
     const racer = race.getRacerById(parseInt(editedRacer.racerId))
-    console.log(race, racer)
     if (!race.isNameUnique(editedRacer.name, racer.id)) {
         io.emit('error', { message: 'Racer with this name already exist' })
         return

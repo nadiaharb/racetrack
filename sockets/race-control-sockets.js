@@ -39,12 +39,13 @@ function startRace(io, updatedRace) {
 function endRace(io, updatedRace) {
     const race = dataStore.getRaceById(parseInt(updatedRace.raceId))
 
-    race.raceState = "Finished"
+    race.raceState = 'Finished'
     race.flagState = 'Danger'
     io.emit('raceModeChange', race)
     io.emit('loadRaceControl', dataStore.getNextRace())
-    io.emit('showMessage', dataStore.getNextRace())
-    io.emit("updateRaceData", JSON.stringify(race))
+    // This did not appear to have a function
+    //io.emit('showMessage', dataStore.getNextRace())
+    io.emit("renderNextRace", JSON.stringify(race))
 }
 
 module.exports = { raceModeChange, startRace, endRace }

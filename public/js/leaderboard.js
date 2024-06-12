@@ -59,11 +59,12 @@ function renderLeaderBoard(race) {
         <div class="lb-entries">
             ${sortedParticipants.map(participant => `
             <div class="racer">
-            <li style="background-color: ${colorMap[participant.carNumber]}; border-color: ${colorMap[participant.carNumber]};">${participant.name} - Car Number: ${participant.carNumber} - Fastest Lap: ${formatTimeWithMilliseconds(participant.bestLapTime)}</li>
-            <li class="lap-time">Current Lap: ${formatTimeWithMilliseconds(participant.currentLapTime)}</li></div>
+            <li class="participant-data" data-car-number="${participant.carNumber}" style="background-color: ${colorMap[participant.carNumber]}; border-color: ${colorMap[participant.carNumber]};">${participant.name} - Car Number: ${participant.carNumber} - Fastest Lap: ${formatTimeWithMilliseconds(participant.bestLapTime)}</li>
+            <li class="lap-time" data-car-number="${participant.carNumber}">Current Lap: ${formatTimeWithMilliseconds(participant.currentLapTime)}</li>
+            </div>
             `).join('')}
-        </div>
-        `;
+        </div>`;
+    console.log("Leaderboard rendered")
     leaderboard.appendChild(raceState)
     leaderboard.appendChild(raceDiv);
 
@@ -100,7 +101,6 @@ function updateCheckerboard(mode) {
     } else if (mode === "Finish") {
         color1 = 'white';
         color2 = 'black';
-        console.log("Reached finish")
     }
     const flagContainer = document.getElementById('flagContainer');
     const squares = flagContainer.children;
@@ -172,7 +172,6 @@ socket.on('raceModeChange', race => {
 
 
     updateCheckerboard(race.flagState);
-    console.log("Updated flag display to: " + mode);
 });
 
 // Update the dynamic elements of the leaderboard
@@ -186,12 +185,17 @@ function updateLeaderBoard(race) {
     updateCheckerboard(race.flagState);
 
     const sortedParticipants = race.participants.sort((a, b) => a.bestLapTime - b.bestLapTime);
-    const entries = document.querySelector('.lb-entries');
-    entries.innerHTML = sortedParticipants.map(participant => `
-        <div class="racer">
-        <li>${participant.name} - Car Number: ${participant.carNumber} - Fastest Lap: ${formatTimeWithMilliseconds(participant.bestLapTime)}</li>
-        <li class="lap-time">Current Lap: ${formatTimeWithMilliseconds(participant.currentLapTime)}</li></div>
-    `).join('');
+    sortedParticipants.forEach(participant => {
+        const participantElem = document.querySelector(`li.participant-data[data-car-number="${participant.carNumber}"]`);
+        if (participantElem) {
+            participantElem.innerHTML = `${participant.name} - Car Number: ${participant.carNumber} - Fastest Lap: ${formatTimeWithMilliseconds(participant.bestLapTime)}`;
+        }
+
+        const lapTimeElem = document.querySelector(`li.lap-time[data-car-number="${participant.carNumber}"]`);
+        if (lapTimeElem) {
+            lapTimeElem.textContent = `Current Lap: ${formatTimeWithMilliseconds(participant.currentLapTime)}`;
+        }
+    });
 }
 
 // Load and render race data
@@ -206,7 +210,7 @@ socket.on('renderNextRace', function (incomingRace) {
     }
 });
 
-socket.on('updateRaceData', function (incomingRace) {
+socket.on('updateData', function (incomingRace) {
     try {
         const race = JSON.parse(incomingRace);
         if (race) {

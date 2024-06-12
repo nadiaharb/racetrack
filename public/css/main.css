@@ -16,7 +16,7 @@ body {
     min-height: 100vh; 
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    overflow: auto;
 }
 
 title{
@@ -163,7 +163,7 @@ title{
 .flag-container {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
-    margin-top: 10px;
+    margin-top: 1vw;
 }
 
 .white, .black {
@@ -271,9 +271,9 @@ title{
 /* Race-Flags Styles */
 
 .flag-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-      grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 }
 
 .flag-white {

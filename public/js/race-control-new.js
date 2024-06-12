@@ -160,9 +160,7 @@ startBtn.addEventListener('click', function (e) {
 
     const raceIdBtn = startBtn.getAttribute('raceId')
     const racers = startBtn.getAttribute('racers')
-    console.log(racers)
     if (parseInt(racers) < 8) {
-        console.log("alert")
         alert(`Insufficient number of racers registered to start the race`)
         return
     }
