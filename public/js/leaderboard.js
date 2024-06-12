@@ -22,7 +22,7 @@ Spectators must be able to see:
 // Aesthetix
 
 // Load and render race data
-socket.on('startRace', function (incomingRace) {
+/*socket.on('startRace', function (incomingRace) {
     try {
         const race = JSON.parse(incomingRace);
         if (race) {
@@ -32,7 +32,7 @@ socket.on('startRace', function (incomingRace) {
     } catch (error) {
         console.error('Error parsing or handling data:', error);
     }
-});
+});*/
 
 // Update flag display
 
@@ -97,7 +97,7 @@ function updateCheckerboard(mode) {
     } else if (mode === "Danger") {
         color1 = 'red';
         color2 = 'red';
-    } else if (mode === "white") {
+    } else if (mode === "Finish") {
         color1 = 'white';
         color2 = 'black';
         console.log("Reached finish")
@@ -170,8 +170,8 @@ socket.on('raceModeChange', race => {
         color2 = 'black';
     }
 
-     
-    updateCheckerboard(color1, color2);
+
+    updateCheckerboard(race.flagState);
     console.log("Updated flag display to: " + mode);
 });
 
@@ -220,6 +220,6 @@ socket.on('updateRaceData', function (incomingRace) {
 
 // Handle case when no races are available
 socket.on('displayNone', function () {
-    const leaderboard = document.getElementById('lbContainer');
+    const leaderboard = document.getElementById('lb-container');
     leaderboard.innerHTML = '<p>No races available</p>';
 });

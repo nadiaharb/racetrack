@@ -14,9 +14,6 @@ If we want to fetch data, we should emit it (pipe it) through the socket, and re
 by using the .on method on the same event name.
 This is basically how the socket works.
 */
-
-
-
 // Stringification is necessary so is JSONification
 module.exports = function (io) {
     io.on('connection', socket => {
@@ -37,6 +34,7 @@ module.exports = function (io) {
         // Load Data 
         socket.emit('loadData', JSON.stringify(dataStore.getUpcomingRacesByFlag("Danger")))
         io.emit('renderNextRace', JSON.stringify(dataStore.getNextRace()))
+        io.emit('lapTimeUpdate', JSON.stringify(dataStore.getNextRace().participants))
         // Emit current race if it exists
         // Used by Leaderboard and Lap-Line Tracker
         emitCurrentRace(io);
@@ -62,6 +60,7 @@ module.exports = function (io) {
         socket.on("endRace", updatedRace => {
             //stopCountdown(io, updatedRace);
             endRace(io, updatedRace)
+            io.emit('disableInput', updatedRace)
         })
 
         // This is use until I can figure out why I can't tie logic inside of this to any of the startrace emits

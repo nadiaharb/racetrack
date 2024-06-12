@@ -5,6 +5,7 @@ let colorMap = {};
 Cars can still cross the lap line when the race is in finish mode. 
 The observer's display should show a message to indicate that the race session is ended once that has been declared by the Safety Official.
 
+// Apply reset on race end
 The buttons must not function after the race is ended. They should disappear or be visually disabled.
 */
 /*document.addEventListener('DOMContentLoaded', () => {
@@ -118,26 +119,22 @@ function updateRaceTime(remainingTime) {
 }
 
 
-socket.on('startRace', function (incomingRace) {
+socket.on('disableInput', function (incomingRace) {
     try {
         const race = JSON.parse(incomingRace);
         if (race) {
-            renderObserverView(race);
             //enableButtons();
-            socket.emit('startCountdown', race)
         }
     } catch (error) {
         console.error('Error parsing or handling data:', error);
     }
 });
 
-socket.on('renderNextRace', function (incomingRace) {
+socket.on('updateRaceData', function (incomingRace) {
     try {
         const race = JSON.parse(incomingRace)
         if (race) {
-            console.log(`Received JSON: ${race}`)
             renderObserverView(race)
-            disableButtons();
         }
     } catch (error) {
         console.error('Error parsing or handling data:', error)
@@ -148,7 +145,6 @@ socket.on('updateObserver', function (incomingRace) {
     try {
         const race = JSON.parse(incomingRace)
         if (race) {
-            console.log(`Received JSON: ${race}`)
             updateObserverView(race)
             enableButtons();
         }
@@ -161,7 +157,6 @@ socket.on('updateRaceStatePanel', function (incomingRace) {
     try {
         const race = JSON.parse(incomingRace);
         if (race) {
-            console.log(`Received JSON: ${race}`);
             updateRaceStatePanel(race);
         }
     } catch (error) {
@@ -173,7 +168,6 @@ socket.on('lapTimeUpdate', function (incomingParticipants) {
     try {
         const participants = JSON.parse(incomingParticipants);
         if (participants) {
-            console.log(`Received JSON: ${participants}`);
             participants.forEach(p => updateParticipantLap(p));
 
         }
@@ -186,7 +180,6 @@ socket.on('raceTimeUpdate', function (incomingRaceDuration) {
     try {
         const raceDuration = JSON.parse(incomingRaceDuration);
         if (raceDuration) {
-            console.log(`Received JSON: ${raceDuration}`);
             updateRaceTime(raceDuration)
 
         }
@@ -246,7 +239,6 @@ function showRaceEndMessage() {
 // Helper function to format time in MM:SS
 function formatTime(duration) {
     const durationInt = parseInt(duration);
-    console.log(`Time to be formatted: ${duration}`)
     const minutes = Math.floor(durationInt / 60000);
     const seconds = Math.floor((durationInt % 60000) / 1000);
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
@@ -254,7 +246,6 @@ function formatTime(duration) {
 
 function formatTimeWithMilliseconds(duration) {
     const durationInt = parseInt(duration, 10);
-    console.log(`Time to be formatted: ${durationInt}`);
     const minutes = Math.floor(durationInt / 60000);
     const seconds = Math.floor((durationInt % 60000) / 1000);
     const milliseconds = durationInt % 1000;

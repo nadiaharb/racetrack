@@ -25,7 +25,7 @@ class Racer {
         }
         this.lapCount++; // Increment lap count
         if (this.bestLapTime === 0 || this.currentLapTime < this.bestLapTime) {
-            if (this.currentLapTime !== 0){
+            if (this.currentLapTime !== 0) {
                 this.bestLapTime = this.currentLapTime; // Update best lap time
             }
         }
@@ -35,9 +35,9 @@ class Racer {
 
     // Lap Timer logic enclosed here for simplicity.
     startLapTimer() {
-        if (this.lapTimer) {
+        /*if (this.lapTimer) {
             clearInterval(this.lapTimer);
-        }
+        }*/
         this.currentLapTime = 0;
         this.lapTimer = setInterval(() => {
             this.currentLapTime += 100; // Increment timer every second
