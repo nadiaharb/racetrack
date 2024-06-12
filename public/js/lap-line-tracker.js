@@ -2,11 +2,8 @@ const socket = io('http://localhost:3000')
 
 let colorMap = {};
 /*
-Cars can still cross the lap line when the race is in finish mode. 
-The observer's display should show a message to indicate that the race session is ended once that has been declared by the Safety Official.
+Cars can still cross the lap line when the race is in finish mode. Not sure what this means
 
-// Apply reset on race end
-The buttons must not function after the race is ended. They should disappear or be visually disabled.
 */
 /*document.addEventListener('DOMContentLoaded', () => {
     const socket = io('http://localhost:3000')
@@ -39,9 +36,6 @@ window.addEventListener('DOMContentLoaded', function () {
     }
 })
 
-
-
-// TO-DO: If page is CTRL+F5 the dynamic lap counters break. Oops.
 function renderObserverView(race) {
     const tracker = document.getElementById('tracker-container');
     const mainContainer = document.getElementById('tracker-master-container');
@@ -118,6 +112,15 @@ function updateRaceTime(remainingTime) {
     }
 }
 
+function displayNone() {
+    const tracker = document.getElementById('tracker-container');
+    tracker.innerHTML = '<p>No races available</p>';
+    tracker.style.display = 'flex';
+    tracker.style.justifyContent = 'center';
+    tracker.style.textAlign = 'center';
+}
+
+
 
 socket.on('disableInput', function (incomingRace) {
     try {
@@ -193,19 +196,10 @@ socket.on('displayNone', function () {
     displayNone()
 });
 
-function displayNone() {
-    const tracker = document.getElementById('tracker-container');
-    tracker.innerHTML = '<p>No races available</p>';
-    tracker.style.display = 'flex';
-    tracker.style.justifyContent = 'center';
-    tracker.style.textAlign = 'center';
-}
-
 socket.on('raceFinished', function () {
     showRaceEndMessage();
     disableButtons();
 });
-
 
 function showRaceEndMessage() {
     // Create the modal container
@@ -223,14 +217,14 @@ function showRaceEndMessage() {
     modal.style.width = '80%';
     modal.style.maxWidth = '300px';
 
-    // Create the message text
+    // Message text
     const message = document.createElement('p');
     message.textContent = 'The race has ended!';
     message.style.fontSize = '20px';
     message.style.marginBottom = '20px';
     modal.appendChild(message);
 
-    // Create the close button
+    // Close button
     const closeButton = document.createElement('button');
     closeButton.textContent = 'Close';
     closeButton.style.padding = '10px 20px';
@@ -246,7 +240,7 @@ function showRaceEndMessage() {
     document.body.appendChild(modal);
 }
 
-// Helper function to format time in MM:SS
+// Helper functions to format time in MM:SS
 function formatTime(duration) {
     const durationInt = parseInt(duration);
     const minutes = Math.floor(durationInt / 60000);
@@ -262,7 +256,7 @@ function formatTimeWithMilliseconds(duration) {
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}.${milliseconds}`;
 }
 
-
+// Helper functions to enable/disable buttons
 function disableButtons() {
     document.querySelectorAll('.elapse-lap-button').forEach(button => {
         button.disabled = true;
@@ -279,6 +273,7 @@ function enableButtons() {
 }
 
 
+// Helper functions to generate and assign colors
 function generateColor(index) {
     const hue = index * 137.5 % 360; // Use a golden ratio to distribute colors
     return `hsl(${hue}, 100%, 50%)`;

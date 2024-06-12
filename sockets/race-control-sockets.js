@@ -1,11 +1,5 @@
-
-
-
-
-
 const dataStore = require('../models/DataStore')
 const Race = require('../models/Race')
-
 
 
 function raceModeChange(io, updatedRace) {
@@ -23,6 +17,7 @@ function raceModeChange(io, updatedRace) {
 
 }
 
+// updatedRace is not a VALID RACE OBJECT! Just incase!
 function startRace(io, updatedRace) {
 
     const race = dataStore.getRaceById(parseInt(updatedRace.raceId))

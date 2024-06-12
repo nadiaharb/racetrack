@@ -15,6 +15,7 @@ body {
     flex-direction: column;
     min-height: 100vh; 
     margin: 0;
+    padding: 0;
     overflow: hidden;
 }
 
@@ -32,46 +33,10 @@ title{
     flex: 2;
 }
 
-.race{
-    display: flex;
-    flex-direction: column;
-}
-
-.race li{  
-    list-style-type: none;
-}
-
-.lb-container{
-
-}
-.lb-entries{
-    display: flex;
-    align-items: left;
-    flex-direction: column;
-    border-width: 0.2vw;
-    border-radius: 1vw;
-    border: 2px solid transparent;
-    list-style-type: none;
-    
-}
-
-.lb-entries li{
-    display: flex;
-    flex-direction: column;
-    border-width: 0.2vw;
-    border-radius: 1vw;
-    border: 2px solid #303030;
-    padding: 1%;
-}
 .widget-title{
 
 }
-.lap-time{
 
-}
-.racer{
-    margin: 1%;
-}
 .lap-counter {
     border: 2px solid transparent;
     display: flex;
@@ -88,15 +53,6 @@ title{
     list-style-type: none; /* Remove bullet points */
     flex: 1;
     margin: 0;
-}
-
-
-.race-state{
-    display: flex;
-    flex-direction: row;
-    gap: 5vw;
-    margin-bottom: 1vw;
-
 }
 
 #tracker-master-container{
@@ -158,6 +114,7 @@ title{
     margin-bottom: auto;
 }
 
+/* Obligatory for Lap Line Observer */
 /* Media query for tablets */
 @media (max-width: 768px) {
     body {
@@ -196,6 +153,8 @@ title{
     }
 }
 
+/* Leaderboard Styles */
+
 .blur-content {
     filter: blur(5px); /* Apply blur effect */
     pointer-events: none; /* Disable pointer events */
@@ -210,4 +169,101 @@ title{
 .white, .black {
     width: 1vw;
     height: 1vw;
+}
+
+.race{
+    display: flex;
+    flex-direction: column;
+}
+
+.race li{  
+    list-style-type: none;
+}
+
+.lb-container{
+
+}
+.lb-entries{
+    display: flex;
+    align-items: left;
+    flex-direction: column;
+    border-width: 0.2vw;
+    border-radius: 1vw;
+    border: 2px solid transparent;
+    list-style-type: none;
+    
+}
+
+.lb-entries li{
+    display: flex;
+    flex-direction: column;
+    border-width: 0.2vw;
+    border-radius: 1vw;
+    border: 2px solid #303030;
+    padding: 1%;
+}
+
+.race-state{
+    display: flex;
+    flex-direction: row;
+    gap: 5vw;
+    margin-bottom: 1vw;
+
+}
+
+.racer{
+    margin: 1%;
+}
+
+.lap-time{
+
+}
+
+/* Index Page Styles */
+
+.main-page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Set full viewport height */
+}
+
+/* Center the links vertically and horizontally */
+.main-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%; /* Set height to 100% */
+}
+
+/* Style for links */
+.main-links a {
+    display: inline-block;
+    padding: 10px 20px; /* Adjust padding as needed */
+    margin: 10px; /* Add margin between links */
+    text-decoration: none; /* Remove default underline */
+    color: #fff; /* Text color */
+    background-color: #007bff; /* Blue color */
+    border: 1px solid #007bff; /* Blue border */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+    font-size: 36px;
+    font-weight: 1000;
+    color: #ffffff; /* White text color to contrast with the background */
+    border: none;
+    border-radius: 1vw;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    flex-grow: 1;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+/* Hover effect */
+.main-links a:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    border-color: #0056b3; /* Darker blue border on hover */
 }

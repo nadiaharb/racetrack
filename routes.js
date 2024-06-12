@@ -6,7 +6,7 @@ const path = require('path')
 //https://e3f9-176-118-7-17.ngrok-free.app/
 
 
-module.exports = function (req, res,io) {
+module.exports = function (req, res, io) {
     // Add CORS headers
     const origin = req.headers.origin;
     const allowedOrigin = /\.ngrok-free\.app$/;
@@ -26,7 +26,7 @@ module.exports = function (req, res,io) {
         } else if (filePath.startsWith('./public/')) {
             // Serve static files from the public directory
             filePath = '.' + req.url
-        }else {
+        } else {
             // Serve HTML templates from the views directory
             filePath = './views' + req.url + '.html'
         }
@@ -41,6 +41,7 @@ module.exports = function (req, res,io) {
             '.jpg': 'image/jpg',
             '.gif': 'image/gif',
             '.wav': 'audio/wav',
+            '.ico': 'image/x-icon',
             '.mp4': 'video/mp4',
             '.woff': 'application/font-woff',
             '.ttf': 'application/font-ttf',
@@ -68,8 +69,8 @@ module.exports = function (req, res,io) {
             }
         })
     }
-    
-  
+
+
 }
 
 
