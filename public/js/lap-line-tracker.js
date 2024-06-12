@@ -188,8 +188,16 @@ socket.on('raceTimeUpdate', function (incomingRaceDuration) {
     }
 });
 
+// Handle case when no races are available
+socket.on('displayNone', function () {
+    displayNone()
+});
 
-
+function displayNone() {
+    const tracker = document.getElementById('tracker-container');
+    tracker.innerHTML = '<p>No races available</p>';
+    tracker.style.display = 'center';
+}
 
 socket.on('raceFinished', function () {
     showRaceEndMessage();

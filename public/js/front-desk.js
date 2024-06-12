@@ -5,21 +5,21 @@ const loadDataButton = document.getElementById('loadDataButton')
 const socket = io('http://localhost:3000')
 //8ded6076
 
-window.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('DOMContentLoaded', function () {
     let receptionistKey
     document.body.classList.add('blur-content')
     socket.on('getKey', loadedData => {
-        const data=JSON.parse(loadedData)
-       
-       
+        const data = JSON.parse(loadedData)
+
+
         receptionistKey = data.RECEPTIONIST_KEY
-        promptAccessKey() 
+        promptAccessKey()
     })
 
     const promptAccessKey = () => {
         const enteredKey = prompt('Please enter the access key:')
         const correctKey = receptionistKey
-        
+
         if (enteredKey === correctKey) {
             console.log('Access granted!')
             document.body.classList.remove('blur-content')
@@ -213,21 +213,14 @@ function editRacer(raceId, participantId, name, car, raceId) {
         // Close modal without saving changes
         modalContainer.remove()
     })
-
-
 }
-
-
-
-
-
 
 // Load and render race data
 socket.on('loadData', function (loadedData) {
 
     try {
         if (loadedData === null) {
-       
+
             renderRaces(null)
             return
         }

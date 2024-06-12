@@ -33,21 +33,20 @@ module.exports = function (io) {
         socket.emit('getKey', JSON.stringify(keys))
         // Load Data 
         socket.emit('loadData', JSON.stringify(dataStore.getUpcomingRacesByFlag("Danger")))
-        io.emit('renderNextRace', JSON.stringify(dataStore.getNextRace()))
-        io.emit('lapTimeUpdate', JSON.stringify(dataStore.getNextRace().participants))
+        const nextRace = dataStore.getNextRace();
+        if (nextRace) {
+            io.emit('renderNextRace', JSON.stringify(nextRace))
+            io.emit('lapTimeUpdate', JSON.stringify(nextRace.pariticipants))
+        } else {
+            io.emit('displayNone')
+        }
+
         // Emit current race if it exists
         // Used by Leaderboard and Lap-Line Tracker
         emitCurrentRace(io);
 
         // Race Control INIT
-        const inProgressRace = dataStore.getInProgressRace()
-
-        if (inProgressRace) {
-            socket.emit('loadRaceControl', inProgressRace);
-        } else {
-            socket.emit('loadRaceControl', dataStore.getNextRace());
-        }
-
+        handleRaceControl(socket);
         // Race Control
         socket.on("raceModeChange", updatedRace => {
             raceModeChange(io, updatedRace)
@@ -140,6 +139,11 @@ module.exports = function (io) {
             inProgressRace.duration = 0; // Set the duration to 0 so all events stop
             io.emit('raceFinished') // Make sure everybody knows
         })
+        socket.on('endRace', () => {
+            if (!dataStore.getUpcomingRaces()) {
+                io.emit('displayNone');
+            }
+        })
         /*// TO-DO
         socket.on('finishLap', raceID => {
             // Lap Line Observer needs a method for his view
@@ -227,4 +231,14 @@ function startRaceTimerMain(io, race) {
             clearInterval(interval);
         }
     }, 1000);
+}
+
+function handleRaceControl(socket) {
+    const inProgressRace = dataStore.getInProgressRace()
+
+    if (inProgressRace) {
+        socket.emit('loadRaceControl', inProgressRace);
+    } else {
+        socket.emit('loadRaceControl', dataStore.getNextRace());
+    }
 }
