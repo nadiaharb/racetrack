@@ -52,7 +52,7 @@ function editRacer(raceId, carId, driverName) {
     if (driverName === '') {
         db.run(`DELETE FROM races WHERE race_id = ? AND car = ?`, [raceId, carId], function (err) {
             if (err) {
-                return console.error(err.message);
+                console.log(err.message);
             } else if (console_feedback) {
                 console.log(`Row deleted for race_id: ${raceId} and car: ${carId}`);
             }
