@@ -196,7 +196,9 @@ socket.on('displayNone', function () {
 function displayNone() {
     const tracker = document.getElementById('tracker-container');
     tracker.innerHTML = '<p>No races available</p>';
-    tracker.style.display = 'center';
+    tracker.style.display = 'flex';
+    tracker.style.justifyContent = 'center';
+    tracker.style.textAlign = 'center';
 }
 
 socket.on('raceFinished', function () {
