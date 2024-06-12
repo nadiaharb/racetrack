@@ -267,3 +267,23 @@ title{
     background-color: #0056b3; /* Darker blue on hover */
     border-color: #0056b3; /* Darker blue border on hover */
 }
+
+/* Race-Flags Styles */
+
+.flag-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+.flag-white {
+  height: 12.5vh;
+  width: 12.5vw;
+  background-color: white;
+}
+
+.flag-black {
+  height: 12.5vh;
+  width: 12.5vw;
+  background-color: black;
+} 

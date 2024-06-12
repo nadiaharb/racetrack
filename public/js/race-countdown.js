@@ -9,13 +9,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 socket.on('getRaceData', race => {
-     console.log(race)
-     if(race===null){
+    console.log(race)
+    if (race === null) {
         const timerContainer = document.getElementById('timer-container')
         timerContainer.innerHTML = '<p>No races available</p>'
         return
-     }
-    const data=JSON.parse(race)
+    }
+    const data = JSON.parse(race)
     renderTimer(data)
 })
 
@@ -37,7 +37,7 @@ socket.on('startRace', function (incomingRace) {
 })
 
 function renderTimer(race) {
-     
+
     const timerContainer = document.getElementById('timer-container')
     if (race.duration === undefined || race.raceState === "Finished") {
         const timerContainer = document.getElementById('timer-container')

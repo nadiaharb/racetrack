@@ -13,11 +13,11 @@ socket.on('raceModeChange', race => {
 // Handle the current race data received from the server
 socket.on('getRaceData', race => {
     console.log(race)
-    if(race===null){
+    if (race === null) {
         updateFlagDisplay("Danger")
         return
     }
-    const data=JSON.parse(race)
+    const data = JSON.parse(race)
     updateFlagDisplay(data.flagState)
 })
 
@@ -47,11 +47,11 @@ function updateFlagDisplay(mode) {
             color2 = 'white'
     }
 
-    let whiteSquares = document.getElementsByClassName("white")
+    let whiteSquares = document.getElementsByClassName("flag-white")
     for (let i = 0; i < whiteSquares.length; i++) {
         whiteSquares[i].style.backgroundColor = color1;
     }
-    let blackSquares = document.getElementsByClassName("black")
+    let blackSquares = document.getElementsByClassName("flag-black")
     for (let i = 0; i < blackSquares.length; i++) {
         blackSquares[i].style.backgroundColor = color2;
     }

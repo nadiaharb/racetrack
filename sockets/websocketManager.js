@@ -1,20 +1,12 @@
 const dataStore = require('../models/DataStore');
-
-const { loadData, addRace, deleteRace, addRacer, getRaceParticipants, deleteRacer, editRacer } = require('./front-desk-sockets');
-const { } = require('./leaderboard-sockets');
-
-const { RaceState, FlagState } = require('../models/enums');
-const { raceModeChange, raceStarted, raceEnded, prepareNextRace, startRace, endRace } = require('./race-control-sockets');
-const { nextRaceChange } = require('./next-race-sockets');
+const { RaceState } = require('../models/enums');
 
 
-/*
-Comment for future usage:
-If we want to fetch data, we should emit it (pipe it) through the socket, and receive it
-by using the .on method on the same event name.
-This is basically how the socket works.
-*/
-// Stringification is necessary so is JSONification
+const { addRace, deleteRace, addRacer, deleteRacer, editRacer } = require('./front-desk-sockets');
+const { raceModeChange, startRace, endRace } = require('./race-control-sockets');
+
+
+// PS: Stringification is necessary so is JSONification
 module.exports = function (io) {
     io.on('connection', socket => {
 
@@ -33,10 +25,10 @@ module.exports = function (io) {
         socket.emit('getKey', JSON.stringify(keys))
         // Load Data 
         socket.emit('loadData', JSON.stringify(dataStore.getUpcomingRacesByFlag("Danger")))
-        
+
         socket.on('requestCurrentRaceData', () => {
-             getRaceData(io)
-               })
+            getRaceData(io)
+        })
 
 
         const nextRace = dataStore.getNextRace();
@@ -73,21 +65,22 @@ module.exports = function (io) {
             startRace(io, mode)
         })
 
-        socket.on("endRace", updatedRace => {
-            //stopCountdown(io, updatedRace);
-            endRace(io, updatedRace)
-            io.emit('disableInput', updatedRace)
+        // This state sets state to Finished
+        socket.on('raceFinished', () => {
+            const inProgressRace = dataStore.getInProgressRace();
+            inProgressRace.duration = 0; // Set the duration to 0 so all events stop
+            io.emit('raceFinished') // Make sure everybody knows
+        })
+        // This state clears the race
+        socket.on('endRace', () => {
+            endRace(io, updatedRace) // race-control
+            io.emit('disableInput', updatedRace) // lap-line-observer
+            if (!dataStore.getUpcomingRaces()) {
+                io.emit('displayNone'); // lap-line-observer and leaderboard
+            }
         })
 
-        // This is use until I can figure out why I can't tie logic inside of this to any of the startrace emits
-        socket.on('startCountdown', () => {
-
-        });
-
-
-
         // Front Desk
-
         // Add Race
         socket.on('addRace', race => {
             addRace(socket, io, race);
@@ -116,6 +109,7 @@ module.exports = function (io) {
             deleteRacer(io, deletedRacer)
         })
 
+        // Lap Line Observer
         socket.on('elapseLap', (participantID, raceID) => {
             const race = dataStore.getRaceById(parseInt(raceID));
             const participantIDInt = parseInt(participantID)
@@ -131,18 +125,7 @@ module.exports = function (io) {
                 throw new Error('Participant not found');
             }
         });
-        // This state sets state to Finished
-        socket.on('raceFinished', () => {
-            const inProgressRace = dataStore.getInProgressRace();
-            inProgressRace.duration = 0; // Set the duration to 0 so all events stop
-            io.emit('raceFinished') // Make sure everybody knows
-        })
-        // This state clears the race
-        socket.on('endRace', () => {
-            if (!dataStore.getUpcomingRaces()) {
-                io.emit('displayNone');
-            }
-        })
+
     });
 };
 
@@ -199,14 +182,14 @@ function handleRaceControl(socket) {
 
 
 
-function getRaceData(io){
-const inProgressRace = dataStore.getInProgressRace();
-const upcomingRace = dataStore.getNextRace();
-if (inProgressRace) {
-io.emit('getRaceData', JSON.stringify(inProgressRace))
-} else if (upcomingRace) {
-io.emit('getRaceData', JSON.stringify(upcomingRace))
-}else{
-io.emit('getRaceData', null)
-}
+function getRaceData(io) {
+    const inProgressRace = dataStore.getInProgressRace();
+    const upcomingRace = dataStore.getNextRace();
+    if (inProgressRace) {
+        io.emit('getRaceData', JSON.stringify(inProgressRace))
+    } else if (upcomingRace) {
+        io.emit('getRaceData', JSON.stringify(upcomingRace))
+    } else {
+        io.emit('getRaceData', null)
+    }
 }
