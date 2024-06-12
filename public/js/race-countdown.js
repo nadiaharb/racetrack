@@ -1,5 +1,25 @@
 const socket = io()
 const noRace = document.querySelector('.no-race')
+
+
+window.addEventListener('DOMContentLoaded', () => {
+    socket.emit('requestCurrentRaceData')
+})
+
+
+
+socket.on('getRaceData', race => {
+     console.log(race)
+     if(race===null){
+        const timerContainer = document.getElementById('timer-container')
+        timerContainer.innerHTML = '<p>No races available</p>'
+        return
+     }
+    const data=JSON.parse(race)
+    renderTimer(data)
+})
+
+
 socket.on('startRace', function (incomingRace) {
     if (incomingRace === null) {
         const timerContainer = document.getElementById('timer-container')
@@ -15,7 +35,6 @@ socket.on('startRace', function (incomingRace) {
         console.error('Error parsing or handling data:', error)
     }
 })
-
 
 function renderTimer(race) {
      
@@ -63,5 +82,6 @@ socket.on('updateRaceData', function (incomingRace) {
         console.error('Error parsing or handling data:', error)
     }
 })
+
 
 
