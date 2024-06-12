@@ -33,6 +33,12 @@ module.exports = function (io) {
         socket.emit('getKey', JSON.stringify(keys))
         // Load Data 
         socket.emit('loadData', JSON.stringify(dataStore.getUpcomingRacesByFlag("Danger")))
+        
+        socket.on('requestCurrentRaceData', () => {
+             getRaceData(io)
+               })
+
+
         const nextRace = dataStore.getNextRace();
         if (nextRace) {
             io.emit('renderNextRace', JSON.stringify(nextRace))
@@ -189,4 +195,18 @@ function handleRaceControl(socket) {
     } else {
         socket.emit('loadRaceControl', dataStore.getNextRace());
     }
+}
+
+
+
+function getRaceData(io){
+const inProgressRace = dataStore.getInProgressRace();
+const upcomingRace = dataStore.getNextRace();
+if (inProgressRace) {
+io.emit('getRaceData', JSON.stringify(inProgressRace))
+} else if (upcomingRace) {
+io.emit('getRaceData', JSON.stringify(upcomingRace))
+}else{
+io.emit('getRaceData', null)
+}
 }
