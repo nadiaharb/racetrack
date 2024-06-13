@@ -13,6 +13,62 @@ const table = document.querySelector(".table-container")
 
 window.addEventListener('DOMContentLoaded', function () {
     let safetyKey
+
+    document.body.classList.add('blur-content')
+
+    const modal = document.getElementById('accessKeyModal')
+    const accessKeyInput = document.getElementById('accessKeyInput')
+    const submitKeyButton = document.getElementById('submitKeyButton')
+
+   
+    const showModal = () => {
+        modal.style.display = 'block'
+        accessKeyInput.value = '' 
+        accessKeyInput.focus() 
+    }
+
+  
+    const hideModal = () => {
+        modal.style.display = 'none'
+    }
+
+    socket.on('getKey', loadedData => {
+        const data = JSON.parse(loadedData)
+        safetyKey = data.SAFETY_KEY
+        showModal()
+    })
+
+    
+    const checkAccessKey = () => {
+        const enteredKey = accessKeyInput.value
+        const correctKey = safetyKey
+
+        if (enteredKey === correctKey) {
+            console.log('Access granted!')
+            document.body.classList.remove('blur-content')
+            hideModal()
+        } else {
+            console.log('Access denied!')
+            setTimeout(() => {
+                showModal()
+            }, 500)
+        }
+    }
+
+    submitKeyButton.addEventListener('click', checkAccessKey)
+
+   
+    accessKeyInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            checkAccessKey()
+        }
+    })
+})
+
+
+/*
+window.addEventListener('DOMContentLoaded', function () {
+    let safetyKey
     document.body.classList.add('blur-content')
     socket.on('getKey', loadedData => {
         const data = JSON.parse(loadedData)
@@ -36,7 +92,7 @@ window.addEventListener('DOMContentLoaded', function () {
     }
 })
 
-
+*/
 
 
 socket.on('loadRaceControl', race => {

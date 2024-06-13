@@ -363,7 +363,58 @@ button:disabled {
     text-align: center;
 }
 
-.blur-content {
-    filter: blur(5px); /* Apply blur effect */
-    pointer-events: none; /* Disable pointer events */
+
+
+/* Modal verification styles */
+.modal-verification {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+  }
+  
+  .modal-content-verification {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+    text-align: center;
+  }
+  
+  #submitKeyButton{
+    
+    font-size: 16px; /* Increased font size for better readability */
+    font-family: 'Race Sport';
+  }
+
+  #accessKeyInput{
+    font-size: 21px; /* Increased font size for better readability */
+    font-family: 'Race Sport';
+  }
+  .blur-content > :not(.modal-verification):not(.modal-verification *) {
+    filter: blur(5px);
+}
+
+
+/* Media query for small screens */
+@media (max-width: 800px) {
+    .modal-content-verification {
+        width: 80%;
+        margin: 20% auto;
+    }
+
+    #submitKeyButton {
+        font-size: 14px;
+    }
+
+    #accessKeyInput {
+        font-size: 18px;
+    }
 }

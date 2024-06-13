@@ -278,3 +278,61 @@ socket.on('error', (data) => {
 socket.on("raceModeChanged", race => {
     console.log(race)
 })
+
+
+
+/*
+window.addEventListener('DOMContentLoaded', function () {
+    let receptionistKey
+
+    document.body.classList.add('blur-content')
+
+    const modal = document.getElementById('accessKeyModal')
+    const accessKeyInput = document.getElementById('accessKeyInput')
+    const submitKeyButton = document.getElementById('submitKeyButton')
+
+   
+    const showModal = () => {
+        modal.style.display = 'block'
+        accessKeyInput.value = '' 
+        accessKeyInput.focus() 
+    }
+
+  
+    const hideModal = () => {
+        modal.style.display = 'none'
+    }
+
+    socket.on('getKey', loadedData => {
+        const data = JSON.parse(loadedData)
+        receptionistKey = data.RECEPTIONIST_KEY
+        showModal()
+    })
+
+    
+    const checkAccessKey = () => {
+        const enteredKey = accessKeyInput.value
+        const correctKey = receptionistKey
+
+        if (enteredKey === correctKey) {
+            console.log('Access granted!')
+            document.body.classList.remove('blur-content')
+            hideModal()
+        } else {
+            console.log('Access denied!')
+            setTimeout(() => {
+                showModal()
+            }, 500)
+        }
+    }
+
+    submitKeyButton.addEventListener('click', checkAccessKey)
+
+   
+    accessKeyInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            checkAccessKey()
+        }
+    })
+})
+*/
