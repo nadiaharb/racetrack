@@ -126,10 +126,24 @@ function renderRace(race) {
         return
     }
     if (race.flagState === "Finish") {
+        endBtn.setAttribute('raceId', race.id)
         raceModeBtns.style.display = 'none'
-
+        startTitle.innerHTML = race.raceState
+        startBtn.style.display='none'
         finishDiv.style.display = 'block'
         endBtn.style.backgroundColor = 'red'
+        for (let i = 1; i <= 8; i++) {
+            document.getElementById(`driver${i}`).textContent = ''
+        }
+    
+    
+        race.participants.forEach(participant => {
+            const carNumber = participant.carNumber
+            const driverCell = document.getElementById(`driver${carNumber}`)
+            if (driverCell) {
+                driverCell.textContent = participant.name
+            }
+        })
         return
     }
 
@@ -152,7 +166,8 @@ function renderRace(race) {
         }
     })
 
-    if (race.raceState == "In Progress") {
+    if (race.raceState == "In Progress" && race.flagState!="Finish") {
+       
         renderModeBtns(race)
     } else {
 
@@ -274,10 +289,12 @@ function createModeButtons() {
 
         modeBtnsContainer.appendChild(btn)
     })
+    /*
     const finishBtn = document.getElementById('finishBtn')
     finishBtn.addEventListener('click', function (e) {
         socket.emit('raceFinished');
     });
+    */
 }
 
 function deleteModeButtons() {

@@ -18,7 +18,7 @@ class Race {
     // Default duration is set by environment var
     // RaceState and FlagState are enums and contain all possible states
     static lastId = 0
-    constructor(duration = process.env.RACE_DURATION, flagState = FlagState.SAFE, raceState = RaceState.UPCOMING) {
+    constructor(duration = process.env.RACE_DURATION, flagState = FlagState.DANGER, raceState = RaceState.UPCOMING) {
         this.id = ++Race.lastId;
         this.participants = []
         this.duration = duration; // Duration of the race (derived from env vars, default)
@@ -131,6 +131,7 @@ class Race {
             if (this.duration <= 0) {
                 clearInterval(this.raceTimer);
                 this.setRaceState(RaceState.FINISHED);
+                //this.setFlagState(FlagState.FINISH)
             }
         }, 100);
     }
