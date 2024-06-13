@@ -51,11 +51,12 @@ module.exports = function (io) {
         });
 
         socket.on('raceFinished', () => {
+            const inProgressRace = dataStore.getInProgressRace();
+            inProgressRace.duration = 0; // Set the duration to 0 so all events stop
             io.emit('raceFinished'); // Notify all clients
         });
         socket.on('flagFinish', () => {
-            const inProgressRace = dataStore.getInProgressRace();
-            inProgressRace.duration = 0; // Set the duration to 0 so all events stop
+   
         })
 
         socket.on('endRace', (updatedRace) => {
