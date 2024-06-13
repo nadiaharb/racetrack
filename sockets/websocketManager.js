@@ -56,7 +56,7 @@ module.exports = function (io) {
             io.emit('raceFinished'); // Notify all clients
         });
         socket.on('flagFinish', () => {
-   
+         //here the timer should stop
         })
 
         socket.on('endRace', (updatedRace) => {
