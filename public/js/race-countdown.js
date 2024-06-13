@@ -2,9 +2,22 @@ const socket = io()
 const noRace = document.querySelector('.no-race')
 
 // This code doesn't seem to have a purpose
-/*window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', () => {
     socket.emit('requestCurrentRaceData')
-})*/
+})
+
+
+socket.on('getRaceData', race => {
+    
+    const data = JSON.parse(race)
+    if (data===null) {
+       // timerContainer.innerHTML = '' // Reset just incase
+       noRace.innerHTML = "No race in progress"
+        return
+    }
+    renderTimer(data)
+})
+
 
 
 socket.on('updateData', function (incomingRace) {
@@ -24,19 +37,24 @@ socket.on('updateData', function (incomingRace) {
 })
 
 function renderTimer(race) {
-
+   
     const timerContainer = document.getElementById('timer-container')
     if (race.duration === undefined || race.raceState === "Finished") {
+        
         const timerContainer = document.getElementById('timer-container')
         timerContainer.innerHTML = '' // Reset just incase
         noRace.innerHTML = "No race in progress"
         return
     }
+    /*
+    
     if (race.flagState === 'Finish') {
-        timerContainer.innerHTML = '' // Reset just incase
-        noRace.innerHTML = "No race in progress"
+        //timerContainer.innerHTML = '' // Reset just incase
+       // noRace.innerHTML = "No race in progress"
         return
     }
+    */
+    
     noRace.innerHTML = ""
 
     timerContainer.innerHTML = '' // Reset just incase

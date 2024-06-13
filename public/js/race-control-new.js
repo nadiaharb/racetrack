@@ -13,6 +13,62 @@ const table = document.querySelector(".table-container")
 
 window.addEventListener('DOMContentLoaded', function () {
     let safetyKey
+
+    document.body.classList.add('blur-content')
+
+    const modal = document.getElementById('accessKeyModal')
+    const accessKeyInput = document.getElementById('accessKeyInput')
+    const submitKeyButton = document.getElementById('submitKeyButton')
+
+   
+    const showModal = () => {
+        modal.style.display = 'block'
+        accessKeyInput.value = '' 
+        accessKeyInput.focus() 
+    }
+
+  
+    const hideModal = () => {
+        modal.style.display = 'none'
+    }
+
+    socket.on('getKey', loadedData => {
+        const data = JSON.parse(loadedData)
+        safetyKey = data.SAFETY_KEY
+        showModal()
+    })
+
+    
+    const checkAccessKey = () => {
+        const enteredKey = accessKeyInput.value
+        const correctKey = safetyKey
+
+        if (enteredKey === correctKey) {
+            console.log('Access granted!')
+            document.body.classList.remove('blur-content')
+            hideModal()
+        } else {
+            console.log('Access denied!')
+            setTimeout(() => {
+                showModal()
+            }, 500)
+        }
+    }
+
+    submitKeyButton.addEventListener('click', checkAccessKey)
+
+   
+    accessKeyInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            checkAccessKey()
+        }
+    })
+})
+
+
+/*
+window.addEventListener('DOMContentLoaded', function () {
+    let safetyKey
     document.body.classList.add('blur-content')
     socket.on('getKey', loadedData => {
         const data = JSON.parse(loadedData)
@@ -36,7 +92,7 @@ window.addEventListener('DOMContentLoaded', function () {
     }
 })
 
-
+*/
 
 
 socket.on('loadRaceControl', race => {
@@ -70,10 +126,24 @@ function renderRace(race) {
         return
     }
     if (race.flagState === "Finish") {
+        endBtn.setAttribute('raceId', race.id)
         raceModeBtns.style.display = 'none'
-
+        startTitle.innerHTML = race.raceState
+        startBtn.style.display='none'
         finishDiv.style.display = 'block'
         endBtn.style.backgroundColor = 'red'
+        for (let i = 1; i <= 8; i++) {
+            document.getElementById(`driver${i}`).textContent = ''
+        }
+    
+    
+        race.participants.forEach(participant => {
+            const carNumber = participant.carNumber
+            const driverCell = document.getElementById(`driver${carNumber}`)
+            if (driverCell) {
+                driverCell.textContent = participant.name
+            }
+        })
         return
     }
 
@@ -96,7 +166,8 @@ function renderRace(race) {
         }
     })
 
-    if (race.raceState == "In Progress") {
+    if (race.raceState == "In Progress" && race.flagState!="Finish") {
+       
         renderModeBtns(race)
     } else {
 
@@ -218,10 +289,12 @@ function createModeButtons() {
 
         modeBtnsContainer.appendChild(btn)
     })
+    /*
     const finishBtn = document.getElementById('finishBtn')
     finishBtn.addEventListener('click', function (e) {
         socket.emit('raceFinished');
     });
+    */
 }
 
 function deleteModeButtons() {

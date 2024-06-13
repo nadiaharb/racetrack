@@ -6,6 +6,11 @@ function raceModeChange(io, updatedRace) {
 
     const race = dataStore.getRaceById(updatedRace.raceId)
     race.flagState = updatedRace.flagState
+
+
+    if(race.flagState==="Finish"){
+         io.emit("flagFinish")
+    }
     //io.emit('raceModeChanged', race)
     io.emit('raceModeChange', race)
     //frontDesk
@@ -46,6 +51,7 @@ function endRace(io, updatedRace) {
     // This did not appear to have a function
     //io.emit('showMessage', dataStore.getNextRace())
     io.emit("renderNextRace", JSON.stringify(race))
+    io.emit('raceFinished')
 }
 
 module.exports = { raceModeChange, startRace, endRace }

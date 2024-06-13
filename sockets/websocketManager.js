@@ -55,6 +55,9 @@ module.exports = function (io) {
             inProgressRace.duration = 0; // Set the duration to 0 so all events stop
             io.emit('raceFinished'); // Notify all clients
         });
+        socket.on('flagFinish', () => {
+         //here the timer should stop
+        })
 
         socket.on('endRace', (updatedRace) => {
             io.emit('disableInput', updatedRace); // lap-line-observer
