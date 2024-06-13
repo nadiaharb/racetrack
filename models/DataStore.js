@@ -1,10 +1,27 @@
+const EventEmitter = require('events');
 const { RaceState } = require('./enums');
 const Race = require('./Race');
 const Racer = require('./Racer');
 
-class DataStore {
+class DataStore extends EventEmitter {
     constructor() {
+        super();
         this.races = [];
+        Race.setDataStore(this);
+        Racer.setDataStore(this);
+    }
+
+    // Emit a change event whenever the race data changes
+    notifyChange() {
+        this.emit('notifyChange');
+    }
+
+    // Method to get the current race data
+    getRaceData() {
+        return {
+            inProgressRace: this.getInProgressRace(),
+            upcomingRace: this.getNextRace()
+        };
     }
 
     // Race Methods
@@ -101,9 +118,6 @@ class DataStore {
             return this.races.filter(race => race.raceState === raceState);
         }
     */
-
-
-
 
     // Racer Methods
 

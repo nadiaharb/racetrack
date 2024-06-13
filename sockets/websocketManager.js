@@ -105,6 +105,11 @@ module.exports = function (io) {
             }
         });
     });
+
+    dataStore.on('notifyChange', () => {
+        io.emit('updateData', JSON.stringify(dataStore.getInProgressRace()));
+    });
+
 };
 
 // This is used to transmit the main generic state of the ongoing race, or buffer the incoming race
@@ -126,7 +131,7 @@ function startRaceTimerMain(io, race) {
         emitCurrentRace(io);
     });
 
-    const interval = setInterval(() => {
+    /*const interval = setInterval(() => {
         if (race.raceState === RaceState.IN_PROGRESS) {
             io.emit('lapTimeUpdate', JSON.stringify(race.participants));
             io.emit('updateData', JSON.stringify(race));
@@ -142,7 +147,7 @@ function startRaceTimerMain(io, race) {
         } else {
             clearInterval(otherInterval);
         }
-    }, 1000);
+    }, 1000);*/
 }
 
 function handleRaceControl(socket) {

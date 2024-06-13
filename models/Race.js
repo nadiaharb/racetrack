@@ -2,6 +2,7 @@ const RaceState = Object.freeze({ // RaceState enum
     UPCOMING: 'Upcoming',
     IN_PROGRESS: 'In Progress',
     FINISHED: 'Finished',
+    ENDED: 'Ended',
     NEXT: 'Next'
 });
 
@@ -13,6 +14,7 @@ const FlagState = Object.freeze({ // FlagState enum
 });
 
 const Racer = require('./Racer');
+let dataStore = null;
 
 class Race {
     // Default duration is set by environment var
@@ -60,19 +62,37 @@ class Race {
         }
 
         participant.carNumber = carNumber
+        participant.race = this; // Set reference to the parent race
         this.assignedCarNumbers.add(carNumber)
 
         this.participants.push(participant)
+        this.emitChange();
     }
+
+    emitChange() {
+        dataStore.notifyChange();
+    }
+
     deleteParticipant(participantId) {
         const index = this.participants.findIndex(p => p.id === participantId)
         if (index !== -1) {
             const deletedParticipant = this.participants.splice(index, 1)[0]
             this.assignedCarNumbers.delete(deletedParticipant.carNumber)
+            this.emitChange();
             return deletedParticipant
         } else {
+            this.emitChange();
             throw new Error(`Participant with ID ${participantId} not found.`)
         }
+
+    }
+    sortParticipants() {
+        this.participants.sort((a, b) => {
+            if (a.bestLapTime === null) return 1;
+            if (b.bestLapTime === null) return -1;
+            this.emitChange();
+            return a.bestLapTime - b.bestLapTime;
+        });
     }
 
     isNameUnique(name, excludeId = null) {
@@ -87,10 +107,7 @@ class Race {
         return this.racers.find(racer => racer.carNumber === carNumber);
     }
     getRacerById(participantId) {
-
         const participant = this.participants.find(participant => participant.id === participantId);
-
-
         return participant || null;
     }
     // Flag State - Race State
@@ -104,7 +121,7 @@ class Race {
         } else {
             throw new Error('Invalid race state');
         }
-
+        this.emitChange();
     }
 
     getRaceState() {
@@ -120,6 +137,7 @@ class Race {
         } else {
             throw new Error('Invalid race state');
         }
+        this.emitChange();
     }
     // Race Timer logic enclosed here for simplicity.
     startRaceTimer() {
@@ -128,9 +146,10 @@ class Race {
         }
         this.raceTimer = setInterval(() => {
             this.duration -= 100; // Decrement race duration
+            this.emitChange();
             if (this.duration <= 0) {
                 clearInterval(this.raceTimer);
-                this.setRaceState(RaceState.FINISHED);
+                this.setRaceState(RaceState.ENDED); // PLACEHOLDER TO CORRECT POTENTIAL ISSUES WITH RACESTATE DECLARATIONS  
             }
         }, 100);
     }
@@ -143,5 +162,9 @@ class Race {
     }
 
 }
+
+Race.setDataStore = function (store) {
+    dataStore = store;
+};
 
 module.exports = Race;

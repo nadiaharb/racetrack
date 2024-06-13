@@ -7,7 +7,7 @@ const noRace = document.querySelector('.no-race')
 })*/
 
 
-socket.on('renderNextRace', function (incomingRace) {
+socket.on('updateData', function (incomingRace) {
     if (incomingRace === null) {
         const timerContainer = document.getElementById('timer-container')
         timerContainer.innerHTML = '<p>No races available</p>'

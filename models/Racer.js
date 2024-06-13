@@ -1,3 +1,5 @@
+let dataStore = null;
+
 class Racer {
     constructor(carNumber, name, lapCount = 0, bestLapTime = 0) {
         this.id = this.generateRandomId();
@@ -7,6 +9,11 @@ class Racer {
         this.currentLapTime = 0; // Initialize current lap time
         this.lapCount = lapCount;
         this.lapTimer = null; // Initialize lap timer
+        this.race = null; // Reference to the parent race
+    }
+
+    emitChange() {
+        dataStore.notifyChange();
     }
 
     generateRandomId() {
@@ -16,6 +23,7 @@ class Racer {
     // Necessary for Receptionist bonus functionality
     changeCarNumber(carNumber) {
         this.carNumber = carNumber;
+        this.emitChange();
     }
 
     // Lap elapsing logic contained within Racer data model for simplicity
@@ -42,14 +50,20 @@ class Racer {
         this.lapTimer = setInterval(() => {
             this.currentLapTime += 100; // Increment timer every second
         }, 100);
+        this.emitChange();
     }
 
     // Custom serialization method to exclude lapTimer
     // Gotta make sure we don't JSONify the timer itself
     toJSON() {
-        const { lapTimer, ...rest } = this;
+        const { lapTimer, race, ...rest } = this;
         return rest;
     }
 }
+
+Racer.setDataStore = function (store) {
+    dataStore = store;
+};
+
 
 module.exports = Racer;
