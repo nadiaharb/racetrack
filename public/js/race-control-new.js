@@ -289,12 +289,6 @@ function createModeButtons() {
 
         modeBtnsContainer.appendChild(btn)
     })
-
-    const finishBtn = document.getElementById('finishBtn')
-    finishBtn.addEventListener('click', function (e) {
-        socket.emit('raceFinished');
-    });
-
 }
 
 function deleteModeButtons() {

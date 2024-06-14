@@ -38,6 +38,14 @@ module.exports = function (io) {
         // Race Control
         socket.on("raceModeChange", updatedRace => {
             raceModeChange(io, updatedRace);
+            if (updatedRace.flagState === "Finish") {
+                // Make sure current race duration is set to 0.
+                const inProgressRace = dataStore.getInProgressRace();
+                inProgressRace.duration = 0; // Set the duration to 0 so all events stop
+                inProgressRace.flagState = 'Finish' // correct flagState
+                io.emit('disableInput'); // Disable buttons for lap-line-observer
+            }
+
         });
 
         socket.on("startedRace", mode => {
@@ -50,14 +58,14 @@ module.exports = function (io) {
             startRace(io, mode);
         });
 
-        socket.on('raceFinished', () => {
+        /*socket.on('raceFinished', () => {
             // Make sure current race duration is set to 0.
             const inProgressRace = dataStore.getInProgressRace();
             inProgressRace.duration = 0; // Set the duration to 0 so all events stop
             inProgressRace.flagState = 'Finish' // correct flagState
             io.emit('disableInput'); // Disable buttons for lap-line-observer
             //io.emit('raceFinished'); // Notify all clients
-        });
+        });*/
         /*socket.on('flagFinish', () => {
             //here the timer should stop
         })*/
