@@ -122,16 +122,20 @@ function displayNone() {
 
 socket.on('disableInput', function (incomingRace) {
     try {
-        const race = JSON.parse(incomingRace);
-        if (race) {
-            disableButtons();
-        }
+        disableButtons();
     } catch (error) {
-        console.error('Error parsing or handling data:', error);
+        console.error('Error:', error);
     }
 });
 
-socket.on('renderNextRace', function (incomingRace) {
+/*socket.on('raceFinished', () => {
+    try {
+        disableButtons();
+    } catch (error) {
+        console.error('Error parsing or handling data:', error)
+    }
+})*/
+socket.on('initializeData', function (incomingRace) {
     try {
         const race = JSON.parse(incomingRace)
         if (race) {
@@ -152,7 +156,7 @@ socket.on('updateData', function (incomingRace) {
         console.error('Error parsing or handling data:', error)
     }
 })
-
+/*
 socket.on('lapTimeUpdate', function (incomingParticipants) {
     try {
         const participants = JSON.parse(incomingParticipants);
@@ -176,6 +180,7 @@ socket.on('raceTimeUpdate', function (incomingRaceDuration) {
         console.error('Error parsing or handling data:', error);
     }
 });
+*/
 socket.on("startedRace", function () {
     enableButtons();
 })
@@ -235,6 +240,9 @@ function formatTime(duration) {
     const durationInt = parseInt(duration);
     const minutes = Math.floor(durationInt / 60000);
     const seconds = Math.floor((durationInt % 60000) / 1000);
+    if (minutes === -1 || seconds === -1) { // So the time doesn't look weird
+        return "0:00"
+    }
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 }
 
@@ -243,6 +251,9 @@ function formatTimeWithMilliseconds(duration) {
     const minutes = Math.floor(durationInt / 60000);
     const seconds = Math.floor((durationInt % 60000) / 1000);
     const milliseconds = durationInt % 1000;
+    if (minutes === -1 || seconds === -1) { // So the time doesn't look weird
+        return "0:00"
+    }
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}.${milliseconds}`;
 }
 

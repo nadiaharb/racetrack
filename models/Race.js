@@ -149,7 +149,7 @@ class Race {
             this.emitChange();
             if (this.duration <= 0) {
                 clearInterval(this.raceTimer);
-                this.setRaceState(RaceState.ENDED); // PLACEHOLDER TO CORRECT POTENTIAL ISSUES WITH RACESTATE DECLARATIONS  
+                this.setFlagState(FlagState.FINISH);
             }
         }, 100);
     }

@@ -8,8 +8,8 @@ function raceModeChange(io, updatedRace) {
     race.flagState = updatedRace.flagState
 
 
-    if(race.flagState==="Finish"){
-         io.emit("flagFinish")
+    if (race.flagState === "Finish") {
+        io.emit("flagFinish")
     }
     //io.emit('raceModeChanged', race)
     io.emit('raceModeChange', race)
@@ -47,9 +47,10 @@ function endRace(io, updatedRace) {
     race.raceState = 'Finished'
     race.flagState = 'Danger'
     io.emit('raceModeChange', race)
+    //
     io.emit('loadRaceControl', dataStore.getNextRace())
-    // This did not appear to have a function
-    //io.emit('showMessage', dataStore.getNextRace())
+    // Emit message to Racers In regards to upcoming race
+    io.emit('showMessage', dataStore.getNextRace())
     io.emit("renderNextRace", JSON.stringify(race))
     io.emit('raceFinished')
 }

@@ -11,7 +11,7 @@ socket.on('raceModeChange', race => {
 })
 
 // Handle the current race data received from the server
-socket.on('getRaceData', race => {
+socket.on('initializeData', race => {
     console.log(race)
     if (race === null) {
         updateFlagDisplay("Danger")

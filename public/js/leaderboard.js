@@ -64,7 +64,6 @@ function renderLeaderBoard(race) {
             </div>
             `).join('')}
         </div>`;
-    console.log("Leaderboard rendered")
     leaderboard.appendChild(raceState)
     leaderboard.appendChild(raceDiv);
 
@@ -126,6 +125,9 @@ function updateCheckerboard(mode) {
 function formatTime(duration) {
     const minutes = Math.floor(duration / 60000);
     const seconds = Math.floor((duration % 60000) / 1000);
+    if (minutes === -1 || seconds === -1) {
+        return "0:00"
+    }
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 }
 
@@ -134,6 +136,9 @@ function formatTimeWithMilliseconds(duration) {
     const minutes = Math.floor(durationInt / 60000);
     const seconds = Math.floor((durationInt % 60000) / 1000);
     const milliseconds = durationInt % 1000;
+    if (minutes === -1 || seconds === -1) {
+        return "0:00"
+    }
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}.${milliseconds}`;
 }
 
@@ -170,7 +175,7 @@ socket.on('raceModeChange', race => {
         color2 = 'black';
     }
 
-
+    //initializeData
     updateCheckerboard(race.flagState);
 });
 
@@ -199,7 +204,7 @@ function updateLeaderBoard(race) {
 }
 
 // Load and render race data
-socket.on('renderNextRace', function (incomingRace) {
+socket.on('initializeData', function (incomingRace) {
     try {
         const race = JSON.parse(incomingRace);
         if (race) {

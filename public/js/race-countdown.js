@@ -7,12 +7,12 @@ window.addEventListener('DOMContentLoaded', () => {
 })
 
 
-socket.on('getRaceData', race => {
-    
+socket.on('initializeData', race => {
+
     const data = JSON.parse(race)
-    if (data===null) {
-       // timerContainer.innerHTML = '' // Reset just incase
-       noRace.innerHTML = "No race in progress"
+    if (data === null) {
+        // timerContainer.innerHTML = '' // Reset just incase
+        noRace.innerHTML = "No race in progress"
         return
     }
     renderTimer(data)
@@ -37,10 +37,10 @@ socket.on('updateData', function (incomingRace) {
 })
 
 function renderTimer(race) {
-   
+
     const timerContainer = document.getElementById('timer-container')
     if (race.duration === undefined || race.raceState === "Finished") {
-        
+
         const timerContainer = document.getElementById('timer-container')
         timerContainer.innerHTML = '' // Reset just incase
         noRace.innerHTML = "No race in progress"
@@ -54,7 +54,7 @@ function renderTimer(race) {
         return
     }
     */
-    
+
     noRace.innerHTML = ""
 
     timerContainer.innerHTML = '' // Reset just incase
@@ -72,5 +72,8 @@ function renderTimer(race) {
 function formatTime(duration) {
     const minutes = Math.floor(duration / 60000)
     const seconds = Math.floor((duration % 60000) / 1000)
+    if (minutes === -1 || seconds === -1) { // So the time doesn't look weird
+        return "0:00"
+    }
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
 }

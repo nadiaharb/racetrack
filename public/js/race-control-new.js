@@ -20,14 +20,14 @@ window.addEventListener('DOMContentLoaded', function () {
     const accessKeyInput = document.getElementById('accessKeyInput')
     const submitKeyButton = document.getElementById('submitKeyButton')
 
-   
+
     const showModal = () => {
         modal.style.display = 'block'
-        accessKeyInput.value = '' 
-        accessKeyInput.focus() 
+        accessKeyInput.value = ''
+        accessKeyInput.focus()
     }
 
-  
+
     const hideModal = () => {
         modal.style.display = 'none'
     }
@@ -38,7 +38,7 @@ window.addEventListener('DOMContentLoaded', function () {
         showModal()
     })
 
-    
+
     const checkAccessKey = () => {
         const enteredKey = accessKeyInput.value
         const correctKey = safetyKey
@@ -57,7 +57,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
     submitKeyButton.addEventListener('click', checkAccessKey)
 
-   
+
     accessKeyInput.addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
             checkAccessKey()
@@ -129,14 +129,14 @@ function renderRace(race) {
         endBtn.setAttribute('raceId', race.id)
         raceModeBtns.style.display = 'none'
         startTitle.innerHTML = race.raceState
-        startBtn.style.display='none'
+        startBtn.style.display = 'none'
         finishDiv.style.display = 'block'
         endBtn.style.backgroundColor = 'red'
         for (let i = 1; i <= 8; i++) {
             document.getElementById(`driver${i}`).textContent = ''
         }
-    
-    
+
+
         race.participants.forEach(participant => {
             const carNumber = participant.carNumber
             const driverCell = document.getElementById(`driver${carNumber}`)
@@ -166,8 +166,8 @@ function renderRace(race) {
         }
     })
 
-    if (race.raceState == "In Progress" && race.flagState!="Finish") {
-       
+    if (race.raceState == "In Progress" && race.flagState != "Finish") {
+
         renderModeBtns(race)
     } else {
 
@@ -289,12 +289,12 @@ function createModeButtons() {
 
         modeBtnsContainer.appendChild(btn)
     })
-    /*
+
     const finishBtn = document.getElementById('finishBtn')
     finishBtn.addEventListener('click', function (e) {
         socket.emit('raceFinished');
     });
-    */
+
 }
 
 function deleteModeButtons() {

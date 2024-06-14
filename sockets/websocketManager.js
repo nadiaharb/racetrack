@@ -51,18 +51,22 @@ module.exports = function (io) {
         });
 
         socket.on('raceFinished', () => {
+            // Make sure current race duration is set to 0.
             const inProgressRace = dataStore.getInProgressRace();
             inProgressRace.duration = 0; // Set the duration to 0 so all events stop
-            io.emit('raceFinished'); // Notify all clients
+            inProgressRace.flagState = 'Finish' // correct flagState
+            io.emit('disableInput'); // Disable buttons for lap-line-observer
+            //io.emit('raceFinished'); // Notify all clients
         });
-        socket.on('flagFinish', () => {
-         //here the timer should stop
-        })
+        /*socket.on('flagFinish', () => {
+            //here the timer should stop
+        })*/
 
         socket.on('endRace', (updatedRace) => {
-            io.emit('disableInput', updatedRace); // lap-line-observer
-            emitCurrentRace(io); // Reset lap-line and leaderboard before proceeding
+            // Refresh all views with upcoming race,replacing old data
+            io.emit('updateData', JSON.stringify(dataStore.getNextRace()))
             endRace(io, updatedRace); // Effectively deletes race
+            io.emit('disableInput', updatedRace); // lap-line-observer
             if (!dataStore.getUpcomingRaces()) {
                 io.emit('displayNone'); // Notify lap-line-observer and leaderboard
             }
@@ -108,7 +112,7 @@ module.exports = function (io) {
             }
         });
     });
-
+    // Model data change detection (extends EventEmitter)
     dataStore.on('notifyChange', () => {
         io.emit('updateData', JSON.stringify(dataStore.getInProgressRace()));
     });
@@ -120,9 +124,9 @@ function emitCurrentRace(io) {
     const inProgressRace = dataStore.getInProgressRace();
     const upcomingRace = dataStore.getNextRace();
     if (inProgressRace) {
-        io.emit('renderNextRace', JSON.stringify(inProgressRace));
+        io.emit('initializeData', JSON.stringify(inProgressRace));
     } else if (upcomingRace) {
-        io.emit('renderNextRace', JSON.stringify(upcomingRace));
+        io.emit('initializeData', JSON.stringify(upcomingRace));
     } else {
         io.emit('displayNone', {});
     }
