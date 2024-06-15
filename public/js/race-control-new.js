@@ -115,6 +115,9 @@ socket.on('raceStarted', (race) => {
     //renderModeBtns(race)
 })
 
+socket.on('updateData', (race) => {
+    renderRace(JSON.parse(race))
+})
 function renderRace(race) {
 
     if (race === null) {
