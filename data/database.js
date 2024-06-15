@@ -1,7 +1,7 @@
 const Racer = require('../models/Racer');
 const sqlite3 = require('sqlite3').verbose();
 //const dataStore = require('../models/DataStore');
-const Race=require('../models/Race')
+const Race = require('../models/Race')
 
 // Switches
 let samples = true;  // Add sample races to db
@@ -13,9 +13,9 @@ let db = new sqlite3.Database('./data/raceData.db', (err) => {
         console.error(err.message);
     } else if (console_feedback) {
         console.log('Connected to SQLite database.');
-       // db.run('PRAGMA foreign_keys = ON;'); // Enable foreign keys
+        // db.run('PRAGMA foreign_keys = ON;'); // Enable foreign keys
     }
-   // loadRacesFromDatabase()
+    // loadRacesFromDatabase()
 });
 
 // Create "racers" table
@@ -60,28 +60,28 @@ db.run(`CREATE TABLE IF NOT EXISTS races (
 
 function dataChange(changedRace, action) {
     console.log(`Received data change event for Race ${changedRace.id}. Updating SQLite database...`)
-    if(action==='addrace'){
+    if (action === 'addrace') {
         addRacetoDB(changedRace)
-    }else if(action==='addracer'){
-       addRacerToDb(changedRace)
-    }else if(action==="deleteracer"){
+    } else if (action === 'addracer') {
+        addRacerToDb(changedRace)
+    } else if (action === "deleteracer") {
         deleteRacerFromDb(changedRace.id)
-    }else if(action==="updateracer"){
+    } else if (action === "updateracer") {
         updateRacerInDb(changedRace)
-    }else if(action==='deleterace'){
-        
+    } else if (action === 'deleterace') {
+
         deleteRace(changedRace)
-    }else if(action==='updaterace'){
-        updateRaceData(changedRace.id,changedRace)
+    } else if (action === 'updaterace') {
+        updateRaceData(changedRace.id, changedRace)
     }
 
-  
+
 }
 
 
-function addRacetoDB(changedRace){
-      // Check if the race already exists in the database
-      db.get("SELECT * FROM races WHERE race_id = ?", [changedRace.id], (err, row) => {
+function addRacetoDB(changedRace) {
+    // Check if the race already exists in the database
+    db.get("SELECT * FROM races WHERE race_id = ?", [changedRace.id], (err, row) => {
         if (err) {
             console.error('Error checking race in database:', err.message)
             return
@@ -107,19 +107,19 @@ function addRacetoDB(changedRace){
 }
 
 function addRacerToDb(racer) {
-    const { id,carNumber, name, bestLapTime, lapCount } = racer
-    const race_id=racer.race.id
-  
-    
+    const { id, carNumber, name, bestLapTime, lapCount } = racer
+    const race_id = racer.race.id
+
+
     db.run(
         `INSERT INTO racers (racer_id,car_number, name, best_lap_time, lap_count, race_id)
          VALUES (?, ?, ?, ?, ?,?)`,
-        [id,carNumber, name, bestLapTime, lapCount, race_id],
+        [id, carNumber, name, bestLapTime, lapCount, race_id],
         function (err) {
             if (err) {
                 console.error('Error inserting racer:', err.message)
             } else {
-               // console.log(`Racer added: Car ${carNumber} - ${name}`)
+                // console.log(`Racer added: Car ${carNumber} - ${name}`)
                 addRacerToRace(race_id, id)
             }
         }
@@ -127,13 +127,13 @@ function addRacerToDb(racer) {
 }
 
 function deleteParticipantsByRaceId(raceId) {
-    db.run(`DELETE FROM racers WHERE race_id = ?`, [raceId], function(err) {
+    db.run(`DELETE FROM racers WHERE race_id = ?`, [raceId], function (err) {
         if (err) {
             console.error('Error deleting participants:', err.message);
         } else {
-          //  console.log(`Deleted ${this.changes} participants from race ID ${raceId}`);
+            //  console.log(`Deleted ${this.changes} participants from race ID ${raceId}`);
             // Proceed to delete the race after deleting participants
-           // deleteRace(raceId);
+            // deleteRace(raceId);
         }
     });
 }
@@ -141,12 +141,12 @@ function deleteParticipantsByRaceId(raceId) {
 // Function to delete a race from the database
 function deleteRace(raceId) {
     console.log(raceId)
-    db.run(`DELETE FROM races WHERE race_id = ?`, [raceId], function(err) {
+    db.run(`DELETE FROM races WHERE race_id = ?`, [raceId], function (err) {
         if (err) {
             console.error('Error deleting race:', err.message);
         } else {
-           // console.log(`Race with ID ${raceId} deleted`);
-           deleteParticipantsByRaceId(raceId)
+            // console.log(`Race with ID ${raceId} deleted`);
+            deleteParticipantsByRaceId(raceId)
         }
     });
 }
@@ -183,7 +183,7 @@ function addRacerToRace(raceId, racerId) {
 
 function updateRacerInDb(racer) {
     const { id, carNumber, name, bestLapTime, lapCount } = racer
-   
+
 
     db.serialize(() => {
         db.run(
@@ -194,12 +194,12 @@ function updateRacerInDb(racer) {
                     console.error('Error updating racer:', err.message)
                 } else {
                     console.log(`Racer updated: ID ${id}`)
-                   
+
                     db.get(`SELECT * FROM racers WHERE racer_id = ?`, [id], (err, row) => {
                         if (err) {
                             console.error('Error fetching updated racer:', err.message)
                         } else {
-                           // console.log('Updated racer:', row)
+                            // console.log('Updated racer:', row)
                         }
                     })
                 }
@@ -259,7 +259,7 @@ function updateRaceParticipants(racerId) {
 
 
 function updateRaceData(raceId, updatedRace) {
-   
+
     const { duration, flagState, raceState } = updatedRace
 
     db.run(
@@ -267,7 +267,7 @@ function updateRaceData(raceId, updatedRace) {
          SET duration = ?, flag_state = ?, race_state = ?
          WHERE race_id = ?`,
         [duration, flagState, raceState, raceId],
-        function(err) {
+        function (err) {
             if (err) {
                 console.error('Error updating race data:', err.message)
             } else {
@@ -288,15 +288,15 @@ function loadRacesFromDatabase(dataStore) {
         }
 
         rows.forEach((row) => {
-          
+
             let race = new Race(row.duration, row.flag_state, row.race_state)
 
-          
+
             if (row.participants && row.participants.trim() !== '') {
                 let participantIds = row.participants.split(',')
 
                 participantIds.forEach((racerId) => {
-              
+
                     let racerQuery = `SELECT * FROM racers WHERE racer_id = ?`
                     db.get(racerQuery, [racerId], (err, racerRow) => {
                         if (err) {
@@ -304,18 +304,18 @@ function loadRacesFromDatabase(dataStore) {
                             return
                         }
                         if (racerRow) {
-                            let racer = new Racer(racerRow.car_number, racerRow.name,racerRow.lap_count, racerRow.best_lap_time);
+                            let racer = new Racer(racerRow.car_number, racerRow.name, racerRow.lap_count, racerRow.best_lap_time);
                             race.addParticipant(racer)
                         }
                     })
                 })
             }
 
-         
+
             dataStore.addRace(race)
         })
     })
 }
 
 
-module.exports={dataChange, loadRacesFromDatabase}
+module.exports = { dataChange, loadRacesFromDatabase }
