@@ -5,6 +5,8 @@ socket.on('updateData', race => {
     const incomingRace = JSON.parse(race)
     if (incomingRace) {
         updateFlagDisplay(incomingRace.flagState)
+    } else {
+        updateFlagDisplay("Danger")
     }
 })
 
@@ -40,8 +42,8 @@ function updateFlagDisplay(mode) {
             color2 = 'black'
             break
         default:
-            color1 = 'white'
-            color2 = 'white'
+            color1 = 'red'
+            color2 = 'red'
     }
 
     let whiteSquares = document.getElementsByClassName("flag-white")

@@ -7,7 +7,8 @@ const { raceModeChange, startRace, endRace } = require('./race-control-sockets')
 module.exports = function (io) {
     io.on('connection', socket => {
         console.log('User connected to socket');
-
+        // Emit current race or upcoming race data
+        emitCurrentRace(io);
 
 
         // Send environment keys
@@ -20,17 +21,20 @@ module.exports = function (io) {
 
         // Load initial data
         socket.emit('loadData', JSON.stringify(dataStore.getUpcomingRacesByFlag("Danger")));
-        const currentRace=dataStore.getInProgressRace()
-        if(!currentRace && dataStore.getNextRace().participants.length===8){
-            console.log(dataStore.getNextRace().participants.length)
-            io.emit('showMessage', dataStore.getNextRace())
+        const currentRace = dataStore.getInProgressRace()
+        const nextRace = dataStore.getNextRace()
+        if (nextRace) {
+            if (!currentRace && dataStore.getNextRace().participants.length === 8) {
+                console.log(dataStore.getNextRace().participants.length)
+                io.emit('showMessage', dataStore.getNextRace())
+            }
         }
+
         socket.on('requestCurrentRaceData', () => {
             getRaceData(io);
         });
 
-        // Emit current race or upcoming race data
-        emitCurrentRace(io);
+
         // Disable Lap-Line-Observer on-load
         if (!dataStore.getInProgressRace()) {
             io.emit('disableInput', JSON.stringify(dataStore.getNextRace()));
