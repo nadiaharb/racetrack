@@ -1,9 +1,7 @@
-//const { error } = require("loglevel")
-//const socket = io()
 const addRaceForm = document.getElementById('addRaceForm')
 const loadDataButton = document.getElementById('loadDataButton')
 const socket = io('http://localhost:3000')
-//8ded6076
+
 
 window.addEventListener('DOMContentLoaded', function () {
     let receptionistKey
@@ -29,10 +27,6 @@ window.addEventListener('DOMContentLoaded', function () {
         }
     }
 })
-
-
-
-
 
 // render race data
 function renderRaces(races) {
@@ -219,6 +213,7 @@ function deleteRacer(racerId, raceId) {
         racerId: racerId,
         raceId: raceId
     }
+
     socket.emit('deleteRacer', deleteRacer)
 }
 

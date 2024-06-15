@@ -29,8 +29,6 @@ socket.on("showMessage", function (loadedData) {
     }
 })
 
-
-
 socket.on('racerDeleted', (race) => {
     console.log("racer deletr")
     renderRace(race)

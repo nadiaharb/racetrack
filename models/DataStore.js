@@ -25,17 +25,6 @@ class DataStore extends EventEmitter {
     }
 
     // Race Methods
-    /* Replaced this function with getNextRace
-        getUpcomingRace() {
-            const upcomingRaces = this.races.filter(race => race.raceState === RaceState.UPCOMING);
-            if (upcomingRaces.length === 0) {
-                return null; //
-            }
-            return upcomingRaces.reduce((minRace, currentRace) => {
-                return currentRace.id <= minRace.id ? currentRace : minRace;
-            });
-        }
-    */
     // Get all upcoming races sorted by race id
     getUpcomingRaces() {
         // Find all races with raceState Upcoming
@@ -74,9 +63,6 @@ class DataStore extends EventEmitter {
         this.races.push(race);
         this.notifyChange();
     }
-    getRaceByFlag() {
-
-    }
 
     deleteRaceById(raceId) {
         raceId = parseInt(raceId);
@@ -97,10 +83,8 @@ class DataStore extends EventEmitter {
         }
     }
     getRaceById(raceId) {
-
         return this.races.find(race => race.id === raceId);
     }
-
 
     getRaces() {
         return this.races;

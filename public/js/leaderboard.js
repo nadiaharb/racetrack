@@ -2,7 +2,6 @@ const socket = io('http://localhost:3000')
 
 let colorMap = {};
 
-// This is used for testing
 
 /*
 Spectators must be able to see:
@@ -15,30 +14,6 @@ Spectators must be able to see:
     The current lap for each car.
 
 */
-// TO-DO
-// Evaluate with conditionals properly when the next race should be displayed once Safety Official works partially.
-// Add logic for dynamic lap time display once Lap Line Observer is fleshed out
-// Conceive and implement last-race scoreboard reset/update once Safety Official has that part worked out.
-// Aesthetix
-
-// Load and render race data
-/*socket.on('startRace', function (incomingRace) {
-    try {
-        const race = JSON.parse(incomingRace);
-        if (race) {
-            renderLeaderBoard(race);
-            startCountdown(race.duration);
-        }
-    } catch (error) {
-        console.error('Error parsing or handling data:', error);
-    }
-});*/
-
-// Update flag display
-
-
-
-
 
 function renderLeaderBoard(race) {
     const leaderboard = document.getElementById('lb-container');
@@ -156,7 +131,7 @@ function assignColorsToParticipants(participants) {
 
 
 // Update flag display
-socket.on('raceModeChange', race => {
+socket.on('updateData', race => {
     const mode = race.flagState;
     let color1;
     let color2;
@@ -191,6 +166,8 @@ socket.on('initializeData', function (incomingRace) {
     }
 });
 
+// Re-rendering leaderboard and playing with DOM elements because not sure how to
+// Change positions of racers more performantly.
 socket.on('updateData', function (incomingRace) {
     try {
         const race = JSON.parse(incomingRace);

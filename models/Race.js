@@ -103,9 +103,6 @@ class Race {
     }
 
     // Racer Method
-    getRacerByCarNumber(carNumber) { // Necessary for Lap Line Observer
-        return this.racers.find(racer => racer.carNumber === carNumber);
-    }
     getRacerById(participantId) {
         const participant = this.participants.find(participant => participant.id === participantId);
         return participant || null;
