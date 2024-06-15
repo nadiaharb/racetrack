@@ -3,7 +3,7 @@ const { RaceState } = require('./enums');
 const Race = require('./Race');
 const Racer = require('./Racer');
 const eventEmitter = new EventEmitter()
-const {dataChange, loadRacesFromDatabase}=require("../data/database")
+const {dataChange, loadRacesFromDatabase, updateDatabase}=require("../data/database")
 
 class DataStore extends EventEmitter {
     constructor() {
@@ -26,6 +26,11 @@ class DataStore extends EventEmitter {
             upcomingRace: this.getNextRace()
         };
     }
+    //get all racers
+    getRacers() {
+        return this.racers;
+      }
+    
 
     // Race Methods
     // Get all upcoming races sorted by race id
@@ -139,7 +144,7 @@ class DataStore extends EventEmitter {
     onParticipantChange(participant,race, action) {
        dataChange(participant, action)
     }
-
+  
 
 }
 

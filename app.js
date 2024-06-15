@@ -1,4 +1,4 @@
-require('./loadKeys');
+require('./loadKeys')
 require('./check-keys');
 
 const http = require('http');
@@ -7,11 +7,12 @@ const server = http.createServer(routes)
 //const { createServer }= require('http')
 const { Server } = require('socket.io')
 const websocketManager = require('./sockets/websocketManager')
+const {updateDatabase}=require("./data/database")
 //const server=createServer(app)
 
 // SQLite3 database
 const database = require('./data/database')
-
+//const dataStore = require('./models/DataStore');
 // https://admin.socket.io/#/
 // Server url = "http://localhost:3000" username = "admin" password = "race"
 const { instrument } = require("@socket.io/admin-ui");
@@ -40,3 +41,21 @@ server.listen(PORT, () => {
 })
 
 websocketManager(io)
+
+process.on('SIGINT', () => {
+    console.log('Ctrl+C pressed. Closing server gracefully.')
+    
+    
+    server.close((err) => {
+      if (err) {
+        console.error('Error closing server:', err.message)
+        process.exit(1)
+      } else {
+       // updateDatabase()
+        console.log('Server closed gracefully.')
+        process.exit(1)
+      }
+    })
+  
+  
+  })

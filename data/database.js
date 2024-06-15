@@ -1,6 +1,6 @@
 const Racer = require('../models/Racer');
 const sqlite3 = require('sqlite3').verbose();
-//const dataStore = require('../models/DataStore');
+const dataStore = require('../models/DataStore');
 const Race=require('../models/Race')
 
 // Switches
@@ -318,4 +318,40 @@ function loadRacesFromDatabase(dataStore) {
 }
 
 
-module.exports={dataChange, loadRacesFromDatabase}
+function updateDatabase( callback) {
+    console.log(dataStore)
+    let races = dataStore.getRaces()
+    let racers = dataStore.getRacers()
+    let pendingUpdates = races.length + racers.length
+  
+    if (pendingUpdates === 0) {
+      return callback(null)
+    }
+  
+    races.forEach((race) => {
+        dataChange(race,"updaterace", (err) => {
+        if (err) {
+          return callback(err)
+        }
+        pendingUpdates--
+        if (pendingUpdates === 0) {
+          callback(null)
+        }
+      })
+    })
+  
+    racers.forEach((racer) => {
+      dataChange(racer,"updateracer", (err) => {
+        if (err) {
+          return callback(err)
+        }
+        pendingUpdates--
+        if (pendingUpdates === 0) {
+          callback(null)
+        }
+      })
+    })
+  }
+
+
+module.exports={dataChange, loadRacesFromDatabase, updateDatabase}
