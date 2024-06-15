@@ -1,10 +1,5 @@
-# Racetrack Info-Screens
-
-A local racetrack needs a system to control races and inform spectators. You'll create a real-time system so that everyone has the information they need, exactly when they need it.
-
 ## Table of Contents
 - [Introduction](#introduction)
-- [Functional Requirements](#functional-requirements)
 - [User Personas](#user-personas)
 - [Race Sessions](#race-sessions)
 - [Race Cars](#race-cars)
@@ -21,11 +16,10 @@ A local racetrack needs a system to control races and inform spectators. You'll 
 
 Beachside Racetrack is located next to a beach in a very touristic area. To reduce reliance on staff, the racetrack requires a way to prepare the next race, control races, and inform spectators.
 
-This project aims to develop a real-time system to address these needs, based on the user stories and requirements provided by the Product Manager.
+This project aims has developed a real-time system to address these needs, based on the user stories and requirements provided by the Product Manager.
 
-## Functional Requirements
+This is the Minimum Viable Product (MVP).
 
-Beachside Racetrack is looking for a Minimum Viable Product (MVP) to solve their biggest problems.
 
 ## User Personas
 
@@ -40,7 +34,7 @@ Beachside Racetrack is looking for a Minimum Viable Product (MVP) to solve their
 
 ## Race Sessions
 
-A race session is an instance of a race where up to 8 drivers try to get the fastest lap. The race finishes after 10 minutes, and the winner is the driver with the fastest lap time.
+A race session is an instance of a race where up to 8 drivers try to get the fastest lap. The race finishes after 10 minutes (in normal mode), and the winner is the driver with the fastest lap time.
 
 ## Race Cars
 
@@ -76,7 +70,7 @@ The system uses flags to communicate race modes:
 
 ## Technology
 
-- **Server:** Node.js
+- **Server:** NodeJS
 - **Real-time Functionality:** Socket.IO
 - **Start Server:** `npm start`
 - **Development Mode:** `npm run dev` (1-minute race duration)
@@ -91,19 +85,105 @@ export receptionist_key=8ded6076
 export observer_key=662e0f6c
 export safety_key=a2d393bc
 npm start
+```
 
+## Getting Started
 
+### Prerequisites
 
-When server is started default state will be empty races, no ongoing race. 
+- NodeJS
 
-Front desk will add races and drivers. Race-control interface will be updated with drivers of next race as this happens (). 
+### Installation
 
--This is currently the default starting state as we have 2 sample races added
+1. Clone the repository:
 
-Race starts - When drivers have been briefed and race is ready to start safety official clicks start race button, in database raceMode is changed from next race to ongoing race (function startRace(io,updatedRace))(race-control instructs dataStore to do mode change and dataStore informs all concerned interfaces to update), flag display is changed (socket.on('raceModeChange', mode)
+    ```bash
+    git clone https://github.com/yourusername/racetrack-info-screens.git
+    cd racetrack-info-screens
+    ```
 
-During race - safety official can change race mode(raceModeChange) and finish race manually (function endRace). Timer, lap line tracker, leaderboard also do stuff here
+2. Install dependencies:
 
-Race finishes - As timer runs out or race is finished by safety official, checkered flag is displayed(raceModeChange) to instruct all drivers to proceed to pit area. Race mode needs to be changed to Finished (function endRace) Other interfaces need to be also informed
+    ```bash
+    npm install
+    ```
 
-Race session is ended - As the cars have returned to the pit lane, the Safety Official can end the Session. Race-control driver list is updated () Race mode changes to "Danger" (raceModeChange) Next Race screen now displays the current session's drivers(nextRaceChange), and displays an extra message to tell them to proceed to the paddock ()
+3. Set environment variables (Define keys for restricted views):
+
+    ```bash
+    export receptionist_key=8ded6076
+    export observer_key=662e0f6c
+    export safety_key=a2d393bc
+    ```
+
+4. Start the server (Race timers are set to 10 minutes):
+
+    ```bash
+    npm start
+    ```
+
+5. For development mode (Race timers are set to 1 minute):
+
+    ```bash
+    npm run dev
+    ```
+
+## Usage Guide
+
+### Front Desk (```/front-desk```)
+
+- **Add/Remove Race Sessions:** Allows the receptionist to manage race sessions.
+- **Add/Remove/Edit Race Drivers:** Allows the receptionist to manage drivers.
+
+### Safety Official View (```/race-control```)
+
+- **Start Race:** Starts the race and changes the race mode to "Safe".
+- **Control Race Modes:** Changes the race mode (Safe, Hazard, Danger, Finish).
+- **End Race:** Ends the race and changes the race mode to "Finished".
+
+### Lap-Line Observer (```/lap-line-tracker```)
+
+- **Record Lap Times:** Records when cars cross the lap line.
+
+### Leader Board (```/leader-board```)
+
+- **View Lap Times:** Displays the fastest laptimes for each driver along with their positions in relation to each other in terms of shortest (best) laps.
+
+### Next Race (```/next-race```)
+
+- **View Next Race:** Displays the list of drivers and assigned cars for the next race session.
+
+### Race Countdown (```/race-countdown```)
+
+- **View Countdown:** Displays the race countdown timer.
+
+### Race Flag (```/race-flags```)
+
+- **View Flag Display:** Displays the current race mode using flag colors.
+
+## Extra Features
+
+- **Persist Data:** Implemented data persistence so that the server can be restarted without losing data. 
+(COMING SOON)
+
+- **Select Cars:** Allows the receptionist to define which cars drivers will race in.
+
+## Bonus Functionality
+
+- **NGROK hosting:** We've implemented a way to host the NodeJS server on ngrok so it can be implemented.
+
+## Useful Links
+
+- [Socket.IO](https://socket.io/)
+- [Node.JS](https://nodejs.org/)
+- [MVP](https://en.wikipedia.org/wiki/Minimum_viable_product)
+- [Product Manager](https://en.wikipedia.org/wiki/Product_manager)
+- [User Stories](https://en.wikipedia.org/wiki/User_story)
+- [User Personas](https://en.wikipedia.org/wiki/User_persona)
+
+## What the project demonstrates
+
+- Real-time functionality
+- Socket.IO
+- Environment variables
+- Node.JS
