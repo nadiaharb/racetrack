@@ -2,6 +2,8 @@ const EventEmitter = require('events');
 const { RaceState } = require('./enums');
 const Race = require('./Race');
 const Racer = require('./Racer');
+const eventEmitter = new EventEmitter()
+const {dataChange, loadRacesFromDatabase}=require("../data/database")
 
 class DataStore extends EventEmitter {
     constructor() {
@@ -14,6 +16,7 @@ class DataStore extends EventEmitter {
     // Emit a change event whenever the race data changes
     notifyChange() {
         this.emit('notifyChange');
+        
     }
 
     // Method to get the current race data
@@ -61,7 +64,11 @@ class DataStore extends EventEmitter {
 
     addRace(race) {
         this.races.push(race);
-        this.notifyChange();
+        dataChange(race, 'addrace')
+    }
+   
+    getRaceByFlag() {
+
     }
 
     deleteRaceById(raceId) {
@@ -70,6 +77,8 @@ class DataStore extends EventEmitter {
 
         if (index !== -1) { // Check if the race was found
             this.races.splice(index, 1);
+            
+            dataChange(raceId,'deleterace')
             return true;
         } else {
             return false; // Indicate that the race was not found
@@ -127,11 +136,18 @@ class DataStore extends EventEmitter {
             return null;
         }
     }
+    onParticipantChange(participant,race, action) {
+       dataChange(participant, action)
+    }
+
 
 }
 
 const dataStore = new DataStore();
+loadRacesFromDatabase(dataStore)
 
+
+/*
 // Sample races for testing
 const racers1 = [
     new Racer(1, 'John Doe'),
@@ -169,5 +185,5 @@ dataStore.addRace(race2);
 
 console.log(race1);
 console.log(race2);
-
+*/
 module.exports = dataStore;
