@@ -3,12 +3,13 @@ const { RaceState } = require('../models/enums');
 
 const { addRace, deleteRace, addRacer, deleteRacer, editRacer } = require('./front-desk-sockets');
 const { raceModeChange, startRace, endRace } = require('./race-control-sockets');
-const {dataChange}=require("../data/database")
+const { dataChange } = require("../data/database")
 
 module.exports = function (io) {
     io.on('connection', socket => {
         console.log('User connected to socket');
-
+        // Emit current race or upcoming race data
+        emitCurrentRace(io);
 
 
         // Send environment keys
@@ -21,17 +22,18 @@ module.exports = function (io) {
 
         // Load initial data
         socket.emit('loadData', JSON.stringify(dataStore.getUpcomingRacesByFlag("Danger")));
-        const currentRace=dataStore.getInProgressRace()
-        const nextR=dataStore.getNextRace()
-        if(!currentRace && nextR && nextR.participants.length===8){
+        const currentRace = dataStore.getInProgressRace()
+        const nextR = dataStore.getNextRace()
+        if (!currentRace && nextR && nextR.participants.length === 8) {
+            console.log(dataStore.getNextRace().participants.length)
             io.emit('showMessage', dataStore.getNextRace())
         }
+
         socket.on('requestCurrentRaceData', () => {
             getRaceData(io);
         });
 
-        // Emit current race or upcoming race data
-        emitCurrentRace(io);
+
         // Disable Lap-Line-Observer on-load
         if (!dataStore.getInProgressRace()) {
             io.emit('disableInput', JSON.stringify(dataStore.getNextRace()));
@@ -109,7 +111,7 @@ module.exports = function (io) {
             const participant = race.participants.find(r => r.id === participantIDInt);
             if (participant) {
                 participant.elapseLap(); // Call elapseLap on the racer
-                dataChange(participant,'updateracer')
+                dataChange(participant, 'updateracer')
             } else {
                 throw new Error('Participant not found');
             }
@@ -133,7 +135,7 @@ module.exports = function (io) {
 
 // This is used to transmit the main generic state of the ongoing race, or buffer the incoming race
 function emitCurrentRace(io) {
-   
+
     const inProgressRace = dataStore.getInProgressRace();
     const upcomingRace = dataStore.getNextRace();
     if (inProgressRace) {

@@ -43,19 +43,25 @@ server.listen(PORT, () => {
 websocketManager(io)
 
 process.on('SIGINT', () => {
-    console.log('Ctrl+C pressed. Closing server gracefully.')
-    
-    
-    server.close((err) => {
+  console.log('Ctrl+C pressed. Closing server gracefully.')
+
+  
+  const forceCloseTimeout = setTimeout(() => {
+      console.log('Force closing ')
+      process.exit(1)
+  }, 4000)
+
+ 
+  server.close((err) => {
+      clearTimeout(forceCloseTimeout) 
       if (err) {
-        console.error('Error closing server:', err.message)
-        process.exit(1)
+          console.error('Error closing server:', err.message)
+          process.exit(1)
       } else {
-       // updateDatabase()
-        console.log('Server closed gracefully.')
-        process.exit(1)
+          console.log('Server closed gracefully.')
+          process.exit(1)
       }
-    })
-  
-  
   })
+
+  console.log('Server close initiated.')
+})
