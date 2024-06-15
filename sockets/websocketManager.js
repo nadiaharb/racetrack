@@ -22,12 +22,10 @@ module.exports = function (io) {
         // Load initial data
         socket.emit('loadData', JSON.stringify(dataStore.getUpcomingRacesByFlag("Danger")));
         const currentRace = dataStore.getInProgressRace()
-        const nextRace = dataStore.getNextRace()
-        if (nextRace) {
-            if (!currentRace && dataStore.getNextRace().participants.length === 8) {
-                console.log(dataStore.getNextRace().participants.length)
-                io.emit('showMessage', dataStore.getNextRace())
-            }
+        const nextR = dataStore.getNextRace()
+        if (!currentRace && nextR && nextR.participants.length === 8) {
+            console.log(dataStore.getNextRace().participants.length)
+            io.emit('showMessage', dataStore.getNextRace())
         }
 
         socket.on('requestCurrentRaceData', () => {

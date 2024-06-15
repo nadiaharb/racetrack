@@ -50,7 +50,10 @@ function endRace(io, updatedRace) {
     io.emit('raceModeChange', race)
     io.emit('loadRaceControl', dataStore.getNextRace())
     // This did not appear to have a function
-    if(dataStore.getNextRace().participants.length===8){
+
+        const nextR=dataStore.getNextRace()
+        
+    if(nextR && nextR.participants.length===8){
         io.emit('showMessage', dataStore.getNextRace())
     }
     io.emit('showMessage', dataStore.getNextRace())
