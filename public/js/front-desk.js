@@ -192,12 +192,14 @@ function editRacer(raceId, participantId, name, car, raceId) {
     saveEditBtn.addEventListener('click', () => {
         const newName = document.getElementById('newName').value
         const newCarNumber = document.getElementById('newCarNumber').value
+      
         const editedRacer = {
             carNumber: newCarNumber,
             name: newName,
             racerId: participantId,
             raceId: raceId
         }
+        console.log(editedRacer)
         socket.emit('editRacer', editedRacer)
         modalContainer.remove()
     })

@@ -3,6 +3,7 @@ const { RaceState } = require('../models/enums');
 
 const { addRace, deleteRace, addRacer, deleteRacer, editRacer } = require('./front-desk-sockets');
 const { raceModeChange, startRace, endRace } = require('./race-control-sockets');
+const { dataChange } = require("../data/database")
 
 module.exports = function (io) {
     io.on('connection', socket => {
@@ -110,6 +111,7 @@ module.exports = function (io) {
             const participant = race.participants.find(r => r.id === participantIDInt);
             if (participant) {
                 participant.elapseLap(); // Call elapseLap on the racer
+                dataChange(participant, 'updateracer')
             } else {
                 throw new Error('Participant not found');
             }
@@ -133,7 +135,9 @@ module.exports = function (io) {
 
 // This is used to transmit the main generic state of the ongoing race, or buffer the incoming race
 function emitCurrentRace(io) {
+
     const inProgressRace = dataStore.getInProgressRace();
+    console.log(inProgressRace)
     const upcomingRace = dataStore.getNextRace();
     if (inProgressRace) {
         io.emit('initializeData', JSON.stringify(inProgressRace));
