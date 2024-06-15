@@ -116,7 +116,8 @@ function editRacer(io, editedRacer) {
     if (!inProgressRace) {
         io.emit('racerEdited', dataStore.getNextRace())
     }
-    //nio.emit('loadData', JSON.stringify(upcomingRaces))
+    //DONT COMMENT OUT THIS LINE
+    io.emit('loadData', JSON.stringify(upcomingRaces))
 
 }
 

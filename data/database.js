@@ -304,7 +304,7 @@ function loadRacesFromDatabase(dataStore) {
                             return
                         }
                         if (racerRow) {
-                            let racer = new Racer(racerRow.car_number, racerRow.name)
+                            let racer = new Racer(racerRow.car_number, racerRow.name,racerRow.lap_count, racerRow.best_lap_time);
                             race.addParticipant(racer)
                         }
                     })

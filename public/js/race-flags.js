@@ -1,4 +1,18 @@
 const socket = io()
+//DONT DELETE
+document.addEventListener('DOMContentLoaded', () => {
+   socket.emit('requestCurrentRaceData')
+})
+
+socket.on('getRaceData', race => {
+   
+    if (race) {
+        const data = JSON.parse(race)
+        updateFlagDisplay(data.flagState)
+    } else {
+        updateFlagDisplay("Danger")
+    }
+})
 
 // Update flag display
 socket.on('updateData', race => {
@@ -8,15 +22,8 @@ socket.on('updateData', race => {
     }
 })
 
-// Handle the current race data received from the server
-socket.on('initializeData', race => {
-    if (race) {
-        const data = JSON.parse(race)
-        updateFlagDisplay(data.flagState)
-    } else {
-        updateFlagDisplay("Danger")
-    }
-})
+
+
 
 function updateFlagDisplay(mode) {
     let color1
