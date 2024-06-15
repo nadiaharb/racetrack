@@ -8,10 +8,7 @@ module.exports = function (io) {
     io.on('connection', socket => {
         console.log('User connected to socket');
 
-        // Handle disconnect event
-        socket.on('disconnect', () => {
-            console.log('User disconnected');
-        });
+
 
         // Send environment keys
         const keys = {
@@ -30,7 +27,10 @@ module.exports = function (io) {
 
         // Emit current race or upcoming race data
         emitCurrentRace(io);
-        io.emit('disableInput', JSON.stringify(dataStore.getNextRace()));
+        // Disable Lap-Line-Observer on-load
+        if (!dataStore.getInProgressRace()) {
+            io.emit('disableInput', JSON.stringify(dataStore.getNextRace()));
+        }
 
         // Initialize Race Control
         handleRaceControl(socket);
@@ -58,26 +58,16 @@ module.exports = function (io) {
             startRace(io, mode);
         });
 
-        /*socket.on('raceFinished', () => {
-            // Make sure current race duration is set to 0.
-            const inProgressRace = dataStore.getInProgressRace();
-            inProgressRace.duration = 0; // Set the duration to 0 so all events stop
-            inProgressRace.flagState = 'Finish' // correct flagState
-            io.emit('disableInput'); // Disable buttons for lap-line-observer
-            //io.emit('raceFinished'); // Notify all clients
-        });*/
-        /*socket.on('flagFinish', () => {
-            //here the timer should stop
-        })*/
-
         socket.on('endRace', (updatedRace) => {
             // Refresh all views with upcoming race,replacing old data
-            io.emit('updateData', JSON.stringify(dataStore.getNextRace()))
-            endRace(io, updatedRace); // Effectively deletes race
-            io.emit('disableInput', updatedRace); // lap-line-observer
-            if (!dataStore.getUpcomingRaces()) {
+            const nextRace = dataStore.getNextRace()
+            if (nextRace) {
+                io.emit('updateData', JSON.stringify(dataStore.getNextRace()))
+            } else {
                 io.emit('displayNone'); // Notify lap-line-observer and leaderboard
             }
+            endRace(io, updatedRace); // Effectively deletes race
+            io.emit('disableInput', updatedRace); // lap-line-observer
         });
 
         // Front Desk
@@ -114,11 +104,19 @@ module.exports = function (io) {
             const participant = race.participants.find(r => r.id === participantIDInt);
             if (participant) {
                 participant.elapseLap(); // Call elapseLap on the racer
-                io.emit('updateObserver', JSON.stringify(race));
             } else {
                 throw new Error('Participant not found');
             }
         });
+
+
+        // Exit events
+
+        // Handle disconnect event
+        socket.on('disconnect', () => {
+            console.log('User disconnected');
+        });
+
     });
     // Model data change detection (extends EventEmitter)
     dataStore.on('notifyChange', () => {

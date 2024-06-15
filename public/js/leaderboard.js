@@ -179,7 +179,38 @@ socket.on('raceModeChange', race => {
     updateCheckerboard(race.flagState);
 });
 
+// Load and render race data
+socket.on('initializeData', function (incomingRace) {
+    try {
+        const race = JSON.parse(incomingRace);
+        if (race) {
+            renderLeaderBoard(race);
+        }
+    } catch (error) {
+        console.error('Error parsing or handling data:', error);
+    }
+});
+
+socket.on('updateData', function (incomingRace) {
+    try {
+        const race = JSON.parse(incomingRace);
+        if (race) {
+            renderLeaderBoard(race);
+        }
+    } catch (error) {
+        console.error('Error parsing or handling data:', error);
+    }
+});
+
+// Handle case when no races are available
+socket.on('displayNone', function () {
+    const leaderboard = document.getElementById('lb-container');
+    leaderboard.innerHTML = '<p>No races available</p>';
+});
+
+
 // Update the dynamic elements of the leaderboard
+/*
 function updateLeaderBoard(race) {
     const raceStateElem = document.querySelector('.race-state');
     raceStateElem.querySelector('p:nth-child(2)').textContent = `Flag State: ${race.flagState}`;
@@ -201,34 +232,4 @@ function updateLeaderBoard(race) {
             lapTimeElem.textContent = `Current Lap: ${formatTimeWithMilliseconds(participant.currentLapTime)}`;
         }
     });
-}
-
-// Load and render race data
-socket.on('initializeData', function (incomingRace) {
-    try {
-        const race = JSON.parse(incomingRace);
-        if (race) {
-            renderLeaderBoard(race);
-        }
-    } catch (error) {
-        console.error('Error parsing or handling data:', error);
-    }
-});
-
-socket.on('updateData', function (incomingRace) {
-    try {
-        const race = JSON.parse(incomingRace);
-        if (race) {
-            updateLeaderBoard(race);
-        }
-    } catch (error) {
-        console.error('Error parsing or handling data:', error);
-    }
-});
-
-
-// Handle case when no races are available
-socket.on('displayNone', function () {
-    const leaderboard = document.getElementById('lb-container');
-    leaderboard.innerHTML = '<p>No races available</p>';
-});
+}*/ // Shelved until this might need to be reintegrated due to potential performance issues

@@ -11,17 +11,14 @@ function deleteRacer(io, deleteRacer) {
     const racer = race.getRacerById(parseInt(deleteRacer.racerId))
     race.deleteParticipant(racer.id)
     const updatedRaces = dataStore.getUpcomingRaces()
-    const inProgressRace = dataStore.getInProgressRace()
 
-    if (!inProgressRace) {
+    if (!dataStore.getInProgressRace()) {
         io.emit('racerDeleted', dataStore.getNextRace())
     }
 
     io.emit('loadData', JSON.stringify(updatedRaces))
 
 }
-
-
 
 function addRace(socket, io, newRace) {
     const race = new Race(newRace.id)
@@ -31,12 +28,9 @@ function addRace(socket, io, newRace) {
     const upcomingRaces = dataStore.getUpcomingRaces()
     io.emit('loadData', JSON.stringify(upcomingRaces))
     socket.emit('addRace', newRace)
-    const inProgressRace = dataStore.getInProgressRace()
-    if (!inProgressRace) {
+    if (!dataStore.getInProgressRace()) {
         socket.emit('loadRaceControl', dataStore.getNextRace());
     }
-    // Logs basically
-    io.emit('racesState', dataStore.races)
 
 }
 
@@ -88,10 +82,6 @@ function addRacer(io, socket, racerData) {
         io.emit('racerAdded', dataStore.getNextRace())
     }
 
-    // socket.emit('racerAdded', racer)
-    // Emit state too
-    socket.emit('raceState', currentRace.participants)
-
 }
 
 function editRacer(io, editedRacer) {
@@ -110,14 +100,15 @@ function editRacer(io, editedRacer) {
         return
     }
     racer.name = editedRacer.name
-    racer.carNumber = editedRacer.carNumber
+    // Replaced with function call just incase.
+    racer.changeCarNumber(editedRacer.carNumber)
     const upcomingRaces = dataStore.getUpcomingRaces()
     const inProgressRace = dataStore.getInProgressRace()
 
     if (!inProgressRace) {
         io.emit('racerEdited', dataStore.getNextRace())
     }
-    io.emit('loadData', JSON.stringify(upcomingRaces))
+    //nio.emit('loadData', JSON.stringify(upcomingRaces))
 
 }
 

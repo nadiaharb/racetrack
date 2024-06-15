@@ -114,6 +114,9 @@ function updateRaceTime(remainingTime) {
 
 function displayNone() {
     const tracker = document.getElementById('tracker-container');
+    const mainContainer = document.getElementById('tracker-master-container');
+    tracker.innerHTML = ''; // Reset just in case
+    mainContainer.innerHTML = ''; // Reset the main container
     tracker.innerHTML = '<p>No races available</p>';
     tracker.style.display = 'flex';
     tracker.style.justifyContent = 'center';
@@ -149,6 +152,10 @@ socket.on('initializeData', function (incomingRace) {
 socket.on('updateData', function (incomingRace) {
     try {
         const race = JSON.parse(incomingRace)
+        // Reset Lap Tracking states if race is upcoming
+        if (race && race.raceState === "Upcoming") {
+            renderObserverView(race)
+        }
         if (race) {
             updateObserverView(race)
         }
@@ -156,35 +163,10 @@ socket.on('updateData', function (incomingRace) {
         console.error('Error parsing or handling data:', error)
     }
 })
-/*
-socket.on('lapTimeUpdate', function (incomingParticipants) {
-    try {
-        const participants = JSON.parse(incomingParticipants);
-        if (participants) {
-            participants.forEach(p => updateParticipantLap(p));
 
-        }
-    } catch (error) {
-        console.error('Error parsing or handling data:', error);
-    }
-});
-
-socket.on('raceTimeUpdate', function (incomingRaceDuration) {
-    try {
-        const raceDuration = JSON.parse(incomingRaceDuration);
-        if (raceDuration) {
-            updateRaceTime(raceDuration)
-
-        }
-    } catch (error) {
-        console.error('Error parsing or handling data:', error);
-    }
-});
-*/
 socket.on("startedRace", function () {
     enableButtons();
 })
-
 
 // Handle case when no races are available
 socket.on('displayNone', function () {
@@ -221,6 +203,7 @@ function showRaceEndMessage() {
 
     // Close button
     const closeButton = document.createElement('button');
+    closeButton.style.fontFamily = 'Race Sport';
     closeButton.textContent = 'Close';
     closeButton.style.padding = '10px 20px';
     closeButton.style.backgroundColor = '#007bff';

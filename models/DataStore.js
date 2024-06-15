@@ -72,6 +72,7 @@ class DataStore extends EventEmitter {
 
     addRace(race) {
         this.races.push(race);
+        this.notifyChange();
     }
     getRaceByFlag() {
 

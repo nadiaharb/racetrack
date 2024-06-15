@@ -54,8 +54,8 @@ module.exports = function (req, res, io) {
 
         fs.readFile(filePath, (error, content) => {
             if (error) {
-                if (error.code == 'ENOENT') {
-                    fs.readFile('./views/404.html', (error, content) => {
+                if (error.code == 'ENOENT') { // Changed to reroute to index since we don't have a 404.html
+                    fs.readFile('./views/index.html', (error, content) => {
                         res.writeHead(404, { 'Content-Type': 'text/html' })
                         res.end(content, 'utf-8')
                     })

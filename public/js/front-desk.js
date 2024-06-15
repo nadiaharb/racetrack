@@ -213,6 +213,34 @@ function editRacer(raceId, participantId, name, car, raceId) {
         modalContainer.remove()
     })
 }
+// Delete racer
+function deleteRacer(racerId, raceId) {
+    const deleteRacer = {
+        racerId: racerId,
+        raceId: raceId
+    }
+    socket.emit('deleteRacer', deleteRacer)
+}
+
+// Add Race FOrm
+addRaceForm.addEventListener('submit', function (event) {
+
+    event.preventDefault() // Prevent the default form submission behavior
+
+    // Get form data
+    const formData = new FormData(addRaceForm)
+    const flagState = formData.get('flagState')
+    const raceState = formData.get('raceState')
+
+    const newRace = {
+        flagState: flagState,
+        raceState: raceState
+    }
+    //console.log(newRace)
+    socket.emit('addRace', newRace)
+    //sendData('/addRace', newRace)
+
+})
 
 // Load and render race data
 socket.on('loadData', function (loadedData) {
@@ -233,42 +261,9 @@ socket.on('loadData', function (loadedData) {
     }
 })
 
-
-
-//delete racer
-function deleteRacer(racerId, raceId) {
-    const deleteRacer = {
-        racerId: racerId,
-        raceId: raceId
-    }
-
-    socket.emit('deleteRacer', deleteRacer)
-}
-
-///aDD NEW RACE 
-addRaceForm.addEventListener('submit', function (event) {
-
-    event.preventDefault() // Prevent the default form submission behavior
-
-    // Get form data
-    const formData = new FormData(addRaceForm)
-    const flagState = formData.get('flagState')
-    const raceState = formData.get('raceState')
-
-    const newRace = {
-        flagState: flagState,
-        raceState: raceState
-    }
-    //console.log(newRace)
-    socket.emit('addRace', newRace)
-    //sendData('/addRace', newRace)
-
-})
-
 socket.on('raceAdded', function (response) {
     console.log('Race successfully added:', response)
 })
-
 
 //Error
 socket.on('error', (data) => {
