@@ -45,11 +45,43 @@ server.listen(PORT, () => {
 
 websocketManager(io)
 
-process.on('SIGINT', () => {
-    console.log('Ctrl+C pressed. Closing server gracefully.');
-    updateDatabase()
+async function handleExit(signal) {
+    console.log(`${signal} received. Closing server gracefully.`);
+
+    try {
+        updateDatabase();
+    } catch (err) {
+        console.error('Error updating database:', err.message);
+    }
+
     const forceCloseTimeout = setTimeout(() => {
         console.log('Force closing');
         process.exit(1);
     }, 2000);
+
+    server.close((err) => {
+        clearTimeout(forceCloseTimeout);
+        if (err) {
+            console.error('Error closing server:', err.message);
+            process.exit(1);
+        } else {
+            console.log('Server closed gracefully.');
+            process.exit(0);
+        }
+    });
+}
+
+process.on('SIGINT', handleExit);
+process.on('SIGTERM', handleExit);
+process.on('SIGUSR1', handleExit);
+process.on('SIGUSR2', handleExit);
+
+process.on('uncaughtException', (err) => {
+    console.error('Uncaught Exception:', err.message);
+    handleExit('uncaughtException');
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+    handleExit('unhandledRejection');
 });
