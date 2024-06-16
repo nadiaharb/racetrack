@@ -19,7 +19,22 @@ let db = new sqlite3.Database('./data/raceData.db', (err) => {
     // loadRacesFromDatabase()
 });
 
-// Create "racers" table
+// Create "races" table
+db.run(`CREATE TABLE IF NOT EXISTS races (
+    race_id INTEGER PRIMARY KEY,
+    duration REAL NOT NULL,
+    flag_state TEXT NOT NULL,
+    race_state TEXT NOT NULL,
+    participants TEXT -- Store participant racer_ids as comma-separated values
+)`, (err) => {
+    if (err) {
+        console.error('Error creating races table:', err.message);
+    } else {
+        console.log('Races table created');
+    }
+});
+
+// Create "racers" table with a foreign key that has ON DELETE CASCADE
 db.run(`CREATE TABLE IF NOT EXISTS racers (
     racer_id INTEGER PRIMARY KEY,
     car_number INTEGER NOT NULL,
@@ -28,7 +43,7 @@ db.run(`CREATE TABLE IF NOT EXISTS racers (
     best_lap_time REAL,
     lap_count INTEGER DEFAULT 0,
     race_id INTEGER,
-    FOREIGN KEY (race_id) REFERENCES races(race_id)
+    FOREIGN KEY (race_id) REFERENCES races(race_id) ON DELETE CASCADE
 )`, (err) => {
     if (err) {
         console.error('Error creating racers table:', err.message);
@@ -36,27 +51,6 @@ db.run(`CREATE TABLE IF NOT EXISTS racers (
         console.log('Racers table created');
     }
 });
-
-
-// Create "races" table with a composite primary key (race_id + car)
-db.run(`CREATE TABLE IF NOT EXISTS races (
-    race_id INTEGER PRIMARY KEY,
-    duration REAL NOT NULL,
-    flag_state TEXT NOT NULL,
-    race_state TEXT NOT NULL,
-    participants TEXT, -- Store participant racer_ids as comma-separated values
-    FOREIGN KEY (participants) REFERENCES racers(racer_id)
-)`, (err) => {
-    if (err) {
-        console.error(err.message)
-    }
-    if (!err && consoleFeedback) {
-        console.log('Database table created')
-    }
-    if (!err && samples) {
-        // sampleRaces()
-    }
-})
 
 
 
@@ -158,7 +152,7 @@ function deleteRace(raceId) {
 
 function addRacerToDb(racer, raceId) {
     // Fix raceID
-    const { id, carNumber, name, bestLapTime, lapTimer, lapCount } = racer;
+    const { id, carNumber, name, bestLapTime, currentLapTime, lapCount } = racer;
     db.run(
         `INSERT INTO racers (racer_id, car_number, name, best_lap_time, current_lap_time, lap_count, race_id)
          VALUES (?, ?, ?, ?, ?, ?, ?)`,
@@ -447,7 +441,7 @@ function updateDatabase(callback) {
     }
 
     races.forEach((race) => {
-        dataChange(race, "updaterace", (err) => {
+        raceChange(race, "updaterace", (err) => {
             if (err) {
                 return callback(err)
             }
@@ -459,7 +453,7 @@ function updateDatabase(callback) {
     })
 
     racers.forEach((racer) => {
-        dataChange(racer, "updateracer", (err) => {
+        racerChange(racer, "updateracer", (err) => {
             if (err) {
                 return callback(err)
             }

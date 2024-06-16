@@ -7,7 +7,7 @@ const server = http.createServer(routes)
 //const { createServer }= require('http')
 const { Server } = require('socket.io')
 const websocketManager = require('./sockets/websocketManager')
-const {updateDatabase}=require("./data/database")
+const { updateDatabase } = require("./data/database")
 //const server=createServer(app)
 
 // SQLite3 database
@@ -30,7 +30,7 @@ instrument(io, {
         type: "basic",
         username: "admin",
         password: "$2a$12$QNYM2ZQj6tBZYmwhVPPjTOzn0APnyEW3/B7O6r9aKVb1CxAA4Bj/q"    // "race" encrypted with bcrypt
-      },
+    },
     mode: "development",    // more development features, less emphasis on efficiency and speed
 })
 
@@ -43,25 +43,25 @@ server.listen(PORT, () => {
 websocketManager(io)
 
 process.on('SIGINT', () => {
-  console.log('Ctrl+C pressed. Closing server gracefully.')
+    console.log('Ctrl+C pressed. Closing server gracefully.')
+    updateDatabase()
 
-  
-  const forceCloseTimeout = setTimeout(() => {
-      console.log('Force closing ')
-      process.exit(1)
-  }, 4000)
+    const forceCloseTimeout = setTimeout(() => {
+        console.log('Force closing ')
+        process.exit(1)
+    }, 4000)
 
- 
-  server.close((err) => {
-      clearTimeout(forceCloseTimeout) 
-      if (err) {
-          console.error('Error closing server:', err.message)
-          process.exit(1)
-      } else {
-          console.log('Server closed gracefully.')
-          process.exit(1)
-      }
-  })
 
-  console.log('Server close initiated.')
+    server.close((err) => {
+        clearTimeout(forceCloseTimeout)
+        if (err) {
+            console.error('Error closing server:', err.message)
+            process.exit(1)
+        } else {
+            console.log('Server closed gracefully.')
+            process.exit(1)
+        }
+    })
+
+    console.log('Server close initiated.')
 })
