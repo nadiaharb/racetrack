@@ -26,6 +26,11 @@ class DataStore extends EventEmitter {
             upcomingRace: this.getNextRace()
         };
     }
+    //get all racers
+    getRacers() {
+        return this.racers;
+    }
+
 
     // Race Methods
     // Get all upcoming races sorted by race id

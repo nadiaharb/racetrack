@@ -145,7 +145,6 @@ module.exports = function (io) {
 function emitCurrentRace(io) {
 
     const inProgressRace = dataStore.getInProgressRace();
-    console.log(inProgressRace)
     const upcomingRace = dataStore.getNextRace();
     if (inProgressRace) {
         io.emit('initializeData', JSON.stringify(inProgressRace));

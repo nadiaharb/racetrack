@@ -433,4 +433,43 @@ function addRacetoDB(changedRace) {
     })
 }
 */
+
+
+/*
+function updateDatabase( callback) {
+    console.log(dataStore)
+    let races = dataStore.getRaces()
+    let racers = dataStore.getRacers()
+    let pendingUpdates = races.length + racers.length
+  
+    if (pendingUpdates === 0) {
+      return callback(null)
+    }
+  
+    races.forEach((race) => {
+        dataChange(race,"updaterace", (err) => {
+        if (err) {
+          return callback(err)
+        }
+        pendingUpdates--
+        if (pendingUpdates === 0) {
+          callback(null)
+        }
+      })
+    })
+  
+    racers.forEach((racer) => {
+      dataChange(racer,"updateracer", (err) => {
+        if (err) {
+          return callback(err)
+        }
+        pendingUpdates--
+        if (pendingUpdates === 0) {
+          callback(null)
+        }
+      })
+    })
+  }
+*/
+
 module.exports = { loadRacesFromDatabase, updateRaceParticipants, racerChange, raceChange }
