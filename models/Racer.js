@@ -38,7 +38,7 @@ class Racer {
         if (this.bestLapTime === 0 || this.currentLapTime < this.bestLapTime) {
             if (this.currentLapTime !== 0) {
                 this.bestLapTime = this.currentLapTime; // Update best lap time
-                this.emitChange();
+                //this.emitChange();
             }
         }
         this.currentLapTime = 0; // Reset current lap time
@@ -53,8 +53,9 @@ class Racer {
         this.currentLapTime = 0;
         this.lapTimer = setInterval(() => {
             this.currentLapTime += 100; // Increment timer every second
+            this.emitChange();
         }, 100);
-        this.emitChange();
+
     }
     resumeLapTimer() {
         if (this.lapTimer) {
@@ -63,8 +64,8 @@ class Racer {
         //this.currentLapTime = 0;
         this.lapTimer = setInterval(() => {
             this.currentLapTime += 100; // Increment timer every second
+            this.emitChange();
         }, 100);
-        this.emitChange();
     }
     // Custom serialization method to exclude lapTimer
     // Gotta make sure we don't JSONify the timer itself

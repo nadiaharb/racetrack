@@ -1,7 +1,7 @@
 const Racer = require('../models/Racer');
 const Race = require('../models/Race');
 const sqlite3 = require('sqlite3').verbose();
-//const dataStore = require('../models/DataStore');
+const dataStore = require('../models/DataStore');
 
 
 // Switches
@@ -212,6 +212,7 @@ function addRacerToRace(raceId, racerId) {
 
 function updateRacerInDb(racer) {
     const { id, carNumber, name, bestLapTime, currentLapTime, lapCount } = racer;
+    console.log(`Racer current lap update: ${racer.currentLapTime}`)
 
     db.serialize(() => {
         db.run(
@@ -238,7 +239,7 @@ function updateRacerInDb(racer) {
 
 function deleteRacerFromDb(racer) {
     const { id } = racer;
-    console.log(id);
+    //console.log(id);
     db.run(
         `DELETE FROM racers WHERE racer_id = ?`,
         [id],
@@ -425,41 +426,43 @@ function addRacetoDB(changedRace) {
 */
 
 
-/*
-function updateDatabase(callback) {
-    console.log(dataStore)
-    let races = dataStore.getRaces()
-    let racers = dataStore.getRacers()
-    let pendingUpdates = races.length + racers.length
 
-    if (pendingUpdates === 0) {
-        return callback(null)
+function updateDatabase(callback) {
+    if (dataStore) {
+        let races = dataStore.getRaces()
+        let racers = dataStore.getRacers()
+        let pendingUpdates = races.length + racers.length
+
+        if (pendingUpdates === 0) {
+            return callback(null)
+        }
+
+        races.forEach((race) => {
+            raceChange(race, "updaterace", (err) => {
+                if (err) {
+                    return callback(err)
+                }
+                pendingUpdates--
+                if (pendingUpdates === 0) {
+                    callback(null)
+                }
+            })
+        })
+
+        racers.forEach((racer) => {
+            racerChange(racer, "updateracer", (err) => {
+                if (err) {
+                    return callback(err)
+                }
+                pendingUpdates--
+                if (pendingUpdates === 0) {
+                    callback(null)
+                }
+            })
+        })
     }
 
-    races.forEach((race) => {
-        raceChange(race, "updaterace", (err) => {
-            if (err) {
-                return callback(err)
-            }
-            pendingUpdates--
-            if (pendingUpdates === 0) {
-                callback(null)
-            }
-        })
-    })
-
-    racers.forEach((racer) => {
-        racerChange(racer, "updateracer", (err) => {
-            if (err) {
-                return callback(err)
-            }
-            pendingUpdates--
-            if (pendingUpdates === 0) {
-                callback(null)
-            }
-        })
-    })
-}*/
+}
 
 
-module.exports = { loadRacesFromDatabase, updateRaceParticipants, racerChange, raceChange }
+module.exports = { loadRacesFromDatabase, updateRaceParticipants, racerChange, raceChange, updateDatabase }

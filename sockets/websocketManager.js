@@ -25,12 +25,11 @@ module.exports = function (io) {
         const currentRace = dataStore.getInProgressRace()
         const nextR = dataStore.getNextRace()
         if (currentRace) {
-            console.log(currentRace)
             currentRace.resumeRaceTimer();
             currentRace.participants.forEach(participant => participant.resumeLapTimer()); // Call elapseLap on the racer)
         }
         if (!currentRace && nextR && nextR.participants.length === 8) {
-            console.log(dataStore.getNextRace().participants.length)
+            //console.log(dataStore.getNextRace().participants.length)
             io.emit('showMessage', dataStore.getNextRace())
         }
 
@@ -117,7 +116,7 @@ module.exports = function (io) {
             const participant = race.participants.find(r => r.id === participantIDInt);
             if (participant) {
                 participant.elapseLap(); // Call elapseLap on the racer
-                racerChange(participant, 'updateracer')
+                //racerChange(participant, 'updateracer')
                 //updateRaceParticipants(participantIDInt, 'updateracer')
             } else {
                 throw new Error('Participant not found');
@@ -136,7 +135,12 @@ module.exports = function (io) {
     // Model data change detection (extends EventEmitter)
     dataStore.on('notifyChange', () => {
         io.emit('updateData', JSON.stringify(dataStore.getInProgressRace()));
-        raceChange(dataStore.getInProgressRace(), 'updaterace')
+        let inProgress = dataStore.getInProgressRace()
+        if (inProgress) {
+            //raceChange(inProgress, 'updaterace')
+            //raceChange(inProgress.participants.forEach(p => p), 'updateracer')
+        }
+
         //racerChange(dataStore.getInProgressRace(), 'updateracer')
     });
 
@@ -146,7 +150,7 @@ module.exports = function (io) {
 function emitCurrentRace(io) {
 
     const inProgressRace = dataStore.getInProgressRace();
-    console.log(inProgressRace)
+    //console.log(inProgressRace)
     const upcomingRace = dataStore.getNextRace();
     if (inProgressRace) {
         io.emit('initializeData', JSON.stringify(inProgressRace));
