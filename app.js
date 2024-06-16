@@ -41,10 +41,10 @@ server.listen(PORT, () => {
 })
 
 websocketManager(io)
-
+/*
 process.on('SIGINT', () => {
     console.log('Ctrl+C pressed. Closing server gracefully.')
-    updateDatabase()
+    //updateDatabase()
 
     const forceCloseTimeout = setTimeout(() => {
         console.log('Force closing ')
@@ -64,4 +64,4 @@ process.on('SIGINT', () => {
     })
 
     console.log('Server close initiated.')
-})
+})*/

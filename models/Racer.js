@@ -38,6 +38,7 @@ class Racer {
         if (this.bestLapTime === 0 || this.currentLapTime < this.bestLapTime) {
             if (this.currentLapTime !== 0) {
                 this.bestLapTime = this.currentLapTime; // Update best lap time
+                this.emitChange();
             }
         }
         this.currentLapTime = 0; // Reset current lap time
