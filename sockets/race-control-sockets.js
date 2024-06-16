@@ -7,7 +7,7 @@ function raceModeChange(io, updatedRace) {
     const race = dataStore.getRaceById(updatedRace.raceId)
     race.flagState = updatedRace.flagState
 
-    raceChange(race, 'updaterace')
+    //raceChange(race, 'updaterace')
     if (race.flagState === "Finish") {
         io.emit("flagFinish")
     }

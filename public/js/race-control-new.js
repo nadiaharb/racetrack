@@ -115,9 +115,10 @@ socket.on('raceStarted', (race) => {
     //renderModeBtns(race)
 })
 
-socket.on('updateData', (race) => {
-    renderRace(JSON.parse(race))
+socket.on('raceModeChange', (race) => {
+    renderRace(race)
 })
+
 function renderRace(race) {
 
     if (race === null) {
