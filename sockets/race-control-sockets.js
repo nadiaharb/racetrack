@@ -1,15 +1,15 @@
 const dataStore = require('../models/DataStore')
 const Race = require('../models/Race')
-const {dataChange}=require('../data/database')
+const { raceChange } = require('../data/database')
 
 function raceModeChange(io, updatedRace) {
 
     const race = dataStore.getRaceById(updatedRace.raceId)
     race.flagState = updatedRace.flagState
-     
-     dataChange(race, 'updaterace')
-    if(race.flagState==="Finish"){
-         io.emit("flagFinish")
+
+    raceChange(race, 'updaterace')
+    if (race.flagState === "Finish") {
+        io.emit("flagFinish")
     }
     //io.emit('raceModeChanged', race)
     io.emit('raceModeChange', race)
@@ -29,7 +29,7 @@ function startRace(io, updatedRace) {
 
     race.flagState = updatedRace.flagState
     race.raceState = "In Progress"
-    dataChange(race, 'updaterace')
+    raceChange(race, 'updaterace')
     //io.emit("raceStarted", dataStore.getInProgressRace())
     //io.emit('loadRaceControl', dataStore.getInProgressRace())
     if (dataStore.getUpcomingRacesByFlag("Danger") === null) {
@@ -42,18 +42,19 @@ function startRace(io, updatedRace) {
 }
 
 function endRace(io, updatedRace) {
+    // Can probably change this to JSON.parse
     const race = dataStore.getRaceById(parseInt(updatedRace.raceId))
 
     race.raceState = 'Finished'
     race.flagState = 'Danger'
-    dataChange(race, 'updaterace')
+    raceChange(race, 'deleterace')
     io.emit('raceModeChange', race)
     io.emit('loadRaceControl', dataStore.getNextRace())
     // This did not appear to have a function
 
-        const nextR=dataStore.getNextRace()
-        
-    if(nextR && nextR.participants.length===8){
+    const nextR = dataStore.getNextRace()
+
+    if (nextR && nextR.participants.length === 8) {
         io.emit('showMessage', dataStore.getNextRace())
     }
     io.emit('showMessage', dataStore.getNextRace())

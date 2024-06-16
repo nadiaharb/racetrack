@@ -3,7 +3,7 @@ const { RaceState } = require('../models/enums');
 
 const { addRace, deleteRace, addRacer, deleteRacer, editRacer } = require('./front-desk-sockets');
 const { raceModeChange, startRace, endRace } = require('./race-control-sockets');
-const { dataChange } = require("../data/database")
+const { raceChange, racerChange, updateRaceParticipants } = require("../data/database")
 
 module.exports = function (io) {
     io.on('connection', socket => {
@@ -24,6 +24,11 @@ module.exports = function (io) {
         socket.emit('loadData', JSON.stringify(dataStore.getUpcomingRacesByFlag("Danger")));
         const currentRace = dataStore.getInProgressRace()
         const nextR = dataStore.getNextRace()
+        if (currentRace) {
+            console.log(currentRace)
+            currentRace.resumeRaceTimer();
+            currentRace.participants.forEach(participant => participant.resumeLapTimer()); // Call elapseLap on the racer)
+        }
         if (!currentRace && nextR && nextR.participants.length === 8) {
             console.log(dataStore.getNextRace().participants.length)
             io.emit('showMessage', dataStore.getNextRace())
@@ -111,7 +116,8 @@ module.exports = function (io) {
             const participant = race.participants.find(r => r.id === participantIDInt);
             if (participant) {
                 participant.elapseLap(); // Call elapseLap on the racer
-                dataChange(participant, 'updateracer')
+                racerChange(participant, 'updateracer')
+                //updateRaceParticipants(participantIDInt, 'updateracer')
             } else {
                 throw new Error('Participant not found');
             }
@@ -129,6 +135,8 @@ module.exports = function (io) {
     // Model data change detection (extends EventEmitter)
     dataStore.on('notifyChange', () => {
         io.emit('updateData', JSON.stringify(dataStore.getInProgressRace()));
+        raceChange(dataStore.getInProgressRace(), 'updaterace')
+        //racerChange(dataStore.getInProgressRace(), 'updateracer')
     });
 
 };

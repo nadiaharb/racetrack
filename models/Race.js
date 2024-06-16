@@ -30,7 +30,9 @@ class Race {
         this.raceTimer = null;
     }
     // Race Methods
-
+    recoverRaceTimer(raceTimer) {
+        this.raceTimer = raceTimer
+    }
     addParticipant(participant) {
 
         if (this.participants.length >= 8) {
@@ -149,6 +151,19 @@ class Race {
                 this.setFlagState(FlagState.FINISH);
             }
         }, 100);
+    }
+    resumeRaceTimer() {
+        if (this.duration > 0 && this.raceState === "In Progress") {
+            clearInterval(this.raceTimer);
+            this.raceTimer = setInterval(() => {
+                this.duration -= 100; // Decrement race duration
+                this.emitChange();
+                if (this.duration <= 0) {
+                    clearInterval(this.raceTimer);
+                    this.setFlagState(FlagState.FINISH);
+                }
+            }, 100);
+        }
     }
 
     // Custom serialization method to exclude lapTimer

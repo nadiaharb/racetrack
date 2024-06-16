@@ -1,17 +1,20 @@
 let dataStore = null;
 
 class Racer {
-    constructor(carNumber, name, lapCount = 0, bestLapTime = 0) {
+    constructor(carNumber, name, lapCount = 0, bestLapTime = 0, currentLapTime = 0) {
         this.id = this.generateRandomId();
         this.carNumber = carNumber;
         this.name = name;
         this.bestLapTime = bestLapTime;
-        this.currentLapTime = 0; // Initialize current lap time
+        this.currentLapTime = currentLapTime; // Initialize current lap time
         this.lapCount = lapCount;
         this.lapTimer = null; // Initialize lap timer
         this.race = null; // Reference to the parent race
     }
 
+    recoverLapTimer(lapTimer) {
+        this.lapTimer = lapTimer;
+    }
     emitChange() {
         dataStore.notifyChange();
     }
@@ -52,7 +55,16 @@ class Racer {
         }, 100);
         this.emitChange();
     }
-
+    resumeLapTimer() {
+        if (this.lapTimer) {
+            clearInterval(this.lapTimer);
+        }
+        //this.currentLapTime = 0;
+        this.lapTimer = setInterval(() => {
+            this.currentLapTime += 100; // Increment timer every second
+        }, 100);
+        this.emitChange();
+    }
     // Custom serialization method to exclude lapTimer
     // Gotta make sure we don't JSONify the timer itself
     toJSON() {

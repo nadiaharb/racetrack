@@ -13,7 +13,8 @@ Cars can still cross the lap line when the race is in finish mode. Not sure what
 
 window.addEventListener('DOMContentLoaded', function () {
     let observerKey
-    document.body.classList.add('blur-content')
+    // It got bugged out for me, so I removed the blur temporarily.
+    //document.body.classList.add('blur-content')
     socket.on('getKey', loadedData => {
         const data = JSON.parse(loadedData)
 
