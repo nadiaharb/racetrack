@@ -1,8 +1,7 @@
 const Racer = require('../models/Racer');
 const Race = require('../models/Race');
 const sqlite3 = require('sqlite3').verbose();
-const dataStore = require('../models/DataStore');
-
+let dataStore = null
 
 // Switches
 let samples = false;  // Add sample races to db
@@ -80,7 +79,7 @@ function racerChange(changedRacer, action) {
         switch (action) {
             case 'addracer':
                 console.log(`Adding racer: ${changedRacer.id}`)
-                addRacerToDb(changedRacer, changedRacer.race.id);
+                createUpdateRacerInDb(changedRacer, changedRacer.race.id);
                 break;
             case 'deleteracer':
                 console.log(`Deleting racer: ${changedRacer.id}`)
@@ -88,7 +87,7 @@ function racerChange(changedRacer, action) {
                 break;
             case 'updateracer':
                 console.log(`Updating racer: ${changedRacer.id}`)
-                updateRacerInDb(changedRacer, changedRacer.race.id);
+                createUpdateRacerInDb(changedRacer, changedRacer.race.id);
                 break;
         }
     }
@@ -105,6 +104,7 @@ function createUpdateRaceInDb(race) {
         }
 
         if (!row) {
+            console.log(`Race doesn't exist in db: ${race.id}`)
             // If race does not exist in the database, insert it
             db.run(
                 `INSERT INTO races (race_id, duration, flag_state, race_state)
@@ -150,23 +150,6 @@ function deleteRace(raceId) {
     });
 }
 
-function addRacerToDb(racer, raceId) {
-    // Fix raceID
-    const { id, carNumber, name, bestLapTime, currentLapTime, lapCount } = racer;
-    db.run(
-        `INSERT INTO racers (racer_id, car_number, name, best_lap_time, current_lap_time, lap_count, race_id)
-         VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [id, carNumber, name, bestLapTime, currentLapTime, lapCount, raceId],
-        function (err) {
-            if (err) {
-                console.error('Error inserting racer:', err.message);
-            } else {
-                console.log(`Racer added: Car ${carNumber} - ${name}`);
-                addRacerToRace(raceId, id);
-            }
-        }
-    );
-}
 
 function deleteParticipantsByRaceId(raceId) {
     db.run(`DELETE FROM racers WHERE race_id = ?`, [raceId], function (err) {
@@ -210,30 +193,54 @@ function addRacerToRace(raceId, racerId) {
     });
 }
 
-function updateRacerInDb(racer) {
+
+
+function createUpdateRacerInDb(racer, raceId) {
     const { id, carNumber, name, bestLapTime, currentLapTime, lapCount } = racer;
-    console.log(`Racer current lap update: ${racer.currentLapTime}`)
 
-    db.serialize(() => {
-        db.run(
-            `UPDATE racers SET car_number = ?, name = ?, best_lap_time = ?, current_lap_time = ?, lap_count = ? WHERE racer_id = ?`,
-            [carNumber, name, bestLapTime, currentLapTime, lapCount, id],
-            function (err) {
-                if (err) {
-                    console.error('Error updating racer:', err.message);
-                } else {
-                    console.log(`Racer updated: ID ${id}; Current Lap: ${currentLapTime}`);
+    // Check if the racer already exists in the database
+    db.get("SELECT * FROM racers WHERE racer_id = ?", [id], (err, row) => {
+        if (err) {
+            console.error('Error checking racer in database:', err.message);
+            return;
+        }
 
-                    db.get(`SELECT * FROM racers WHERE racer_id = ?`, [id], (err, row) => {
-                        if (err) {
-                            console.error('Error fetching updated racer:', err.message);
-                        } else {
-                            console.log('Updated racer:', row);
-                        }
-                    });
+        if (!row) {
+            // If racer does not exist, insert it
+            db.run(
+                `INSERT INTO racers (racer_id, car_number, name, best_lap_time, current_lap_time, lap_count, race_id)
+                 VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                [id, carNumber, name, bestLapTime, currentLapTime, lapCount, raceId],
+                function (err) {
+                    if (err) {
+                        console.error('Error inserting racer:', err.message);
+                    } else {
+                        console.log(`Racer added: Car ${carNumber} - ${name}`);
+                        addRacerToRace(raceId, id);
+                    }
                 }
-            }
-        );
+            );
+        } else {
+            // If racer exists, update it
+            db.run(
+                `UPDATE racers SET car_number = ?, name = ?, best_lap_time = ?, current_lap_time = ?, lap_count = ? WHERE racer_id = ?`,
+                [carNumber, name, bestLapTime, currentLapTime, lapCount, id],
+                function (err) {
+                    if (err) {
+                        console.error('Error updating racer:', err.message);
+                    } else {
+                        console.log(`Racer updated: ID ${id}; Current Lap: ${currentLapTime}`);
+                        db.get(`SELECT * FROM racers WHERE racer_id = ?`, [id], (err, row) => {
+                            if (err) {
+                                console.error('Error fetching updated racer:', err.message);
+                            } else {
+                                console.log('Updated racer:', row);
+                            }
+                        });
+                    }
+                }
+            );
+        }
     });
 }
 
@@ -425,44 +432,83 @@ function addRacetoDB(changedRace) {
 }
 */
 
-
-
-function updateDatabase(callback) {
-    if (dataStore) {
-        let races = dataStore.getRaces()
-        let racers = dataStore.getRacers()
-        let pendingUpdates = races.length + racers.length
-
-        if (pendingUpdates === 0) {
-            return callback(null)
+/*
+function addRacerToDb(racer, raceId) {
+    // Fix raceID
+    const { id, carNumber, name, bestLapTime, currentLapTime, lapCount } = racer;
+    db.run(
+        `INSERT INTO racers (racer_id, car_number, name, best_lap_time, current_lap_time, lap_count, race_id)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [id, carNumber, name, bestLapTime, currentLapTime, lapCount, raceId],
+        function (err) {
+            if (err) {
+                console.error('Error inserting racer:', err.message);
+            } else {
+                console.log(`Racer added: Car ${carNumber} - ${name}`);
+                addRacerToRace(raceId, id);
+            }
         }
+    );
+}
+
+function updateRacerInDb(racer) {
+    const { id, carNumber, name, bestLapTime, currentLapTime, lapCount } = racer;
+    console.log(`Racer current lap update: ${racer.currentLapTime}`)
+
+    db.serialize(() => {
+        db.run(
+            `UPDATE racers SET car_number = ?, name = ?, best_lap_time = ?, current_lap_time = ?, lap_count = ? WHERE racer_id = ?`,
+            [carNumber, name, bestLapTime, currentLapTime, lapCount, id],
+            function (err) {
+                if (err) {
+                    console.error('Error updating racer:', err.message);
+                } else {
+                    console.log(`Racer updated: ID ${id}; Current Lap: ${currentLapTime}`);
+
+                    db.get(`SELECT * FROM racers WHERE racer_id = ?`, [id], (err, row) => {
+                        if (err) {
+                            console.error('Error fetching updated racer:', err.message);
+                        } else {
+                            console.log('Updated racer:', row);
+                        }
+                    });
+                }
+            }
+        );
+    });
+}
+*/
+
+function updateDatabase() {
+    if (dataStore) {
+        const races = dataStore.getRaces();
+        console.log(races);
 
         races.forEach((race) => {
-            raceChange(race, "updaterace", (err) => {
-                if (err) {
-                    return callback(err)
-                }
-                pendingUpdates--
-                if (pendingUpdates === 0) {
-                    callback(null)
-                }
-            })
-        })
+            raceChange(race, "updaterace");
 
-        racers.forEach((racer) => {
-            racerChange(racer, "updateracer", (err) => {
-                if (err) {
-                    return callback(err)
-                }
-                pendingUpdates--
-                if (pendingUpdates === 0) {
-                    callback(null)
-                }
-            })
-        })
+            // Ensure participants are defined and are an array
+            if (!Array.isArray(race.participants)) {
+                console.error(`Race ${race.id} has no participants or participants is not an array.`);
+                return;
+            }
+
+            console.log(`Updating participants for race ${race.id}:`, race.participants);
+
+            // Update participants within each race
+            race.participants.forEach(participant => {
+                racerChange(participant, "updateracer");
+            });
+        });
+    } else {
+        console.error("dataStore is not defined.");
     }
+}
 
+function setDataStore(store) {
+    dataStore = store;
 }
 
 
-module.exports = { loadRacesFromDatabase, updateRaceParticipants, racerChange, raceChange, updateDatabase }
+
+module.exports = { loadRacesFromDatabase, updateRaceParticipants, racerChange, raceChange, updateDatabase, setDataStore }

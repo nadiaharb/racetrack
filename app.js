@@ -7,12 +7,15 @@ const server = http.createServer(routes)
 //const { createServer }= require('http')
 const { Server } = require('socket.io')
 const websocketManager = require('./sockets/websocketManager')
-const { updateDatabase } = require("./data/database")
-//const server=createServer(app)
-
+const { updateDatabase } = require("./data/database");
+const { setDataStore, loadRacesFromDatabase } = require('./data/database');
+const dataStore = require('./models/DataStore');
+setDataStore(dataStore);
+loadRacesFromDatabase(dataStore);
 // SQLite3 database
-const database = require('./data/database')
-//const dataStore = require('./models/DataStore');
+//const database = require('./data/database')
+
+// Initialize data store and set in database
 // https://admin.socket.io/#/
 // Server url = "http://localhost:3000" username = "admin" password = "race"
 const { instrument } = require("@socket.io/admin-ui");
@@ -44,29 +47,9 @@ websocketManager(io)
 
 process.on('SIGINT', () => {
     console.log('Ctrl+C pressed. Closing server gracefully.');
-
-    // Call updateDatabase and provide a callback
-    updateDatabase((err) => {
-        if (err) {
-            console.error('Error updating database:', err.message);
-        }
-
-        const forceCloseTimeout = setTimeout(() => {
-            console.log('Force closing');
-            process.exit(1);
-        }, 4000);
-
-        server.close((err) => {
-            clearTimeout(forceCloseTimeout);
-            if (err) {
-                console.error('Error closing server:', err.message);
-                process.exit(1);
-            } else {
-                console.log('Server closed gracefully.');
-                process.exit(0);
-            }
-        });
-
-        console.log('Server close initiated.');
-    });
+    updateDatabase()
+    const forceCloseTimeout = setTimeout(() => {
+        console.log('Force closing');
+        process.exit(1);
+    }, 2000);
 });

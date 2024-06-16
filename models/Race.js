@@ -145,12 +145,12 @@ class Race {
         }
         this.raceTimer = setInterval(() => {
             this.duration -= 100; // Decrement race duration
-            this.emitChange();
             if (this.duration <= 0) {
                 clearInterval(this.raceTimer);
                 this.setFlagState(FlagState.FINISH);
             }
         }, 100);
+        this.emitChange();
     }
     resumeRaceTimer() {
         if (this.duration > 0 && this.raceState === "In Progress") {
@@ -164,6 +164,7 @@ class Race {
                 }
             }, 100);
         }
+        this.emitChange();
     }
 
     // Custom serialization method to exclude lapTimer

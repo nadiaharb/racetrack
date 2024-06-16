@@ -3,7 +3,7 @@ const { RaceState } = require('./enums');
 const Race = require('./Race');
 const Racer = require('./Racer');
 const eventEmitter = new EventEmitter()
-const { raceChange, racerChange, loadRacesFromDatabase } = require("../data/database")
+const { setDataStore, raceChange, racerChange, loadRacesFromDatabase } = require("../data/database")
 
 class DataStore extends EventEmitter {
     constructor() {
@@ -149,7 +149,8 @@ class DataStore extends EventEmitter {
 }
 
 const dataStore = new DataStore();
-loadRacesFromDatabase(dataStore)
+setDataStore(dataStore); // Set the dataStore in the database module
+//loadRacesFromDatabase(dataStore)
 
 
 /*

@@ -24,7 +24,7 @@ module.exports = function (io) {
         socket.emit('loadData', JSON.stringify(dataStore.getUpcomingRacesByFlag("Danger")));
         const currentRace = dataStore.getInProgressRace()
         const nextR = dataStore.getNextRace()
-        if (currentRace) {
+        if (currentRace && currentRace.duration > 0) {
             currentRace.resumeRaceTimer();
             currentRace.participants.forEach(participant => participant.resumeLapTimer()); // Call elapseLap on the racer)
         }
