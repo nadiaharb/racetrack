@@ -69,6 +69,9 @@ class Racer {
     }
  //ADDED FUNC TO STOP CURRENT LAP
     stopLapTimer() {
+        if(this.lapTimer===null){
+            return;
+        }
         if (this.lapTimer) {
 
             const savedLapTime = this.currentLapTime

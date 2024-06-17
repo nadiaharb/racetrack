@@ -134,8 +134,18 @@ module.exports = function (io) {
                 throw new Error('Participant not found');
             }
         });
-
-
+       //STOP CURRENT LAP
+        socket.on('notifyTimeEnd', () => {
+            let inProgress = dataStore.getInProgressRace()
+            console.log()
+            if (inProgress && inProgress.flagState==="Finish") {
+               inProgress.participants.forEach(participant =>{
+                participant.stopLapTimer()
+               })
+             
+            }
+            
+        });
         // Exit events
 
         // Handle disconnect event
@@ -144,6 +154,7 @@ module.exports = function (io) {
         });
 
     });
+
     // Model data change detection (extends EventEmitter)
     dataStore.on('notifyChange', () => {
         io.emit('updateData', JSON.stringify(dataStore.getInProgressRace()));

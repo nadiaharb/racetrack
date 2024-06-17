@@ -105,6 +105,10 @@ function renderObserverView(race) {
 }
 
 function updateObserverView(race) {
+    //SEND REQ TO STOP CURRENT LAP
+    if(race.duration<=0){
+      stopTimerRequest()
+    }
     updateRaceStatePanel(race);
 
     // Update participants information
@@ -278,6 +282,7 @@ function disableButtons() {
 }
 
 function enableButtons() {
+    currentLapStopped=false
     document.querySelectorAll('.elapse-lap-button').forEach((button, index) => {
         button.disabled = false;
         const racerId = button.getAttribute('data-racer-id');
@@ -297,6 +302,11 @@ function assignColorsToParticipants(participants) {
         acc[participant.carNumber] = generateColor(index);
         return acc;
     }, {});
+}
+
+//ON TIMER END, SEND REQ TO STOP CURRENT LAP
+function stopTimerRequest(){
+    socket.emit('notifyTimeEnd')
 }
 
 /*

@@ -55,10 +55,8 @@ function endRace(io, updatedRace) {
 
     const nextR = dataStore.getNextRace()
     if(nextR){
-        console.log('next race')
         io.emit('loadRaceControl', dataStore.getNextRace())
     }else {
-        console.log('no next')
         io.emit('loadRaceControl', null)
     }
    
