@@ -39,6 +39,7 @@ function startRace(io, updatedRace) {
     }
 
     io.emit('raceModeChange', updatedRace)
+    io.emit('loadRaceControl', dataStore.getInProgressRace())
 }
 
 function endRace(io, updatedRace) {
@@ -49,16 +50,23 @@ function endRace(io, updatedRace) {
     race.flagState = 'Danger'
     raceChange(race, 'deleterace')
     io.emit('raceModeChange', race)
-    io.emit('loadRaceControl', dataStore.getNextRace())
+    
     // This did not appear to have a function
 
     const nextR = dataStore.getNextRace()
-
+    if(nextR){
+        console.log('next race')
+        io.emit('loadRaceControl', dataStore.getNextRace())
+    }else {
+        console.log('no next')
+        io.emit('loadRaceControl', null)
+    }
+   
     if (nextR && nextR.participants.length === 8) {
         io.emit('showMessage', dataStore.getNextRace())
     }
     io.emit('showMessage', dataStore.getNextRace())
-    io.emit("renderNextRace", JSON.stringify(race))
+    io.emit("renderNextRace", JSON.stringify(race))///WHY it takes current race as arg ?????
     io.emit('raceFinished')
 }
 

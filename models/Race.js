@@ -145,9 +145,16 @@ class Race {
         }
         this.raceTimer = setInterval(() => {
             this.duration -= 100; // Decrement race duration
+            console.log('increm',this.duration)
             if (this.duration <= 0) {
                 clearInterval(this.raceTimer);
                 this.setFlagState(FlagState.FINISH);
+                ///ADDED TO STOP CURRENT LAP
+                console.log("stopping")
+                this.participants.forEach(participant =>{
+                    participant.stopLapTimer()
+                })
+                ///END OF ADDED
             }
         }, 100);
         this.emitChange();
