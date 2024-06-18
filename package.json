@@ -4,8 +4,10 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "RACE_DURATION=600000 node app.js",
-    "dev": "RACE_DURATION=60000 node app.js"
+    "start:test": "RACE_DURATION=60000 node  app.js",
+    "start": "export RACE_DURATION=600000 && node check-keys.js && node app.js",
+    "start:dev": "export RACE_DURATION=60000 && node check-keys.js && node app.js"
+    
   },
   "keywords": [],
   "author": "",

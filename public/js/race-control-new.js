@@ -96,6 +96,14 @@ window.addEventListener('DOMContentLoaded', function () {
 
 
 socket.on('loadRaceControl', race => {
+    if (race === null) {
+        table.style.display = 'none'
+        startBtn.style.display = 'none'
+        raceModeBtns.style.display = 'none'
+        startTitle.innerHTML = "No Upcoming Races"
+        finishDiv.style.display = 'none'
+        return
+    }
     renderRace(race)
 })
 
@@ -120,7 +128,6 @@ socket.on('raceModeChange', (race) => {
 })
 
 function renderRace(race) {
-
     if (race === null) {
         table.style.display = 'none'
         startBtn.style.display = 'none'
@@ -153,7 +160,6 @@ function renderRace(race) {
 
     deleteModeButtons()
     createModeButtons()
-
     endBtn.setAttribute('raceId', race.id)
     startBtn.setAttribute('raceId', race.id)
     startBtn.setAttribute('racers', race.participants.length)

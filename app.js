@@ -41,6 +41,7 @@ instrument(io, {
 const PORT = process.env.PORT || 3000
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
+    console.log(process.env.RACE_DURATION)
 })
 
 websocketManager(io)

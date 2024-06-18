@@ -21,9 +21,15 @@ module.exports = function (io) {
         socket.emit('getKey', JSON.stringify(keys));
 
         // Load initial data
+        
         socket.emit('loadData', JSON.stringify(dataStore.getUpcomingRacesByFlag("Danger")));
         const currentRace = dataStore.getInProgressRace()
         const nextR = dataStore.getNextRace()
+        if(!dataStore.getInProgressRace()){
+            io.emit('loadRaceControl', dataStore.getNextRace())
+        }else{
+            io.emit('loadRaceControl', dataStore.getInProgressRace())
+        }
         if (currentRace && currentRace.duration > 0) {
             currentRace.resumeRaceTimer();
             currentRace.participants.forEach(participant => participant.resumeLapTimer()); // Call elapseLap on the racer)
@@ -54,6 +60,12 @@ module.exports = function (io) {
                 const inProgressRace = dataStore.getInProgressRace();
                 inProgressRace.duration = 0; // Set the duration to 0 so all events stop
                 inProgressRace.flagState = 'Finish' // correct flagState
+                //ADDED CODE TO STOP CURRENT LAP
+                const racers=dataStore.getRacersByRaceID(inProgressRace.id)
+                racers.forEach(participant => {
+                    participant.stopLapTimer()
+                });
+                //END OF  CODE
                 io.emit('disableInput'); // Disable buttons for lap-line-observer
             }
 
@@ -122,8 +134,18 @@ module.exports = function (io) {
                 throw new Error('Participant not found');
             }
         });
-
-
+       //STOP CURRENT LAP
+        socket.on('notifyTimeEnd', () => {
+            let inProgress = dataStore.getInProgressRace()
+            console.log()
+            if (inProgress && inProgress.flagState==="Finish") {
+               inProgress.participants.forEach(participant =>{
+                participant.stopLapTimer()
+               })
+             
+            }
+            
+        });
         // Exit events
 
         // Handle disconnect event
@@ -132,11 +154,13 @@ module.exports = function (io) {
         });
 
     });
+
     // Model data change detection (extends EventEmitter)
     dataStore.on('notifyChange', () => {
         io.emit('updateData', JSON.stringify(dataStore.getInProgressRace()));
         let inProgress = dataStore.getInProgressRace()
-        if (inProgress) {
+        if (inProgress && inProgress.flagState==="Finish") {
+            io.emit("raceModeChange",inProgress) ///getting flagChange when duration ===0
             //raceChange(inProgress, 'updaterace')
             //raceChange(inProgress.participants.forEach(p => p), 'updateracer')
         }

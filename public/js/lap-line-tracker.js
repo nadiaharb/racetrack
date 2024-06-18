@@ -10,32 +10,60 @@ Cars can still cross the lap line when the race is in finish mode. Not sure what
     // Init statement
 
 })*/
-
 window.addEventListener('DOMContentLoaded', function () {
     let observerKey
-    // It got bugged out for me, so I removed the blur temporarily.
-    //document.body.classList.add('blur-content')
+
+    document.body.classList.add('blur-content')
+
+    const modal = document.getElementById('accessKeyModal')
+    const accessKeyInput = document.getElementById('accessKeyInput')
+    const submitKeyButton = document.getElementById('submitKeyButton')
+
+   
+    const showModal = () => {
+        modal.style.display = 'block'
+        accessKeyInput.value = '' 
+        accessKeyInput.focus() 
+    }
+
+  
+    const hideModal = () => {
+        modal.style.display = 'none'
+    }
+
     socket.on('getKey', loadedData => {
         const data = JSON.parse(loadedData)
-
-
         observerKey = data.OBSERVER_KEY
-        promptAccessKey()
+        showModal()
     })
 
-    const promptAccessKey = () => {
-        const enteredKey = prompt('Please enter the access key:')
+    
+    const checkAccessKey = () => {
+        const enteredKey = accessKeyInput.value
         const correctKey = observerKey
 
         if (enteredKey === correctKey) {
             console.log('Access granted!')
             document.body.classList.remove('blur-content')
+            hideModal()
         } else {
             console.log('Access denied!')
-            setTimeout(promptAccessKey, 500)
+            setTimeout(() => {
+                showModal()
+            }, 500)
         }
     }
+
+    submitKeyButton.addEventListener('click', checkAccessKey)
+
+   
+    accessKeyInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            checkAccessKey()
+        }
+    })
 })
+
 
 function renderObserverView(race) {
     const tracker = document.getElementById('tracker-container');
@@ -77,6 +105,10 @@ function renderObserverView(race) {
 }
 
 function updateObserverView(race) {
+    //SEND REQ TO STOP CURRENT LAP
+    if(race.duration<=0){
+      stopTimerRequest()
+    }
     updateRaceStatePanel(race);
 
     // Update participants information
@@ -250,6 +282,7 @@ function disableButtons() {
 }
 
 function enableButtons() {
+    currentLapStopped=false
     document.querySelectorAll('.elapse-lap-button').forEach((button, index) => {
         button.disabled = false;
         const racerId = button.getAttribute('data-racer-id');
@@ -270,3 +303,38 @@ function assignColorsToParticipants(participants) {
         return acc;
     }, {});
 }
+
+//ON TIMER END, SEND REQ TO STOP CURRENT LAP
+function stopTimerRequest(){
+    socket.emit('notifyTimeEnd')
+}
+
+/*
+
+window.addEventListener('DOMContentLoaded', function () {
+    let observerKey
+    // It got bugged out for me, so I removed the blur temporarily.
+    //document.body.classList.add('blur-content')
+    socket.on('getKey', loadedData => {
+        const data = JSON.parse(loadedData)
+
+
+        observerKey = data.OBSERVER_KEY
+        promptAccessKey()
+    })
+
+    const promptAccessKey = () => {
+        const enteredKey = prompt('Please enter the access key:')
+        const correctKey = observerKey
+
+        if (enteredKey === correctKey) {
+            console.log('Access granted!')
+            document.body.classList.remove('blur-content')
+        } else {
+            console.log('Access denied!')
+            setTimeout(promptAccessKey, 500)
+        }
+    }
+})
+
+*/ 

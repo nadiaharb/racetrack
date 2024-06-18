@@ -67,6 +67,24 @@ class Racer {
             this.emitChange();
         }, 100);
     }
+ //ADDED FUNC TO STOP CURRENT LAP
+    stopLapTimer() {
+        if(this.lapTimer===null){
+            return;
+        }
+        if (this.lapTimer) {
+
+            const savedLapTime = this.currentLapTime
+            clearInterval(this.lapTimer)
+            this.lapTimer = null
+
+            this.emitChange()
+
+            return savedLapTime
+        }
+        return null
+    }
+    ///END OF ADDED CODE
     // Custom serialization method to exclude lapTimer
     // Gotta make sure we don't JSONify the timer itself
     toJSON() {

@@ -19,15 +19,20 @@ let dataStore = null;
 class Race {
     // Default duration is set by environment var
     // RaceState and FlagState are enums and contain all possible states
-    static lastId = 0
+   // static lastId = 0
     constructor(duration = process.env.RACE_DURATION, flagState = FlagState.DANGER, raceState = RaceState.UPCOMING) {
-        this.id = ++Race.lastId;
+        this.id = this.generateRandomId();
         this.participants = []
         this.duration = duration; // Duration of the race (derived from env vars, default)
         this.flagState = flagState; // State of the flag
         this.raceState = raceState; // State of the race
         this.assignedCarNumbers = new Set()
         this.raceTimer = null;
+    }
+
+
+    generateRandomId() {
+        return Math.floor(Math.random() * 1000000);
     }
     // Race Methods
     recoverRaceTimer(raceTimer) {
@@ -145,9 +150,18 @@ class Race {
         }
         this.raceTimer = setInterval(() => {
             this.duration -= 100; // Decrement race duration
+           // console.log('incr',this.duration)
             if (this.duration <= 0) {
                 clearInterval(this.raceTimer);
                 this.setFlagState(FlagState.FINISH);
+                ///ADDED TO STOP CURRENT LAP
+                /*
+                console.log("stopping")
+                this.participants.forEach(participant =>{
+                    participant.stopLapTimer()
+                })
+                    */
+                ///END OF ADDED
             }
         }, 100);
         this.emitChange();
