@@ -96,7 +96,7 @@ function racerChange(changedRacer, action) {
 // Merged creation and updating logic to simplify logic flow
 function createUpdateRaceInDb(race) {
     const { id, duration, flagState, raceState } = race;
-
+    console.log(id, "ID")
     db.get("SELECT * FROM races WHERE race_id = ?", [id], (err, row) => {
         if (err) {
             console.error('Error checking race in database:', err.message);
@@ -197,7 +197,7 @@ function addRacerToRace(raceId, racerId) {
 
 function createUpdateRacerInDb(racer, raceId) {
     const { id, carNumber, name, bestLapTime, currentLapTime, lapCount } = racer;
-
+   
     // Check if the racer already exists in the database
     db.get("SELECT * FROM racers WHERE racer_id = ?", [id], (err, row) => {
         if (err) {
@@ -294,8 +294,10 @@ function updateRaceParticipants(racerId) {
 
 function loadRacesFromDatabase(dataStore) {
     console.log("Loading races from db");
-    let racesQuery = `SELECT * FROM races`;
 
+    // Modify query to select races where race_state is not 'Finished'
+    let racesQuery = `SELECT * FROM races WHERE race_state != 'Finished'`;
+    console.log(racesQuery)
     db.all(racesQuery, [], (err, rows) => {
         if (err) {
             console.error('Error querying races from database:', err.message);
@@ -303,9 +305,13 @@ function loadRacesFromDatabase(dataStore) {
         }
 
         rows.forEach(row => {
+            // Check if the race state is 'Upcoming' and update duration
+            if (row.race_state === 'Upcoming') {
+                row.duration = process.env.RACE_DURATION;
+            }
+
             let race = new Race(row.duration, row.flag_state, row.race_state);
             race.id = row.race_id;
-
             let racerQuery = `SELECT * FROM racers WHERE race_id = ?`;
             db.all(racerQuery, [race.id], (err, racerRows) => {
                 if (err) {
