@@ -1,6 +1,6 @@
 const addRaceForm = document.getElementById('addRaceForm')
 const loadDataButton = document.getElementById('loadDataButton')
-const socket = io('http://localhost:3000')
+const socket = io()
 
 
 window.addEventListener('DOMContentLoaded', function () {

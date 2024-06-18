@@ -39,7 +39,7 @@ module.exports = function (io) {
 
 
         // Disable Lap-Line-Observer on-load
-        if (!dataStore.getInProgressRace()) {
+        if (!dataStore.getInProgressRace() || dataStore.getInProgressRace().duration === 0) {
             io.emit('disableInput', JSON.stringify(dataStore.getNextRace()));
         }
 
