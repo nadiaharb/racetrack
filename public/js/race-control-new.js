@@ -19,7 +19,8 @@ window.addEventListener('DOMContentLoaded', function () {
     const modal = document.getElementById('accessKeyModal')
     const accessKeyInput = document.getElementById('accessKeyInput')
     const submitKeyButton = document.getElementById('submitKeyButton')
-
+    const errorMessage = document.getElementById('error-message')
+    errorMessage.textContent = ''
 
     const showModal = () => {
         modal.style.display = 'block'
@@ -49,6 +50,8 @@ window.addEventListener('DOMContentLoaded', function () {
             hideModal()
         } else {
             console.log('Access denied!')
+             const errorMessage = document.getElementById('error-message')
+        errorMessage.textContent = 'Incorrect key, please try again.'
             setTimeout(() => {
                 showModal()
             }, 500)
