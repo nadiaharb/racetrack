@@ -75,25 +75,3 @@ module.exports = function (req, res, io) {
         });
     }
 };
-
-
-/* ROUTES WITH EXPRESS
-const express=require('express')
-const router=express.Router()
-const path=require('path')
-
-//routes to templates
-router.get('/',(req,res)=>{
-    res.sendFile(path.join(__dirname,'views','index.html'))
-})
-router.get('/race-control',(req,res)=>{
-    res.sendFile(path.join(__dirname,'views','race-control.html'))
-})
-
-router.get('/front-desk',(req,res)=>{
-    res.sendFile(path.join(__dirname,'views','front-desk.html'))
-})
-
-//export
-module.exports=router
-*/

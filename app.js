@@ -10,14 +10,10 @@ const websocketManager = require('./sockets/websocketManager')
 const { updateDatabase } = require("./data/database");
 const { setDataStore, loadRacesFromDatabase } = require('./data/database');
 const dataStore = require('./models/DataStore');
+// Set up db and load data.
 setDataStore(dataStore);
 loadRacesFromDatabase(dataStore);
-// SQLite3 database
-//const database = require('./data/database')
 
-// Initialize data store and set in database
-// https://admin.socket.io/#/
-// Server url = "http://localhost:3000" username = "admin" password = "race"
 const { instrument } = require("@socket.io/admin-ui");
 const io = new Server(server, { // Keep this line only when removing admin feature
     cors: {
