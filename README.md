@@ -116,11 +116,14 @@ Employee interfaces are protected by access keys set as environment variables.
     npm start
     ```
 
-5. For development mode (Race timers are set to 1 minute):
+- For development mode (Race timers are set to 1 minute):
 
     ```bash
     npm run dev
     ```
+
+5. Navigate to <a target="blank" href="http://localhost:3000/">http://localhost:3000/</a>
+
 
 ## Usage Guide
 
