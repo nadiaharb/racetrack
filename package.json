@@ -4,10 +4,9 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start:test": "RACE_DURATION=60000 node  app.js",
-    "start": "export RACE_DURATION=600000 && node check-keys.js && node app.js",
-    "start:dev": "export RACE_DURATION=60000 && node check-keys.js && node app.js"
-    
+    "start": "export RACE_DURATION=600000 && node check_keys.js && node app.js",
+    "dev": "export RACE_DURATION=60000 && node check_keys.js && node app.js",
+    "test": "export RACE_DURATION=60000 export RECEPTIONIST_KEY=1 export OBSERVER_KEY=1 export SAFETY_KEY=1 && node app.js"
   },
   "keywords": [],
   "author": "",

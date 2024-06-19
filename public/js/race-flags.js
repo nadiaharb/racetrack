@@ -1,11 +1,11 @@
 const socket = io()
 //DONT DELETE
 document.addEventListener('DOMContentLoaded', () => {
-   socket.emit('requestCurrentRaceData')
+    socket.emit('requestCurrentRaceData')
 })
 
 socket.on('getRaceData', race => {
-   
+
     if (race) {
         const data = JSON.parse(race)
         updateFlagDisplay(data.flagState)

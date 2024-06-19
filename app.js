@@ -1,5 +1,5 @@
-require('./loadKeys')
-require('./check-keys');
+//require('./load_env')
+//require('./check_keys');
 
 const http = require('http');
 const routes = require('./routes')
@@ -46,6 +46,7 @@ server.listen(PORT, () => {
 
 websocketManager(io)
 
+// Logic for handling various except cases to retain data upon app failure.
 async function handleExit(signal) {
     console.log(`${signal} received. Closing server gracefully.`);
 

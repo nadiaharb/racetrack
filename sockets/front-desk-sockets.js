@@ -7,10 +7,10 @@ function loadData(socket, io) {
 }
 
 function deleteRacer(io, deleteRacer) {
-    
+
     const race = dataStore.getRaceById(deleteRacer.raceId)
     const racer = race.getRacerById(parseInt(deleteRacer.racerId))
-    dataStore.onParticipantChange(racer,race,'deleteracer')
+    dataStore.onParticipantChange(racer, race, 'deleteracer')
     race.deleteParticipant(racer.id)
     const updatedRaces = dataStore.getUpcomingRaces()
 
@@ -69,8 +69,8 @@ function addRacer(io, socket, racerData) {
     try {
         currentRace.addParticipant(racer)
 
-            dataStore.onParticipantChange(racer, currentRace, 'addracer');
-      
+        dataStore.onParticipantChange(racer, currentRace, 'addracer');
+
     } catch (error) {
         socket.emit('error', { message: error.message })
         return
@@ -106,13 +106,13 @@ function editRacer(io, editedRacer) {
     }
     racer.name = editedRacer.name
     racer.carNumber = editedRacer.carNumber
-    
+
     // Replaced with function call just incase.
     racer.changeCarNumber(editedRacer.carNumber)
-    
+
     const upcomingRaces = dataStore.getUpcomingRaces()
     const inProgressRace = dataStore.getInProgressRace()
-    dataStore.onParticipantChange(racer,race, "updateracer")
+    dataStore.onParticipantChange(racer, race, "updateracer")
     if (!inProgressRace) {
         io.emit('racerEdited', dataStore.getNextRace())
     }

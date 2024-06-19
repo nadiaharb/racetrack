@@ -89,7 +89,6 @@ class DataStore extends EventEmitter {
             return false; // Indicate that the race was not found
         }
     }
-    //get upcoming races
     getUpcomingRacesByFlag(flagState) {
         const upcomingRaces = this.getUpcomingRaces()
         if (upcomingRaces) {
@@ -112,11 +111,6 @@ class DataStore extends EventEmitter {
             return null
         }
     }
-    /*
-        getRacesByRaceByState(raceState) {
-            return this.races.filter(race => race.raceState === raceState);
-        }
-    */
 
     // Racer Methods
 
@@ -150,7 +144,6 @@ class DataStore extends EventEmitter {
 
 const dataStore = new DataStore();
 setDataStore(dataStore); // Set the dataStore in the database module
-//loadRacesFromDatabase(dataStore)
 
 
 /*

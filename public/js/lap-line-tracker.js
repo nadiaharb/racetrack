@@ -19,14 +19,14 @@ window.addEventListener('DOMContentLoaded', function () {
     const accessKeyInput = document.getElementById('accessKeyInput')
     const submitKeyButton = document.getElementById('submitKeyButton')
 
-   
+
     const showModal = () => {
         modal.style.display = 'block'
-        accessKeyInput.value = '' 
-        accessKeyInput.focus() 
+        accessKeyInput.value = ''
+        accessKeyInput.focus()
     }
 
-  
+
     const hideModal = () => {
         modal.style.display = 'none'
     }
@@ -37,7 +37,7 @@ window.addEventListener('DOMContentLoaded', function () {
         showModal()
     })
 
-    
+
     const checkAccessKey = () => {
         const enteredKey = accessKeyInput.value
         const correctKey = observerKey
@@ -56,7 +56,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
     submitKeyButton.addEventListener('click', checkAccessKey)
 
-   
+
     accessKeyInput.addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
             checkAccessKey()
@@ -106,8 +106,8 @@ function renderObserverView(race) {
 
 function updateObserverView(race) {
     //SEND REQ TO STOP CURRENT LAP
-    if(race.duration<=0){
-      stopTimerRequest()
+    if (race.duration <= 0) {
+        stopTimerRequest()
     }
     updateRaceStatePanel(race);
 
@@ -160,10 +160,19 @@ socket.on('disableInput', function (incomingRace) {
     try {
         disableButtons();
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error: ', error);
     }
 });
 
+socket.on('raceModeChange', function (incomingRace) {
+    try {
+        if (incomingRace.flagState === "Finish") {
+            disableButtons();
+        }
+    } catch (error) {
+        console.error('Error: ', error)
+    }
+})
 /*socket.on('raceFinished', () => {
     try {
         disableButtons();
@@ -282,7 +291,7 @@ function disableButtons() {
 }
 
 function enableButtons() {
-    currentLapStopped=false
+    currentLapStopped = false
     document.querySelectorAll('.elapse-lap-button').forEach((button, index) => {
         button.disabled = false;
         const racerId = button.getAttribute('data-racer-id');
@@ -305,7 +314,7 @@ function assignColorsToParticipants(participants) {
 }
 
 //ON TIMER END, SEND REQ TO STOP CURRENT LAP
-function stopTimerRequest(){
+function stopTimerRequest() {
     socket.emit('notifyTimeEnd')
 }
 

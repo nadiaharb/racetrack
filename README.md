@@ -34,7 +34,8 @@ This is the Minimum Viable Product (MVP).
 
 ## Race Sessions
 
-A race session is an instance of a race where up to 8 drivers try to get the fastest lap. The race finishes after 10 minutes (in normal mode), and the winner is the driver with the fastest lap time.
+A race session is an instance of a race where up to 8 Race Drivers participate.
+The race finishes after 10 minutes (in normal mode).
 
 ## Race Cars
 
@@ -44,9 +45,9 @@ Each race car is equal in performance and is represented by a number, which is u
 
 The system uses flags to communicate race modes:
 
-- **Safe:** No flag.
-- **Hazard:** Yellow flag, drive slowly.
-- **Danger:** Red flag, stop driving.
+- **Safe:** Solid Green flag.
+- **Hazard:** Solid Yellow flag, drive slowly.
+- **Danger:** Solid Red flag, stop driving.
 - **Finish:** Chequered flag, proceed to the pit lane.
 
 ## Interfaces
@@ -72,20 +73,13 @@ The system uses flags to communicate race modes:
 
 - **Server:** NodeJS
 - **Real-time Functionality:** Socket.IO
-- **Start Server:** `npm start`
-- **Development Mode:** `npm run dev` (1-minute race duration)
+- **Start Server:** `export RECEPTIONIST_KEY=8ded6076 export OBSERVER_KEY=662e0f6c export SAFETY_KEY=a2d393bc && npm start` (10-minute race duration)
+- **Development Mode:** `export RECEPTIONIST_KEY=8ded6076 export OBSERVER_KEY=662e0f6c export SAFETY_KEY=a2d393bc && npm run dev` (1-minute race duration)
+- **Test Mode:** `npm test` (1-minute race duration, no need to set env vars - Default password is `1`). [BONUS FUNCTIONALITY]
 
 ## Security
 
 Employee interfaces are protected by access keys set as environment variables.
-
-Example:
-```bash
-export receptionist_key=8ded6076
-export observer_key=662e0f6c
-export safety_key=a2d393bc
-npm start
-```
 
 ## Getting Started
 
@@ -98,22 +92,22 @@ npm start
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/yourusername/racetrack-info-screens.git
-    cd racetrack-info-screens
+    git clone https://gitea.kood.tech/taavitaht/racetrack.git
+    cd racetrack
     ```
 
 2. Install dependencies:
 
     ```bash
-    npm install
+    npm i loglevel socket.io sqlite3 @socket.io/admin-ui
     ```
 
 3. Set environment variables (Define keys for restricted views):
 
     ```bash
-    export receptionist_key=8ded6076
-    export observer_key=662e0f6c
-    export safety_key=a2d393bc
+    export RECEPTIONIST_KEY=8ded6076
+    export OBSERVER_KEY=662e0f6c
+    export SAFETY_KEY=a2d393bc
     ```
 
 4. Start the server (Race timers are set to 10 minutes):
@@ -170,9 +164,16 @@ npm start
 
 ## Bonus Functionality
 
-- **NGROK hosting:** We've implemented a way to host the NodeJS server on ngrok so it can be implemented.
+- **NGROK hosting:** App supports hosting over [ngrok](https://ngrok.com/download) and can be easily hosted after successfully installing ngrok:
 
-## Useful Links
+```ngrok http 3000```
+
+- **Data persistence** Simple data persistence via [SQLite3](https://www.npmjs.com/package/sqlite3) has been implemented via socket events along with advanced error handling for various edge cases so that data is not lost upon program crashes. Resuming the program is possible and requires no additional input from the user.
+
+Other ports can be used if the user modifies the .env file to specify a different port alias.
+
+
+## Relevant Topics
 
 - [Socket.IO](https://socket.io/)
 - [Node.JS](https://nodejs.org/)

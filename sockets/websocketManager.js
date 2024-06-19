@@ -21,21 +21,22 @@ module.exports = function (io) {
         socket.emit('getKey', JSON.stringify(keys));
 
         // Load initial data
-        
         socket.emit('loadData', JSON.stringify(dataStore.getUpcomingRacesByFlag("Danger")));
         const currentRace = dataStore.getInProgressRace()
         const nextR = dataStore.getNextRace()
-        if(!dataStore.getInProgressRace()){
-            io.emit('loadRaceControl', dataStore.getNextRace())
-        }else{
-            io.emit('loadRaceControl', dataStore.getInProgressRace())
+        if (!currentRace) {
+            io.emit('loadRaceControl', nextR)
+        } else {
+            io.emit('loadRaceControl', currentRace)
         }
+        // Make sure app timer is resumed if there is a race in progress
         if (currentRace && currentRace.duration > 0) {
             currentRace.resumeRaceTimer();
             currentRace.participants.forEach(participant => participant.resumeLapTimer()); // Call elapseLap on the racer)
         }
+        // If no race in progress, next race exists and has required amount of participants
         if (!currentRace && nextR && nextR.participants.length === 8) {
-            //console.log(dataStore.getNextRace().participants.length)
+            // Display msg to direct drivers to paddock.
             io.emit('showMessage', dataStore.getNextRace())
         }
 
@@ -44,7 +45,7 @@ module.exports = function (io) {
         });
 
 
-        // Disable Lap-Line-Observer on-load
+        // Disable Lap-Line-Observer on-load if no race in progress
         if (!dataStore.getInProgressRace() || dataStore.getInProgressRace().duration === 0) {
             io.emit('disableInput', JSON.stringify(dataStore.getNextRace()));
         }
@@ -61,7 +62,7 @@ module.exports = function (io) {
                 inProgressRace.duration = 0; // Set the duration to 0 so all events stop
                 inProgressRace.flagState = 'Finish' // correct flagState
                 //ADDED CODE TO STOP CURRENT LAP
-                const racers=dataStore.getRacersByRaceID(inProgressRace.id)
+                const racers = dataStore.getRacersByRaceID(inProgressRace.id)
                 racers.forEach(participant => {
                     participant.stopLapTimer()
                 });
@@ -80,7 +81,6 @@ module.exports = function (io) {
             }
             startRace(io, mode);
         });
-
         socket.on('endRace', (updatedRace) => {
             // Refresh all views with upcoming race,replacing old data
 
@@ -128,23 +128,21 @@ module.exports = function (io) {
             const participant = race.participants.find(r => r.id === participantIDInt);
             if (participant) {
                 participant.elapseLap(); // Call elapseLap on the racer
-                //racerChange(participant, 'updateracer')
-                //updateRaceParticipants(participantIDInt, 'updateracer')
             } else {
                 throw new Error('Participant not found');
             }
         });
-       //STOP CURRENT LAP
+        //STOP CURRENT LAP
         socket.on('notifyTimeEnd', () => {
             let inProgress = dataStore.getInProgressRace()
             console.log()
-            if (inProgress && inProgress.flagState==="Finish") {
-               inProgress.participants.forEach(participant =>{
-                participant.stopLapTimer()
-               })
-             
+            if (inProgress && inProgress.flagState === "Finish") {
+                inProgress.participants.forEach(participant => {
+                    participant.stopLapTimer()
+                })
+
             }
-            
+
         });
         // Exit events
 
@@ -159,13 +157,9 @@ module.exports = function (io) {
     dataStore.on('notifyChange', () => {
         io.emit('updateData', JSON.stringify(dataStore.getInProgressRace()));
         let inProgress = dataStore.getInProgressRace()
-        if (inProgress && inProgress.flagState==="Finish") {
-            io.emit("raceModeChange",inProgress) ///getting flagChange when duration ===0
-            //raceChange(inProgress, 'updaterace')
-            //raceChange(inProgress.participants.forEach(p => p), 'updateracer')
+        if (inProgress && inProgress.flagState === "Finish") {
+            io.emit("raceModeChange", inProgress) ///getting flagChange when duration ===0
         }
-
-        //racerChange(dataStore.getInProgressRace(), 'updateracer')
     });
 
 };
@@ -190,24 +184,6 @@ function startRaceTimerMain(io, race) {
     race.startRaceTimer(() => {
         emitCurrentRace(io);
     });
-
-    /*const interval = setInterval(() => {
-        if (race.raceState === RaceState.IN_PROGRESS) {
-            io.emit('lapTimeUpdate', JSON.stringify(race.participants));
-            io.emit('updateData', JSON.stringify(race));
-        } else {
-            clearInterval(interval);
-        }
-    }, 100);
-
-    const otherInterval = setInterval(() => {
-        if (race.raceState === RaceState.IN_PROGRESS) {
-            io.emit('raceTimeUpdate', JSON.stringify(race.duration));
-            emitCurrentRace(io);
-        } else {
-            clearInterval(otherInterval);
-        }
-    }, 1000);*/
 }
 
 function handleRaceControl(socket) {

@@ -47,9 +47,6 @@ class Racer {
 
     // Lap Timer logic enclosed here for simplicity.
     startLapTimer() {
-        /*if (this.lapTimer) {
-            clearInterval(this.lapTimer);
-        }*/
         this.currentLapTime = 0;
         this.lapTimer = setInterval(() => {
             this.currentLapTime += 100; // Increment timer every second
@@ -67,13 +64,11 @@ class Racer {
             this.emitChange();
         }, 100);
     }
- //ADDED FUNC TO STOP CURRENT LAP
     stopLapTimer() {
-        if(this.lapTimer===null){
+        if (this.lapTimer === null) {
             return;
         }
         if (this.lapTimer) {
-
             const savedLapTime = this.currentLapTime
             clearInterval(this.lapTimer)
             this.lapTimer = null
@@ -84,7 +79,6 @@ class Racer {
         }
         return null
     }
-    ///END OF ADDED CODE
     // Custom serialization method to exclude lapTimer
     // Gotta make sure we don't JSONify the timer itself
     toJSON() {

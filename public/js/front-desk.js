@@ -11,14 +11,14 @@ window.addEventListener('DOMContentLoaded', function () {
     const accessKeyInput = document.getElementById('accessKeyInput')
     const submitKeyButton = document.getElementById('submitKeyButton')
 
-   
+
     const showModal = () => {
         modal.style.display = 'block'
-        accessKeyInput.value = '' 
-        accessKeyInput.focus() 
+        accessKeyInput.value = ''
+        accessKeyInput.focus()
     }
 
-  
+
     const hideModal = () => {
         modal.style.display = 'none'
     }
@@ -29,7 +29,7 @@ window.addEventListener('DOMContentLoaded', function () {
         showModal()
     })
 
-    
+
     const checkAccessKey = () => {
         const enteredKey = accessKeyInput.value
         const correctKey = receptionistKey
@@ -48,7 +48,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
     submitKeyButton.addEventListener('click', checkAccessKey)
 
-   
+
     accessKeyInput.addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
             checkAccessKey()
@@ -222,7 +222,7 @@ function editRacer(raceId, participantId, name, car, raceId) {
     saveEditBtn.addEventListener('click', () => {
         const newName = document.getElementById('newName').value
         const newCarNumber = document.getElementById('newCarNumber').value
-      
+
         const editedRacer = {
             carNumber: newCarNumber,
             name: newName,
