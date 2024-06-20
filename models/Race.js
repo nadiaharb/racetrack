@@ -107,8 +107,14 @@ class Race {
         return !this.participants.some(p => p.name.toLowerCase() === name.toLowerCase() && p.id !== excludeId)
     }
     isCarUnique(carNumber, excludeId = null) {
-        return !this.participants.some(p => p.carNumber === carNumber && p.id !== excludeId)
+        const carNumberInt = parseInt(carNumber, 10)
+    
+        return !this.participants.some(p => {
+            const participantCarNumberInt = parseInt(p.carNumber, 10)
+            return participantCarNumberInt === carNumberInt && p.id !== excludeId
+        })
     }
+    
 
     // Racer Method
     getRacerById(participantId) {
