@@ -104,7 +104,7 @@ class Race {
     }
 
     isNameUnique(name, excludeId = null) {
-        return !this.participants.some(p => p.name === name && p.id !== excludeId)
+        return !this.participants.some(p => p.name.toLowerCase() === name.toLowerCase() && p.id !== excludeId)
     }
     isCarUnique(carNumber, excludeId = null) {
         return !this.participants.some(p => p.carNumber === carNumber && p.id !== excludeId)
