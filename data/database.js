@@ -24,7 +24,9 @@ db.run(`CREATE TABLE IF NOT EXISTS races (
     duration REAL NOT NULL,
     flag_state TEXT NOT NULL,
     race_state TEXT NOT NULL,
-    participants TEXT -- Store participant racer_ids as comma-separated values
+    participants TEXT,
+    created_at INTEGER NOT NULL 
+
 )`, (err) => {
     if (err) {
         console.error('Error creating races table:', err.message);
@@ -95,8 +97,7 @@ function racerChange(changedRacer, action) {
 
 // Merged creation and updating logic to simplify logic flow
 function createUpdateRaceInDb(race) {
-    const { id, duration, flagState, raceState } = race;
-    console.log(id, "ID")
+    const { id, duration, flagState, raceState, createdAt } = race;
     db.get("SELECT * FROM races WHERE race_id = ?", [id], (err, row) => {
         if (err) {
             console.error('Error checking race in database:', err.message);
@@ -107,14 +108,14 @@ function createUpdateRaceInDb(race) {
             console.log(`Race doesn't exist in db: ${race.id}`)
             // If race does not exist in the database, insert it
             db.run(
-                `INSERT INTO races (race_id, duration, flag_state, race_state)
-                 VALUES (?, ?, ?, ?)`,
-                [id, duration, flagState, raceState],
+                `INSERT INTO races (race_id, duration, flag_state, race_state,created_at)
+                 VALUES (?, ?, ?, ?,?)`,
+                [id, duration, flagState, raceState,createdAt],
                 (err) => {
                     if (err) {
                         console.error('Error inserting race into database:', err.message);
                     } else {
-                        console.log(`Race ${id} inserted into SQLite database.`);
+                        console.log(`Race ${id} inserted into SQLite database ${createdAt}.`);
                     }
                 }
             );
@@ -310,8 +311,9 @@ function loadRacesFromDatabase(dataStore) {
                 row.duration = process.env.RACE_DURATION;
             }
 
-            let race = new Race(row.duration, row.flag_state, row.race_state);
+            let race = new Race(row.duration, row.flag_state, row.race_state,row.created_at);
             race.id = row.race_id;
+            race.createdAt=row.created_at
             let racerQuery = `SELECT * FROM racers WHERE race_id = ?`;
             db.all(racerQuery, [race.id], (err, racerRows) => {
                 if (err) {

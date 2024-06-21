@@ -35,15 +35,25 @@ class DataStore extends EventEmitter {
     // Race Methods
     // Get all upcoming races sorted by race id
     getUpcomingRaces() {
-        // Find all races with raceState Upcoming
-        const upcomingRaces = this.races.filter(race => race.raceState === RaceState.UPCOMING);
-        // If no upcoming races
-        if (upcomingRaces.length === 0) {
-            return null;
-        }
-        // Sort races by id
-        upcomingRaces.sort((a, b) => a.id - b.id);
-        return upcomingRaces;
+            // Find all races with raceState UPCOMING
+    const upcomingRaces = this.races.filter(race => race.raceState === RaceState.UPCOMING);
+    
+    // If no upcoming races, return null
+    if (upcomingRaces.length === 0) {
+        return null;
+    }
+    
+    // Sort races by createdAt in ascending order
+    upcomingRaces.sort((a, b) => {
+        // Ensure proper date comparison based on createdAt format
+        return new Date(a.createdAt) - new Date(b.createdAt);
+    });
+    
+    // Log for verification
+    //console.log('Sorted upcoming races (ascending by createdAt):', upcomingRaces);
+    
+    return upcomingRaces;
+
     }
 
     // Get next race (to be started after the one in progress)

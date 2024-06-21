@@ -28,6 +28,7 @@ class Race {
         this.raceState = raceState; // State of the race
         this.assignedCarNumbers = new Set()
         this.raceTimer = null;
+        this.createdAt = Date.now(); // Timestamp for creation time
     }
 
 
