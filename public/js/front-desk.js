@@ -33,19 +33,18 @@ window.addEventListener('DOMContentLoaded', function () {
 
     const checkAccessKey = () => {
         const enteredKey = accessKeyInput.value
-        const correctKey = receptionistKey
+        
 
-        if (enteredKey === correctKey) {
+        if (enteredKey === receptionistKey) {
             console.log('Access granted!')
             document.body.classList.remove('blur-content')
             hideModal()
         } else {
-            console.log('Access denied!')
-            const errorMessage = document.getElementById('error-message')
-        errorMessage.textContent = 'Incorrect key, please try again.'
-        showModal();
+
             setTimeout(() => {
-                showModal()
+            console.log('Access denied!')
+            showModal()
+             errorMessage.textContent = 'Incorrect key, please try again.'
             }, 500)
         }
     }
