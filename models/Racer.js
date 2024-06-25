@@ -65,19 +65,16 @@ class Racer {
         }, 100);
     }
     stopLapTimer() {
-        if (this.lapTimer === null) {
-            return;
-        }
+        // Removed redundant logic
+        // This conditional may be redundant
         if (this.lapTimer) {
-            const savedLapTime = this.currentLapTime
+            // Stop iteration and set lapTimer to null
             clearInterval(this.lapTimer)
             this.lapTimer = null
-
             this.emitChange()
-
-            return savedLapTime
+            return
         }
-        return null
+        return
     }
     // Custom serialization method to exclude lapTimer
     // Gotta make sure we don't JSONify the timer itself

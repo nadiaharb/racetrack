@@ -69,7 +69,7 @@ function addRacer(io, socket, racerData) {
     try {
         currentRace.addParticipant(racer)
 
-        dataStore.onParticipantChange(racer, currentRace, 'addracer');
+        dataStore.onParticipantChange(racer, currentRace, 'updateracer');
 
     } catch (error) {
         socket.emit('error', { message: error.message })

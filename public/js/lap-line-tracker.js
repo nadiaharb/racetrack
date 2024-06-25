@@ -53,7 +53,7 @@ window.addEventListener('DOMContentLoaded', function () {
                 console.log('Access denied!')
                 showModal()
                 errorMessage.textContent = 'Incorrect key, please try again.'
-                
+
             }, 500)
         }
     }
@@ -109,10 +109,6 @@ function renderObserverView(race) {
 }
 
 function updateObserverView(race) {
-    //SEND REQ TO STOP CURRENT LAP
-    if (race.duration <= 0) {
-        stopTimerRequest()
-    }
     updateRaceStatePanel(race);
 
     // Update participants information
@@ -317,10 +313,6 @@ function assignColorsToParticipants(participants) {
     }, {});
 }
 
-//ON TIMER END, SEND REQ TO STOP CURRENT LAP
-function stopTimerRequest() {
-    socket.emit('notifyTimeEnd')
-}
 
 /*
 

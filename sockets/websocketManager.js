@@ -132,19 +132,6 @@ module.exports = function (io) {
                 throw new Error('Participant not found');
             }
         });
-        //STOP CURRENT LAP
-        socket.on('notifyTimeEnd', () => {
-            let inProgress = dataStore.getInProgressRace()
-            console.log()
-            if (inProgress && inProgress.flagState === "Finish") {
-                inProgress.participants.forEach(participant => {
-                    participant.stopLapTimer()
-                })
-
-            }
-
-        });
-        // Exit events
 
         // Handle disconnect event
         socket.on('disconnect', () => {
@@ -157,7 +144,12 @@ module.exports = function (io) {
     dataStore.on('notifyChange', () => {
         io.emit('updateData', JSON.stringify(dataStore.getInProgressRace()));
         let inProgress = dataStore.getInProgressRace()
+        // If at any given point in progress state race gets "Finish" flag
         if (inProgress && inProgress.flagState === "Finish") {
+            // Do it here without redundant logic
+            inProgress.participants.forEach(participant => {
+                participant.stopLapTimer()
+            })
             io.emit("raceModeChange", inProgress) ///getting flagChange when duration ===0
         }
     });

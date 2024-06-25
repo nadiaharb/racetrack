@@ -7,7 +7,7 @@ if (!process.env.RECEPTIONIST_KEY || !process.env.OBSERVER_KEY || !process.env.S
     console.error("export OBSERVER_KEY=your_observer_key")
     console.error("export SAFETY_KEY=your_safety_key")
     process.exit(1)
-} 
-
-console.log("Keys verified")
-console.log(`Keys loaded:\n${process.env.RECEPTIONIST_KEY}\n${process.env.OBSERVER_KEY}\n${process.env.SAFETY_KEY}`)
+} else {
+    console.log("Keys verified")
+    console.log(`Keys loaded:\n${process.env.RECEPTIONIST_KEY}\n${process.env.OBSERVER_KEY}\n${process.env.SAFETY_KEY}`)
+}

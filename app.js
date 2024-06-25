@@ -1,19 +1,19 @@
-//require('./load_env')
-//require('./check_keys');
-
 const http = require('http');
 const routes = require('./routes')
 const server = http.createServer(routes)
-//const { createServer }= require('http')
+// Socket.IO import
 const { Server } = require('socket.io')
+// Socket handler definition
 const websocketManager = require('./sockets/websocketManager')
+// Function to save data state to local "offline" db
 const { updateDatabase } = require("./data/database");
+// Data methods to init data store and load them from db
 const { setDataStore, loadRacesFromDatabase } = require('./data/database');
 const dataStore = require('./models/DataStore');
 // Set up db and load data.
 setDataStore(dataStore);
 loadRacesFromDatabase(dataStore);
-
+// Socket.IO admin node package
 const { instrument } = require("@socket.io/admin-ui");
 const io = new Server(server, { // Keep this line only when removing admin feature
     cors: {
@@ -37,9 +37,9 @@ instrument(io, {
 const PORT = process.env.PORT || 3000
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
-    console.log(process.env.RACE_DURATION)
+    console.log(`Default duration of race in current mode (ms): ${process.env.RACE_DURATION}`)
 })
-
+// Set up web socket handler by calling the .js
 websocketManager(io)
 
 // Logic for handling various except cases to retain data upon app failure.
