@@ -95,7 +95,7 @@ function renderRaces(races) {
         <div id ="racerForm${race.id}" class="racerFormContainer" style="display: none;">
             <form id="raceForm${race.id}">
             <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
+            <input type="text" id="name" name="name" required maxlength="20">
             <!-- Hidden carNumber input -->
             <div id="carNumberContainer${race.id}" style="display: none;">
                 <label for="carNumber">Car Number:</label>
@@ -180,7 +180,7 @@ function showRacerForm(raceId) {
             carNumber: carNumber,
             name: name
         }
-
+        console.log(newRacer)
         socket.emit('addRacer', { raceId: raceId, racer: newRacer })
         racerFormContainer.style.display = 'none'
         racerForm.reset()
@@ -206,7 +206,7 @@ function editRacer(raceId, participantId, name, car, raceId) {
     modal.innerHTML = `
         <h3>Edit Racer</h3>
         <label for="newName">New Name:</label>
-        <input type="text" id="newName" value="${name}">
+        <input type="text" id="newName" value="${name}" maxlength="20">
         <label for="newCarNumber">New Car Number:</label>
         <input type="text" id="newCarNumber" value="${car}">
         <button id="saveEditBtn">Save</button>

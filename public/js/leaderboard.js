@@ -18,7 +18,11 @@ Spectators must be able to see:
 function renderLeaderBoard(race) {
     const leaderboard = document.getElementById('lb-container');
     leaderboard.innerHTML = ''; // Reset just incase
-    const sortedParticipants = race.participants.sort((a, b) => a.bestLapTime - b.bestLapTime);
+    const sortedParticipants = race.participants.sort((a, b) => {
+        if (a.bestLapTime === 0 && b.bestLapTime !== 0) return 1
+        if (b.bestLapTime === 0 && a.bestLapTime !== 0) return -1
+        return a.bestLapTime - b.bestLapTime
+    })
     const raceDiv = document.createElement('div');
     raceDiv.classList.add('race');
     colorMap = assignColorsToParticipants(race.participants);

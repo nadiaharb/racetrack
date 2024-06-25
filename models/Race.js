@@ -72,8 +72,7 @@ class Race {
         participant.carNumber = carNumber
         // This is unused, may be used for future expansion.
         participant.race = this; // Set reference to the parent race
-        this.assignedCarNumbers.add(carNumber)
-
+        this.assignedCarNumbers.add(parseInt(carNumber))
         this.participants.push(participant)
         this.emitChange();
     }
@@ -109,9 +108,11 @@ class Race {
     }
     isCarUnique(carNumber, excludeId = null) {
         const carNumberInt = parseInt(carNumber, 10)
-    
+      
         return !this.participants.some(p => {
+
             const participantCarNumberInt = parseInt(p.carNumber, 10)
+
             return participantCarNumberInt === carNumberInt && p.id !== excludeId
         })
     }
