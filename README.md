@@ -91,10 +91,6 @@ Employee interfaces are protected by access keys set as environment variables.
 
 1. Clone the repository:
 
-    ```bash
-    git clone https://gitea.kood.tech/taavitaht/racetrack.git
-    cd racetrack
-    ```
 
 2. Install dependencies:
 
